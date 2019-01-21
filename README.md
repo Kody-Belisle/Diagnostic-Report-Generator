@@ -21,13 +21,13 @@ If we need java installed we need to specify
 
 ## Running the tests
 
-Explain how to run tests (if applicable)
+Explain how to run tests (if/when applicable)
 
 ## Authors
 
 * **Kody Belisle** - (https://github.com/Kody-Belisle)
 
-* **Hannah Johnson** - (https://github.com/xxxx)
+* **Hannah Johnson** - (https://github.com/HJohnson748)
 
 ## License
 
