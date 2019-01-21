@@ -3,7 +3,7 @@
 
 ## Overview
 
-Converts raw ELISA data into a cleanly formatted report.
+Converts raw ELISA data and animal ID's into a cleanly formatted report.
 
 
 ## Getting Started
