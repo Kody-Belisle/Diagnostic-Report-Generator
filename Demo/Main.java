@@ -8,6 +8,9 @@ public class Main
 {
     public static void main(String[] args)
     {
+        final String dir = System.getProperty("user.dir");
+
+        System.out.println("current dir = " + dir);
     	File file = new File("ExampleReport.csv");
         ParsePlateReaderData parser = new ParsePlateReaderData(file);
         ArrayList <String> animalIDList = new ArrayList <String>();
@@ -16,6 +19,8 @@ public class Main
         GenerateReport report = new GenerateReport(generateResults(parser.parseValues(), animalIDList));
         //parser.printValues();
         report.printToFile();
+
+        DrawGUI gui = new DrawGUI();
     }
 
 
