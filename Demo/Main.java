@@ -10,6 +10,10 @@ public class Main
     {
         final String dir = System.getProperty("user.dir");
 
+        //Start Derby Driver
+        new DerbyDriver().go(args);
+        System.out.println("DerbyDriver finished");
+
         System.out.println("current dir = " + dir);
     	File file = new File("ExampleReport.csv");
         ParsePlateReaderData parser = new ParsePlateReaderData(file);
