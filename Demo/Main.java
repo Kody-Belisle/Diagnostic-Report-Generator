@@ -17,9 +17,10 @@ public class Main
 
         animalIDList = getAnimalIDList();
         GenerateReport report = new GenerateReport(generateResults(parser.parseValues(), animalIDList));
-        //parser.printValues();
+        parser.printValues();
         report.printToFile();
 
+        DrawAnimalInputWindow animalGUI = new DrawAnimalInputWindow();
         DrawGUI gui = new DrawGUI();
     }
 
