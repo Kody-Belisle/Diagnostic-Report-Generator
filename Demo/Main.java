@@ -23,9 +23,8 @@ public class Main
         GenerateReport report = new GenerateReport(generateResults(parser.parseValues(), animalIDList));
         parser.printValues();
         report.printToFile();
-
-        InputWindow animalGUI = new InputWindow();
-        DrawGUI gui = new DrawGUI();
+        TestSelectWindow testWindow = new TestSelectWindow();
+        testWindow.setVisible(true);
     }
 
 

@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -35,6 +37,8 @@ public class InputWindow extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
+
+        
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -183,23 +187,37 @@ public class InputWindow extends javax.swing.JFrame {
     }// </editor-fold>                        
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {                                         
-        // TODO add your handling code here:
         //add field button
-        DefaultTableModel model = (DefaultTableModel) jTable2.getModel();
-        model.addRow(new String[]{""});
+        
+        DefaultTableModel jTable2model = (DefaultTableModel) jTable2.getModel();
+        jTable2model.addRow(new String[]{""});
 
 
     }                                        
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {                                         
-        // TODO add your handling code here:
         //Next customer button
+        DefaultTableModel jTable2model = (DefaultTableModel) jTable2.getModel();
+        
+        for (int i = 0; i < jTable2model.getRowCount(); i++){
+            animalIDS.add(jTable2model.getValueAt(i, 0).toString());
+            jTable1.setValueAt(animalIDS.get(i), animalIDS.size(), animalIDS.size());
+          }
+        
+
+
     }                                        
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {                                         
         // TODO add your handling code here:
         //continue button
-    }                                        
+        ImportPlateDataWindow plateData = new ImportPlateDataWindow();
+        plateData.setVisible(true);
+    }                                     
+    
+    public void setTest(int testID) {
+        this.testID = testID;
+    }
 
     /**
      * @param args the command line arguments
@@ -220,5 +238,10 @@ public class InputWindow extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField jTextField3;
     private javax.swing.JTextField jTextField4;
+
+
+    public int testID;
+    public ArrayList<String> animalIDS = new ArrayList<String>();
+    
     // End of variables declaration                   
 }

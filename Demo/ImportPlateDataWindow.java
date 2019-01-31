@@ -3,7 +3,7 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.io.File;
 
-public class DrawGUI extends JFrame {
+public class ImportPlateDataWindow extends JFrame {
     
     String filePath;
     JMenuBar menuBar = new JMenuBar();
@@ -13,9 +13,9 @@ public class DrawGUI extends JFrame {
     JPanel panel = new JPanel();
     JLabel label = new JLabel("Plate Data File: ");
     JTextField tf = new JTextField(50); // shows 50 characters before scrolling
-    JButton send = new JButton("Select");
+    JButton send = new JButton("Generate Reports");
 
-    public DrawGUI() {
+    public ImportPlateDataWindow() {
         setJMenuBar(menuBar);
         setVisible(true);
         setSize(400, 200);
@@ -39,7 +39,7 @@ public class DrawGUI extends JFrame {
         
         send.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                //parse data and bring up animal input window
+                //parse data generate report
                 filePath = tf.getText();
                 InputWindow animalWindow = new InputWindow();
                 animalWindow.setVisible(true);
