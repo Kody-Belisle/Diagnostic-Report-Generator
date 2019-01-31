@@ -41,7 +41,7 @@ public class DrawGUI extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 //parse data and bring up animal input window
                 filePath = tf.getText();
-                DrawAnimalInputWindow animalWindow = new DrawAnimalInputWindow();
+                InputWindow animalWindow = new InputWindow();
                 animalWindow.setVisible(true);
                 setVisible(false);
             }
