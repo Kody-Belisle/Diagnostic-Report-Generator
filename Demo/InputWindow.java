@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -189,6 +185,10 @@ public class InputWindow extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {                                         
         // TODO add your handling code here:
         //add field button
+        DefaultTableModel model = (DefaultTableModel) jTable2.getModel();
+        model.addRow(new String[]{""});
+
+
     }                                        
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {                                         

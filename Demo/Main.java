@@ -24,7 +24,7 @@ public class Main
         parser.printValues();
         report.printToFile();
 
-        DrawAnimalInputWindow animalGUI = new DrawAnimalInputWindow();
+        InputWindow animalGUI = new InputWindow();
         DrawGUI gui = new DrawGUI();
     }
 
