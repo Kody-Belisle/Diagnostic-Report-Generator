@@ -13,6 +13,7 @@ public class InputWindow extends javax.swing.JFrame {
      */
     public InputWindow() {
         initComponents();
+        this.setExtendedState(MAXIMIZED_BOTH);
     }
 
     /**
@@ -116,7 +117,7 @@ public class InputWindow extends javax.swing.JFrame {
             }
         });
 
-        jButton2.setText("Next Customer");
+        jButton2.setText("Add Customer to Table");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
@@ -196,27 +197,39 @@ public class InputWindow extends javax.swing.JFrame {
     }                                        
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {                                         
-        //Next customer button
+        //Add customer to table button
         DefaultTableModel jTable2model = (DefaultTableModel) jTable2.getModel();
-        
+        System.out.println("Row Count: " + jTable2model.getRowCount());
         for (int i = 0; i < jTable2model.getRowCount(); i++){
-            animalIDS.add(jTable2model.getValueAt(i, 0).toString());
-            jTable1.setValueAt(animalIDS.get(i), animalIDS.size(), animalIDS.size());
+            animalIDList.add(jTable2model.getValueAt(i, 0).toString());
+            System.out.println("Added " + jTable2model.getValueAt(i, 0).toString() + " to the animal ID list");
+            jTable1.setValueAt(animalIDList.get(i), animalIDList.size(), animalIDList.size());
           }
+
+        jTable2model.setNumRows(0);
+        //jTable2model.setValueAt("", 0, 0);
         
 
 
     }                                        
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {                                         
-        // TODO add your handling code here:
         //continue button
         ImportPlateDataWindow plateData = new ImportPlateDataWindow();
+
+        plateData.setAnimalIDList(animalIDList);
+        printCurrentAnimalList();
         plateData.setVisible(true);
     }                                     
     
     public void setTest(int testID) {
         this.testID = testID;
+    }
+
+    public void printCurrentAnimalList(){
+        for (String e : animalIDList) {
+            System.out.println("In List: " + e);
+        }
     }
 
     /**
@@ -241,7 +254,7 @@ public class InputWindow extends javax.swing.JFrame {
 
 
     public int testID;
-    public ArrayList<String> animalIDS = new ArrayList<String>();
+    public ArrayList<String> animalIDList = new ArrayList<String>();
     
     // End of variables declaration                   
 }

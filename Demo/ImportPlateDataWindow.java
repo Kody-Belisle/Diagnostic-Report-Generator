@@ -2,6 +2,7 @@ import java.awt.*;
 import javax.swing.*;
 import java.awt.event.*;
 import java.io.File;
+import java.util.ArrayList;
 
 public class ImportPlateDataWindow extends JFrame {
     
@@ -15,11 +16,12 @@ public class ImportPlateDataWindow extends JFrame {
     JTextField tf = new JTextField(50); // shows 50 characters before scrolling
     JButton send = new JButton("Generate Reports");
 
+    ArrayList <String> animalIDList;
+
     public ImportPlateDataWindow() {
         setJMenuBar(menuBar);
         setVisible(true);
         setSize(400, 200);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         menuBar.add(menu);
         menu.add(openButton);
         openButton.addActionListener(new ActionListener() {
@@ -39,10 +41,19 @@ public class ImportPlateDataWindow extends JFrame {
         
         send.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                //parse data generate report
                 filePath = tf.getText();
-                InputWindow animalWindow = new InputWindow();
-                animalWindow.setVisible(true);
+
+
+                //get the file from the field
+                File file = new File(filePath);
+
+                //parse data then generate report
+                ParsePlateReaderData parser = new ParsePlateReaderData(file);
+
+                GenerateReport report = new GenerateReport(parser.parseValues(), animalIDList);
+                
+                parser.printValues();
+                report.printToFile();
                 setVisible(false);
             }
 
@@ -54,5 +65,12 @@ public class ImportPlateDataWindow extends JFrame {
 
         getContentPane().add(BorderLayout.CENTER, panel);
         setVisible(true);
+    }
+
+
+    public void setAnimalIDList(ArrayList<String> animalIDList){
+
+        this.animalIDList = animalIDList;
+
     }
 }
