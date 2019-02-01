@@ -1,3 +1,4 @@
+package src;
 import java.io.File;
 import java.util.ArrayList;
 
@@ -8,15 +9,21 @@ public class Main
 {
     public static void main(String[] args)
     {
-        final String dir = System.getProperty("user.dir");
 
-        //Start Derby Driver
-        new DerbyDriver().go(args);
-        System.out.println("DerbyDriver finished");
+        javax.swing.SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                final String dir = System.getProperty("user.dir");
 
-        System.out.println("current dir = " + dir);
-        TestSelectWindow testWindow = new TestSelectWindow();
-        testWindow.setVisible(true);
+                //Start Derby Driver
+                new DerbyDriver().go(args);
+                System.out.println("DerbyDriver finished");
+        
+                System.out.println("current dir = " + dir);
+                TestSelectWindow testWindow = new TestSelectWindow();
+                testWindow.setVisible(true);
+            }
+        });
+
     }
 
 
