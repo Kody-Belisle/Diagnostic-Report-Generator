@@ -208,6 +208,11 @@ public class InputWindow extends javax.swing.JFrame {
             jTable1.setValueAt(animalIDList.get(i), animalIDList.size(), animalIDList.size());
           }
 
+          for (int i = 0; i < jTable2model.getRowCount(); i++)
+            for(int j = 0; j < jTable2model.getColumnCount(); j++) {
+                jTable2model.setValueAt(null, i, j);
+            }
+       
         jTable2model.setNumRows(0);
         //jTable2model.setValueAt("", 0, 0);
         

@@ -6,6 +6,7 @@ import java.util.Scanner;
 import java.io.FileNotFoundException;
 
 public class Main
+
 {
     public static void main(String[] args)
     {
@@ -25,38 +26,4 @@ public class Main
         });
 
     }
-
-
-    
-    
-    
-
-    public static ArrayList <String> getAnimalIDList() {
-
-        Scanner scanner;
-        ArrayList <String> animalIDList = new ArrayList <String>();
-
-        try {
-            scanner = new Scanner(new File("FarmManifest.csv"));
-
-            //Get all tokens and store them in the arrayList
-            while (scanner.hasNextLine()) {
-                String value = scanner.nextLine();
-                animalIDList.add(value);
-                //System.out.println("Added: " + value);
-            }
-        
-            scanner.close();
-            
-        } catch (FileNotFoundException e) {
-            System.out.println("File not Found");
-        }
-
-        return animalIDList;
-
-    }
-
-
-    
-    
 }
