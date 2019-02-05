@@ -64,12 +64,6 @@ public class InputWindow extends javax.swing.JFrame {
         jPanel1.setName(""); // NOI18N
         jPanel1.setPreferredSize(new java.awt.Dimension(1080, 94));
 
-        jTextField4.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField4ActionPerformed(evt);
-            }
-        });
-
         jLabel1.setText("Company Name:");
 
         jLabel2.setText("Address:");
@@ -328,57 +322,54 @@ public class InputWindow extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {                                         
         //Add customer to table button
-        DefaultTableModel jTable2model = (DefaultTableModel) jTable2.getModel();
-        System.out.println("Row Count: " + jTable2model.getRowCount());
-        for (int i = 0; i < jTable2model.getRowCount(); i++){
-            animalIDList.add(jTable2model.getValueAt(i, 0).toString());
-            System.out.println("Added " + jTable2model.getValueAt(i, 0).toString() + " to the animal ID list");
-            jTable1.setValueAt(animalIDList.get(i), animalIDList.size(), animalIDList.size());
-          }
 
-
-          //iterate through rows and set value to null (trying to solve ghost value bug)
-          for (int i = 0; i < jTable2model.getRowCount(); i++) {
-            jTable2model.setValueAt(null, i, 0);
-          }
-       
-        jTable2model.setNumRows(0);
-        //jTable2model.setValueAt("", 0, 0);
-        
+        fillTable();
+    
     }                                        
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {                                         
         //continue button
         ImportPlateDataWindow plateData = new ImportPlateDataWindow();
+        DefaultTableModel jTable1model = (DefaultTableModel) jTable1.getModel();
+    
+
+        //iterate through cell map and put values in an array list
+        for (int i = 0; i < jTable1model.getColumnCount(); i++) {   //x
+            for (int j = 0; j < jTable1model.getRowCount(); j++) {  //y
+                if (jTable1model.getValueAt(i, j) != null) {
+                    animalIDList.add(jTable1model.getValueAt(i, j).toString());
+                    System.out.println("Added " + jTable1model.getValueAt(i, 0).toString() + " to the animal ID list");
+                }
+            }
+
+        }
 
         plateData.setAnimalIDList(animalIDList);
         printCurrentAnimalList();
         plateData.setVisible(true);
-    }                                        
-
-    private void jTextField4ActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        // TODO add your handling code here:
-    }                                           
+    }                                                                                 
 
     private void jRadioButton1ActionPerformed(java.awt.event.ActionEvent evt) {                                              
-        // TODO add your handling code here:
+        //CAE Test
+        testID = 1;
+        populateTestValues();
     }                                             
 
     private void jRadioButton2ActionPerformed(java.awt.event.ActionEvent evt) {                                              
-        // TODO add your handling code here:
+        //CL Test
+        testID = 2;
+        populateTestValues();
     }                                             
 
     private void jRadioButton3ActionPerformed(java.awt.event.ActionEvent evt) {                                              
-        // TODO add your handling code here:
+        //Johne's Test
+        testID = 3;
+        populateTestValues();
     }                                             
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {                                         
-        // TODO add your handling code here:
+        //Update Table Button
     }                                        
-
-    public void setTest(int testID) {
-        this.testID = testID;
-    }
 
     public void printCurrentAnimalList(){
         for (String e : animalIDList) {
@@ -386,7 +377,62 @@ public class InputWindow extends javax.swing.JFrame {
         }
     }
 
-    //
+    private void populateTestValues() {
+
+        DefaultTableModel jTable1model = (DefaultTableModel) jTable1.getModel();
+        int tableOffset = 1;
+
+        switch (testID) {
+
+            case 1:
+                jRadioButton2.getModel().setSelected(false);
+                jRadioButton3.getModel().setSelected(false);
+                break;
+            case 2:
+                System.out.println("CL test selected");
+                jTable1model.setValueAt("BLANK", 0, 0 + tableOffset);
+                jTable1model.setValueAt("TEST VALUE", 1, 0 + tableOffset);
+                jTable1model.setValueAt("TEST VALUE", 2, 0 + tableOffset);
+                jTable1model.setValueAt("TEST VALUE", 0, 3 + tableOffset);
+                jTable1model.setValueAt("TEST VALUE", 1, 3 + tableOffset);
+                jRadioButton1.getModel().setSelected(false);
+                jRadioButton3.getModel().setSelected(false);
+                break;
+            case 3:
+                jRadioButton1.getModel().setSelected(false);
+                jRadioButton2.getModel().setSelected(false);
+                break;
+
+            default:
+                System.out.println("Test not selected");
+
+
+        }
+    }
+
+    private void fillTable() {
+        DefaultTableModel jTable2model = (DefaultTableModel) jTable2.getModel();
+        //print rows in animal ID input column
+        System.out.println("Row Count: " + jTable2model.getRowCount());
+
+
+        for (int i = 0; i < jTable2model.getRowCount(); i++){
+            jTable1.setValueAt(jTable2model.getValueAt(i, 0), animalIDList.size(), animalIDList.size());
+          }
+
+
+          //iterate through rows and set value to null (trying to solve ghost value bug [notworking])
+          for (int i = 0; i < jTable2model.getRowCount(); i++) {
+            jTable2model.setValueAt(null, i, 0);
+          }
+       
+        jTable2model.setNumRows(0);
+        //jTable2model.setValueAt("", 0, 0);
+        
+
+    }
+
+    
     public int testID;
     public ArrayList<String> animalIDList = new ArrayList<String>();
     
