@@ -118,7 +118,7 @@ public class TestSelectWindow extends javax.swing.JFrame {
         //enter client data button
         InputWindow animalWindow = new InputWindow();
         //TODO need to say what test we chose
-        animalWindow.setTest(1);
+        //animalWindow.setTest(1);
         animalWindow.setVisible(true);
         setVisible(false);
     }                                        
