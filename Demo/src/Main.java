@@ -1,9 +1,4 @@
 package src;
-import java.io.File;
-import java.util.ArrayList;
-
-import java.util.Scanner;
-import java.io.FileNotFoundException;
 
 public class Main
 
@@ -19,11 +14,11 @@ public class Main
                 new DerbyDriver().go(args);
                 System.out.println("DerbyDriver finished");        
 
-                System.out.println("    urrent dir = " + dir);
+                System.out.println("current dir = " + dir);
 
 
-                TestSelectWindow testWindow = new TestSelectWindow();
-                testWindow.setVisible(true);
+                InputWindow animalWindow = new InputWindow();
+                animalWindow.setVisible(true);
             }
         });
 
