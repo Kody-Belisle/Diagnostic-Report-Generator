@@ -323,29 +323,31 @@ public class InputWindow extends javax.swing.JFrame {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {                                         
         //Add customer to table button
 
-        fillTable();
+        int animalCount;
+
+        //add animals to map
+        animalCount = fillTable();
+        //save customer info and animal count
+        saveCustomer(animalCount);
+
+        
+
+        //clear table (currently done in filltable)
+
     
     }                                        
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {                                         
         //continue button
         ImportPlateDataWindow plateData = new ImportPlateDataWindow();
-        DefaultTableModel jTable1model = (DefaultTableModel) jTable1.getModel();
-    
-
-        //iterate through cell map and put values in an array list
-        for (int i = 0; i < jTable1model.getColumnCount(); i++) {   //x
-            for (int j = 0; j < jTable1model.getRowCount(); j++) {  //y
-                if (jTable1model.getValueAt(i, j) != null) {
-                    animalIDList.add(jTable1model.getValueAt(i, j).toString());
-                    System.out.println("Added " + jTable1model.getValueAt(i, 0).toString() + " to the animal ID list");
-                }
-            }
-
-        }
-
-        plateData.setAnimalIDList(animalIDList);
+        
+        System.out.println("Set report list, size: " + reportList.size());
         printCurrentAnimalList();
+        
+        getCellValues();
+        
+        plateData.setAnimalIDList(animalIDList);
+        plateData.setReportList(reportList);
         plateData.setVisible(true);
     }                                                                                 
 
@@ -410,32 +412,84 @@ public class InputWindow extends javax.swing.JFrame {
         }
     }
 
-    private void fillTable() {
+    private int fillTable() {
+
+        int animalCount = 0;
         DefaultTableModel jTable2model = (DefaultTableModel) jTable2.getModel();
         //print rows in animal ID input column
-        System.out.println("Row Count: " + jTable2model.getRowCount());
+        int rowCount = jTable2model.getRowCount();
+        System.out.println("Row Count: " + rowCount);
+        if (rowCount < 1) {
+            System.out.println("No data to push to map");
+            return -1;
+        }
 
+        for (int i = 0; i < rowCount; i++){
+            String element = (String) jTable2model.getValueAt(i, 0);
 
-        for (int i = 0; i < jTable2model.getRowCount(); i++){
-            jTable1.setValueAt(jTable2model.getValueAt(i, 0), animalIDList.size(), animalIDList.size());
+            int fillX;
+            int fillY;
+
+            if (element != null && element != "" && element != " ") {
+                jTable1.setValueAt(jTable2model.getValueAt(i, 0), animalIDList.size(), animalIDList.size());
+                animalCount++;
+            } else {
+                System.out.println("Null or empty element, not pushing to map");
+            }
           }
 
-
-          //iterate through rows and set value to null (trying to solve ghost value bug [notworking])
-          for (int i = 0; i < jTable2model.getRowCount(); i++) {
-            jTable2model.setValueAt(null, i, 0);
-          }
-       
         jTable2model.setNumRows(0);
-        //jTable2model.setValueAt("", 0, 0);
-        
+        return animalCount;
+    }
 
+    public void saveCustomer(int animalCount) {
+        //get data from buttons
+        
+        //TODO: check if all the necessary data is there
+
+        //put data in report object
+
+        Report customer = new Report(
+            jTextField1.getText(),
+            jTextField2.getText(),
+            jTextField3.getText(),
+            (String) jComboBox1.getSelectedItem(),
+            jTextField5.getText(),
+            jTextField6.getText(),
+            animalCount
+        );        
+
+        System.out.println("Added customer: " + customer.getName());
+        reportList.add(customer);
+
+    }
+
+    public void getCellValues() {
+
+        DefaultTableModel jTable1model = (DefaultTableModel) jTable1.getModel();
+
+        System.out.println("Column count: " + jTable1model.getColumnCount());
+        System.out.println("Row count: " + jTable1model.getRowCount());
+
+        //iterate through cell map and put values in an array list
+        for (int i = 0; i < jTable1model.getRowCount(); i++) {   //y
+            for (int j = 0; j < jTable1model.getColumnCount(); j++) {  //x
+                System.out.println("Check cell: " + i + ", " + j);
+                if (jTable1model.getValueAt(i, j) != null) {
+                    animalIDList.add(jTable1model.getValueAt(i, j).toString());
+                    System.out.println("Added " + jTable1model.getValueAt(i, 0).toString() + " to the animal ID list");
+                }
+            }
+            
+        }
     }
 
     
     public int testID;
     public ArrayList<String> animalIDList = new ArrayList<String>();
-    
+    public ArrayList<Report> reportList = new ArrayList<Report>();
+    public int customerCount = 0;
+
     // Variables declaration - do not modify                     
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;

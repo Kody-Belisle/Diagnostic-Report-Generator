@@ -3,8 +3,14 @@ package src;
 import java.awt.*;
 import javax.swing.*;
 import java.awt.event.*;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class ImportPlateDataWindow extends JFrame {
     
@@ -18,6 +24,7 @@ public class ImportPlateDataWindow extends JFrame {
     JTextField tf = new JTextField(50); // shows 50 characters before scrolling
     JButton send = new JButton("Generate Reports");
 
+    public ArrayList<Report> reportList = new ArrayList<Report>();
     ArrayList <String> animalIDList;
 
     public ImportPlateDataWindow() {
@@ -43,19 +50,29 @@ public class ImportPlateDataWindow extends JFrame {
         
         send.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                ArrayList<Float> parsedData = new ArrayList<Float>();
+                int dataIndex = 5;  //first 5 are test values
                 filePath = tf.getText();
-
-
                 //get the file from the field
                 File file = new File(filePath);
-
+                System.out.println("Generating Report");
                 //parse data then generate report
                 ParsePlateReaderData parser = new ParsePlateReaderData(file);
+                parsedData = parser.parseValues(2);
+                System.out.println("report count: "+ reportList.size());
+                //give the report objects the amount of values they need
+                for (Report n: reportList) {
+                    for (int i = 0; i < n.getAnimalCount(); i++) {
+                        n.addTestResult(parsedData.get(dataIndex));
+                        System.out.println("Added: " + parsedData.get(dataIndex));
+                    }
+                }
 
-                GenerateReport report = new GenerateReport(parser.parseValues(), animalIDList);
-                
-                parser.printValues();
-                report.printToFile();
+                for (Report r : reportList) {
+                    generateReport(r);
+                    System.out.println("Generated Report");
+                }
+
                 setVisible(false);
             }
 
@@ -74,5 +91,28 @@ public class ImportPlateDataWindow extends JFrame {
 
         this.animalIDList = animalIDList;
 
+    }
+
+    public void setReportList(ArrayList<Report> reportList){
+
+        this.reportList = reportList;
+    }
+
+    public void generateReport(Report report) {
+
+        try {
+            DateFormat dateFormat = new SimpleDateFormat("yyyy_MM_dd HH-MM");
+            Date date = new Date();
+            System.out.println("current date: " + date);
+            String clientName = report.getName();
+            BufferedWriter writer = new BufferedWriter(new FileWriter(clientName + dateFormat.format(date) + ".txt"));
+            writer.write("Submitted by: " + report.getName());
+            System.out.println("Wrote to file");
+            writer.close();
+        } catch (IOException e) {
+
+            System.out.println("IO exception");
+            System.exit(0);
+        }
     }
 }

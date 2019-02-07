@@ -4,13 +4,31 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.util.ArrayList;
 
-public class GenerateReport {
+public class Report {
         ArrayList<PlateTest> plateTests;
+        String name;
+        String address;
+        String city;
+        String state;
+        String dateReceived;
+        String dateTested;
+        int animalCount;
+        
+        String logID;
+        ArrayList<Float> testResults;
+        private static  ArrayList<String> calculatedResult = new ArrayList<String>();
+        
+        public Report(String name, String address, String city, String state, String dateReceived, String dateTested, int animalCount) {
 
-        public GenerateReport(ArrayList <Float> testValues, ArrayList <String> animalIDList) {
+            this.name = name;
+            this.address = address;
+            this.city = city;
+            this.state = state;
+            this.dateReceived = dateReceived;
+            this.dateTested = dateTested;
+            this.animalCount = animalCount;
 
-            plateTests = generateResults(testValues, animalIDList);
-
+            testResults = new ArrayList<Float>();
         }
 
 
@@ -63,16 +81,56 @@ public class GenerateReport {
     
             for (int i = 0; i < iterateCount; i++) {
     
-                PlateTest test = new PlateTest(animalIDList.get(i), testValues.get(i + NONTESTVALUES), calculateResult(i + NONTESTVALUES, testValues));
-                plateTests.add(test);
+                //PlateTest test = new PlateTest(animalIDList.get(i), testValues.get(i + NONTESTVALUES), calculateResult(i + NONTESTVALUES, testValues));
+                //plateTests.add(test);
             }
             
             
             return plateTests;
         }
 
+        public void addTestResult(Float testResult) {
 
-        public static int calculateResult(int index, ArrayList <Float> testValues) {
+            testResults.add(testResult);
+        }
+
+        public int getAnimalCount() {
+
+            return animalCount;
+        }
+
+        public String getName() {
+
+            return name;
+        }
+
+        public String getAddress() {
+
+            return address;
+        }
+
+        public String getCity() {
+            return city;
+        }
+
+        public String getState() {
+            return state;
+        }
+
+        public String calculateLog() {
+            return "";
+        }
+
+        public String getReceived(){
+            return dateReceived;
+        }
+
+        public String getTested(){
+            return dateTested;
+        }
+
+
+        public static void calculateResults(int index, ArrayList <Float> testValues) {
 
             Float negativeControlOne = testValues.get(0);
             Float negativeControlTwo = testValues.get(1);
@@ -88,17 +146,15 @@ public class GenerateReport {
             //test negative
             if (testResult < (((posAvg - negAvg) / 4)) + negAvg) {
     
-                return -1;
+                calculatedResult.add("NEGATIVE");
     
             } else if (testResult > (((posAvg - negAvg) / 4)) + negAvg && testResult < ((((posAvg - negAvg) / 4)) + negAvg) + 0.3 ) {
     
-                return 0;
+                calculatedResult.add("MARGINAL");
             } else if (testResult > (((posAvg - negAvg) / 4)) + negAvg) {
     
-                return 1;
+                calculatedResult.add("POSITVE");
             }
-            
-            return -9;
     
         }
 }

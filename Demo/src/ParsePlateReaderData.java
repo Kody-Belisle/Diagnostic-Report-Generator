@@ -29,7 +29,7 @@ public class ParsePlateReaderData {
 
 
 
-    public ArrayList <Float> parseValues() {
+    public ArrayList <Float> parseValues(int testID) {
 
         //Get all tokens and store them in the arrayList
         while (scanner.hasNext()) {
