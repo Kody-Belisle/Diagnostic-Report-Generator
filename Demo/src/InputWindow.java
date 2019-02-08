@@ -361,6 +361,7 @@ public class InputWindow extends javax.swing.JFrame {
         //CL Test
         testID = 2;
         populateTestValues();
+        setTestVals(2);
     }                                             
 
     private void jRadioButton3ActionPerformed(java.awt.event.ActionEvent evt) {                                              
@@ -424,14 +425,42 @@ public class InputWindow extends javax.swing.JFrame {
             return -1;
         }
 
+
         for (int i = 0; i < rowCount; i++){
             String element = (String) jTable2model.getValueAt(i, 0);
 
-            int fillX;
-            int fillY;
 
             if (element != null && element != "" && element != " ") {
-                jTable1.setValueAt(jTable2model.getValueAt(i, 0), animalIDList.size(), animalIDList.size());
+                
+                if (fillX > 12) {
+                    System.out.println("Too many animals");
+                    continue;
+                }
+
+                for (int l = 0; l < testXVals.size(); l++) {
+
+                    if (fillX == (testXVals.get(l) + 1) && fillY == testYVals.get(l)) {
+                        System.out.println("Collision at: " + fillX + ", " + fillY);
+                        if (fillY < 7) {
+                            fillY++;
+                        } else {
+                            fillY = 0;
+                            fillX++;
+                        }
+                    }
+
+                } 
+                
+                jTable1.setValueAt(jTable2model.getValueAt(i, 0), fillY, fillX);
+
+                fillY++;
+
+                if (fillY > 7) {
+
+                    fillX++;
+                    fillY = 0;
+                }
+                System.out.println("Cellpos x: " + fillX + " y: " + fillY);
                 animalCount++;
             } else {
                 System.out.println("Null or empty element, not pushing to map");
@@ -474,7 +503,6 @@ public class InputWindow extends javax.swing.JFrame {
         //iterate through cell map and put values in an array list
         for (int i = 0; i < jTable1model.getRowCount(); i++) {   //y
             for (int j = 0; j < jTable1model.getColumnCount(); j++) {  //x
-                System.out.println("Check cell: " + i + ", " + j);
                 if (jTable1model.getValueAt(i, j) != null) {
                     animalIDList.add(jTable1model.getValueAt(i, j).toString());
                     System.out.println("Added " + jTable1model.getValueAt(i, 0).toString() + " to the animal ID list");
@@ -484,11 +512,47 @@ public class InputWindow extends javax.swing.JFrame {
         }
     }
 
+
+    public void setTestVals(int testID) {
+
+        testXVals = new ArrayList<Integer>();
+        testYVals = new ArrayList<Integer>();
+
+        switch (testID) {
+
+            case 1:
+
+            
+            
+            case 2:
+
+            testXVals.add(0);
+            testXVals.add(0);
+            testXVals.add(0);
+            testXVals.add(3);
+            testXVals.add(3);
+            
+            testYVals.add(0);
+            testYVals.add(1);
+            testYVals.add(2);
+            testYVals.add(0);
+            testYVals.add(1);
+            
+            case 3:
+
+        }
+
+    }
+
     
     public int testID;
     public ArrayList<String> animalIDList = new ArrayList<String>();
     public ArrayList<Report> reportList = new ArrayList<Report>();
     public int customerCount = 0;
+    public int fillX = 1;
+    public int fillY = 0;
+    public ArrayList<Integer> testXVals;
+    public ArrayList<Integer> testYVals;
 
     // Variables declaration - do not modify                     
     private javax.swing.JButton jButton1;

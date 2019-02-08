@@ -26,6 +26,7 @@ public class ImportPlateDataWindow extends JFrame {
 
     public ArrayList<Report> reportList = new ArrayList<Report>();
     ArrayList <String> animalIDList;
+    int testID;
 
     public ImportPlateDataWindow() {
         setJMenuBar(menuBar);
@@ -98,15 +99,38 @@ public class ImportPlateDataWindow extends JFrame {
         this.reportList = reportList;
     }
 
+    public void setTestID(int testID) {
+        this.testID = testID;
+    }
+
     public void generateReport(Report report) {
 
         try {
             DateFormat dateFormat = new SimpleDateFormat("yyyy_MM_dd HH-MM");
             Date date = new Date();
-            System.out.println("current date: " + date);
             String clientName = report.getName();
-            BufferedWriter writer = new BufferedWriter(new FileWriter(clientName + dateFormat.format(date) + ".txt"));
+            BufferedWriter writer = new BufferedWriter(new FileWriter("Diagnostic-Report-Generator/" + "Generated Reports/" + clientName + " " + dateFormat.format(date) + ".txt"));
+
+
+    
+            switch (testID) {
+
+
+                case 1:
+
+                case 2:
+
+                case 3:
+
+            }
+
+            
+            
             writer.write("Submitted by: " + report.getName());
+
+
+
+
             System.out.println("Wrote to file");
             writer.close();
         } catch (IOException e) {

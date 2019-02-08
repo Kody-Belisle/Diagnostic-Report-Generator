@@ -1,7 +1,5 @@
 package src;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
 import java.util.ArrayList;
 
 public class Report {
@@ -37,23 +35,6 @@ public class Report {
             for (PlateTest e : plateTests) {
 
                 System.out.println(e.toString() + "\n");
-            }
-
-        }
-
-        public void printToFile() {
-            try {
-                BufferedWriter writer = new BufferedWriter(new FileWriter("Generated_Report.txt"));
-                for (PlateTest e : plateTests) {
-    
-                   writer.write(e.toString() + "\r\n");
-                }
-                System.out.println("Wrote to file");
-                writer.close();
-            } catch (Exception e) {
-
-                System.out.println("Write error");
-                System.exit(0);
             }
 
         }
