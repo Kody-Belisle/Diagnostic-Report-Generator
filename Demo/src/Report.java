@@ -2,6 +2,9 @@ package src;
 
 import java.util.ArrayList;
 
+/**
+ * stores all necessary report data and performs calculations on it
+ */
 public class Report {
         ArrayList<PlateTest> plateTests;
         String name;
@@ -28,8 +31,10 @@ public class Report {
 
             testResults = new ArrayList<Float>();
         }
-
-
+        
+        /**
+         * prints out all the plate tests
+         */
         public void printToConsole() {
         
             for (PlateTest e : plateTests) {
@@ -37,37 +42,6 @@ public class Report {
                 System.out.println(e.toString() + "\n");
             }
 
-        }
-
-        public static ArrayList <PlateTest> generateResults(ArrayList <Float> testValues, ArrayList <String> animalIDList) {
-
-            int NONTESTVALUES = 4;
-            int iterateCount = testValues.size() - NONTESTVALUES;
-            //minus 4 is for the non test values: pos1, pos2, neg1, neg2
-            ArrayList <PlateTest> plateTests = new ArrayList <PlateTest>();
-    
-            //error handling
-            if (testValues.size() - NONTESTVALUES != animalIDList.size()) {
-    
-                System.out.println("values table / animalIDList size mismatch");
-                System.out.println("test count = " + (testValues.size() - NONTESTVALUES) );
-                System.out.println("animal id count = " + animalIDList.size());
-    
-                //if animal list is smaller we need to make that many test objects
-                //TODO: needs more thought on how to handle
-                if (animalIDList.size() < testValues.size()) {
-                    iterateCount = animalIDList.size();
-                }
-            }
-    
-            for (int i = 0; i < iterateCount; i++) {
-    
-                //PlateTest test = new PlateTest(animalIDList.get(i), testValues.get(i + NONTESTVALUES), calculateResult(i + NONTESTVALUES, testValues));
-                //plateTests.add(test);
-            }
-            
-            
-            return plateTests;
         }
 
         public void addTestResult(Float testResult) {
@@ -111,6 +85,12 @@ public class Report {
         }
 
 
+        /**
+         * 
+         * @param index
+         * @param testValues
+         * uses calculations from provided excel sheet and puts results in array (should be a map at some point)
+         */
         public static void calculateResults(int index, ArrayList <Float> testValues) {
 
             Float negativeControlOne = testValues.get(0);

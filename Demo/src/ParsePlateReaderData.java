@@ -5,7 +5,9 @@ import java.io.FileNotFoundException;
 import java.util.Scanner;
 import java.util.ArrayList;
 
-
+/**
+ * takes a plate reader file, parses, then arranges it properly for array storage
+ */
 public class ParsePlateReaderData {
 
     private Scanner scanner;
@@ -28,7 +30,12 @@ public class ParsePlateReaderData {
 
 
 
-
+    /**
+     * 
+     * @param testID
+     * @return arrayList containing parsed values
+     * grabs all of the floats out of the file we're parsing
+     */
     public ArrayList <Float> parseValues(int testID) {
 
         //Get all tokens and store them in the arrayList
@@ -59,7 +66,11 @@ public class ParsePlateReaderData {
         return testValues;
 
     }
-
+    
+    /**
+     * properly arranges values from the input file (initially they are parsed along a row then down a column
+     *  and we need them to be parsed down a column then across a row)
+     */
     private void arrangeValues() {
 
 
@@ -115,6 +126,9 @@ public class ParsePlateReaderData {
         testValues = arrangedValues;
     }
 
+    /**
+     * grabs the control values from our parsed list and puts them at the beginning of our new, ordered list
+     */
     private void getControlValues(ArrayList <Float> arrangedValues) {
 
             /*      
