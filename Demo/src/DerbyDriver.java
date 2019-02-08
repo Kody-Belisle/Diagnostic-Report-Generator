@@ -174,8 +174,11 @@ public class DerbyDriver
             statements.add(s);
 
             // We create a table...
-            s.execute("create table location(num int, addr varchar(40))");
-            System.out.println("Created table location");
+            s.execute("create table client(client_name varchar(50) NOT NULL, name varchar(50) NOT NULL," +
+                    "phone varchar(20) NOT NULL, email varchar(50) NOT NULL," +
+                    "address varchar(100) NOT NULL, zip char(5) NOT NULL, city varchar(30) NOT NULL," +
+                    "state char(2) NOT NULL, primary key (client_name))");
+            System.out.println("Created table client");
 
             // and add a few rows...
 
@@ -188,23 +191,24 @@ public class DerbyDriver
              */
             // parameter 1 is num (int), parameter 2 is addr (varchar)
             psInsert = conn.prepareStatement(
-                    "insert into location values (?, ?)");
+                    "insert into client values (?, ?, ?, ?, ?, ?, ?, ?)");
             statements.add(psInsert);
 
-            psInsert.setInt(1, 1956);
-            psInsert.setString(2, "Webster St.");
+            psInsert.setString(1, "Test Company");
+            psInsert.setString(2, "Bob Jones");
+            psInsert.setString(3, "(208) 111-1111");
+            psInsert.setString(4, "test@gmail.com");
+            psInsert.setString(5, "123 Main St.");
+            psInsert.setString(6, "83706");
+            psInsert.setString(7, "Boise");
+            psInsert.setString(8, "ID");
             psInsert.executeUpdate();
-            System.out.println("Inserted 1956 Webster");
-
-            psInsert.setInt(1, 1910);
-            psInsert.setString(2, "Union St.");
-            psInsert.executeUpdate();
-            System.out.println("Inserted 1910 Union");
+            System.out.println("Inserted Test company, bob jones, at 123 Main st.");
 
             // Let's update some rows as well...
 
             // parameter 1 and 3 are num (int), parameter 2 is addr (varchar)
-            psUpdate = conn.prepareStatement(
+            /*psUpdate = conn.prepareStatement(
                     "update location set num=?, addr=? where num=?");
             statements.add(psUpdate);
 
@@ -218,14 +222,14 @@ public class DerbyDriver
             psUpdate.setString(2, "Lakeshore Ave.");
             psUpdate.setInt(3, 180);
             psUpdate.executeUpdate();
-            System.out.println("Updated 180 Grand to 300 Lakeshore");
+            System.out.println("Updated 180 Grand to 300 Lakeshore");*/
 
 
             /*
                We select the rows and verify the results.
              */
             rs = s.executeQuery(
-                    "SELECT num, addr FROM location ORDER BY num");
+                    "SELECT * FROM client");
 
             /* we expect the first returned column to be an integer (num),
              * and second to be a String (addr). Rows are sorted by street
@@ -248,7 +252,7 @@ public class DerbyDriver
                 reportFailure("No rows in ResultSet");
             }
 
-            if ((number = rs.getInt(1)) != 300)
+            /*if ((number = rs.getInt(1)) != 300)
             {
                 failure = true;
                 reportFailure(
@@ -276,11 +280,11 @@ public class DerbyDriver
 
             if (!failure) {
                 System.out.println("Verified the rows");
-            }
+            }*/
 
             // delete the table
-            s.execute("drop table location");
-            System.out.println("Dropped table location");
+            //s.execute("drop table client");
+            //System.out.println("Dropped table location");
 
             /*
                We commit the transaction. Any changes will be persisted to
