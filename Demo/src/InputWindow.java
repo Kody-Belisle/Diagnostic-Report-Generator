@@ -636,7 +636,7 @@ public class InputWindow extends javax.swing.JFrame {
         //get data from buttons
         
         //TODO: check if all the necessary data is there
-
+        
         //put data in report object
 
         Report customer = new Report(
