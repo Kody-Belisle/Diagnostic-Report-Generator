@@ -66,7 +66,7 @@ public class ReportGenerator extends AbstractReportGenerator
         {
             // Using the classloader, get the URL to the reportDefinition file
             final ClassLoader classloader = this.getClass().getClassLoader();
-            final URL reportDefinitionURL = this.getClass().getResource("../sample1.prpt");
+            final URL reportDefinitionURL = this.getClass().getResource("../SageReportTemplate.prpt");
             //final URL reportDefinitionURL = classloader.getResource("/src/sample1.prpt");
             System.out.println(reportDefinitionURL);
             //System.out.println(testUrl);
@@ -99,17 +99,19 @@ public class ReportGenerator extends AbstractReportGenerator
         final DriverConnectionProvider sampleDriverConnectionProvider = new DriverConnectionProvider();
         sampleDriverConnectionProvider.setDriver("org.apache.derby.jdbc.EmbeddedDriver");
         //sampleDriverConnectionProvider.setUrl("jdbc:derby:./sql/sampledata");
+        System.out.println(System.getProperty("Current Directory: " + "user.dir"));
+
         sampleDriverConnectionProvider.setUrl("jdbc:derby:C:\\Users\\Hjohn\\IdeaProjects\\Diagnostic-Report-Generator\\lib\\"
                 + dbName + ";create=true");
         sampleDriverConnectionProvider.setProperty("user", "user1");
         sampleDriverConnectionProvider.setProperty("password", "");
-
+        /*
         final SQLReportDataFactory dataFactory = new SQLReportDataFactory(sampleDriverConnectionProvider);
         dataFactory.setQuery(QUERY_NAME,
                 "select client_name from client");
-
-        return dataFactory;
-        //return null;
+        */
+        //return dataFactory;
+        return null;
     }
 
     /**
@@ -140,7 +142,30 @@ public class ReportGenerator extends AbstractReportGenerator
                         "BG&E Collectables",
                         "Classic Gift Ideas, Inc",
                 });*/
-        parameters.put("Report Title", "Simple Title for the Sample Report");
+
+        parameters.put("TEST_TYPE", "CL Report");
+
+        parameters.put("OWNER_ADDRESS", "1187 Edgemont Rd.");
+        parameters.put("OWNER_CITY_STATE_ZIP", "Emmett, ID 83617");
+        parameters.put("OWNER_PHONE", "(208) 963-5679");
+        parameters.put("OWNER_EMAIL", "lab@sageaglab.com");
+        parameters.put("OWNER_WEBSITE", "www.sageaglab.com");
+
+        //client info
+        parameters.put("CLIENT_NAME", "Jane Doe");
+        parameters.put("CLIENT_ADDRESS", "111 Some Rd.");
+        parameters.put("CLIENT_CITY_STATE_ZIP", "Boise, ID 83709");
+
+        parameters.put("LOGID", "LOG O10419004");
+
+        parameters.put("DATE_RECEIVED", "1/4/2019");
+        parameters.put("DATE_TESTED", "1/9/2019");
+
+
+        //test data
+        parameters.put("POSITIVE_OD", "0.698");
+        parameters.put("MARGINAL_LOW", "0.398");
+        parameters.put("MARGINAL_HIGH", "0.698");
         return parameters;
         //return null;
     }

@@ -1,0 +1,6 @@
+.idea/
+Diagnostic Report Generator.iml
+ReportGenerator.pdf
+derby.log
+lib/demoDB/log/log1.dat
+out/
