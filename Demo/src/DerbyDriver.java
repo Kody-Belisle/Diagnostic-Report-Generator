@@ -52,7 +52,7 @@ public class DerbyDriver
     /* the default framework is embedded */
     private String framework = "embedded";
     private String protocol = "jdbc:derby:C:\\Users\\Hjohn\\IdeaProjects\\Diagnostic-Report-Generator\\lib\\";
-
+    private boolean first = true;
     /**
      * <p>
      * Starts the demo by creating a new instance of this class and running
@@ -173,41 +173,42 @@ public class DerbyDriver
             s = conn.createStatement();
             statements.add(s);
 
-            // We create a table...
-            s.execute("create table client(client_name varchar(50) NOT NULL, name varchar(50) NOT NULL," +
-                    "phone varchar(20) NOT NULL, email varchar(50) NOT NULL," +
-                    "address varchar(100) NOT NULL, zip char(5) NOT NULL, city varchar(30) NOT NULL," +
-                    "state char(2) NOT NULL, primary key (client_name))");
-            System.out.println("Created table client");
+            if(first) {
+                // We create a table...
+                s.execute("create table client(client_name varchar(50) NOT NULL, name varchar(50) NOT NULL," +
+                        "phone varchar(20) NOT NULL, email varchar(50) NOT NULL," +
+                        "address varchar(100) NOT NULL, zip char(5) NOT NULL, city varchar(30) NOT NULL," +
+                        "state char(2) NOT NULL, primary key (client_name))");
+                System.out.println("Created table client");
 
-            // and add a few rows...
+                // and add a few rows...
 
-            /* It is recommended to use PreparedStatements when you are
-             * repeating execution of an SQL statement. PreparedStatements also
-             * allows you to parameterize variables. By using PreparedStatements
-             * you may increase performance (because the Derby engine does not
-             * have to recompile the SQL statement each time it is executed) and
-             * improve security (because of Java type checking).
-             */
-            // parameter 1 is num (int), parameter 2 is addr (varchar)
-            psInsert = conn.prepareStatement(
-                    "insert into client values (?, ?, ?, ?, ?, ?, ?, ?)");
-            statements.add(psInsert);
+                /* It is recommended to use PreparedStatements when you are
+                 * repeating execution of an SQL statement. PreparedStatements also
+                 * allows you to parameterize variables. By using PreparedStatements
+                 * you may increase performance (because the Derby engine does not
+                 * have to recompile the SQL statement each time it is executed) and
+                 * improve security (because of Java type checking).
+                 */
+                // parameter 1 is num (int), parameter 2 is addr (varchar)
+                psInsert = conn.prepareStatement(
+                        "insert into client values (?, ?, ?, ?, ?, ?, ?, ?)");
+                statements.add(psInsert);
 
-            psInsert.setString(1, "Test Company");
-            psInsert.setString(2, "Bob Jones");
-            psInsert.setString(3, "(208) 111-1111");
-            psInsert.setString(4, "test@gmail.com");
-            psInsert.setString(5, "123 Main St.");
-            psInsert.setString(6, "83706");
-            psInsert.setString(7, "Boise");
-            psInsert.setString(8, "ID");
-            psInsert.executeUpdate();
-            System.out.println("Inserted Test company, bob jones, at 123 Main st.");
+                psInsert.setString(1, "Test Company");
+                psInsert.setString(2, "Bob Jones");
+                psInsert.setString(3, "(208) 111-1111");
+                psInsert.setString(4, "test@gmail.com");
+                psInsert.setString(5, "123 Main St.");
+                psInsert.setString(6, "83706");
+                psInsert.setString(7, "Boise");
+                psInsert.setString(8, "ID");
+                psInsert.executeUpdate();
+                System.out.println("Inserted Test company, bob jones, at 123 Main st.");
 
-            // Let's update some rows as well...
+                // Let's update some rows as well...
 
-            // parameter 1 and 3 are num (int), parameter 2 is addr (varchar)
+                // parameter 1 and 3 are num (int), parameter 2 is addr (varchar)
             /*psUpdate = conn.prepareStatement(
                     "update location set num=?, addr=? where num=?");
             statements.add(psUpdate);
@@ -228,9 +229,11 @@ public class DerbyDriver
             /*
                We select the rows and verify the results.
              */
-            rs = s.executeQuery(
-                    "SELECT * FROM client");
+                rs = s.executeQuery(
+                        "SELECT * FROM client");
 
+                first = false;
+            }
             /* we expect the first returned column to be an integer (num),
              * and second to be a String (addr). Rows are sorted by street
              * number (num).
