@@ -3,6 +3,7 @@ package src;
 
 import java.util.ArrayList;
 
+import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
 
@@ -466,18 +467,23 @@ public class InputWindow extends javax.swing.JFrame {
     }                                        
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {                                         
-                //Add customer to table button
+                //Add customer to table button / Next Customer
 
                 int animalCount;
 
-                //add animals to map
-                animalCount = fillTable();
-                //save customer info and animal count
-                saveCustomer(animalCount);
-        
-                
-        
-                //clear table (currently done in filltable)
+                //check if a test is selected
+
+                if (testID != -1) {
+
+                    //add animals to map
+                    animalCount = fillTable();
+                    //save customer info and animal count
+                    saveCustomer(animalCount);
+                    //clear table (currently done in filltable)
+                } else {
+                    JOptionPane.showMessageDialog(null, "Select a test.");
+
+                }
         
     }                                        
 
@@ -625,6 +631,7 @@ public class InputWindow extends javax.swing.JFrame {
                 animalCount++;
             } else {
                 System.out.println("Null or empty element, not pushing to map");
+                System.out.println(element);
             }
           }
 
@@ -636,7 +643,7 @@ public class InputWindow extends javax.swing.JFrame {
         //get data from buttons
         
         //TODO: check if all the necessary data is there
-        
+        //need to decide which fields are necessary
         //put data in report object
 
         Report customer = new Report(
@@ -708,7 +715,7 @@ public class InputWindow extends javax.swing.JFrame {
 
 
     //personal variables
-    public int testID;
+    public int testID = -1;
     public ArrayList<String> animalIDList = new ArrayList<String>();
     public ArrayList<Report> reportList = new ArrayList<Report>();
     public int customerCount = 0;

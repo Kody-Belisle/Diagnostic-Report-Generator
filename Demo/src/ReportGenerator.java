@@ -195,4 +195,3 @@ public class ReportGenerator extends AbstractReportGenerator
         System.err.println("Generated the report [" + outputFilename.getAbsolutePath() + "]");
     }
 }
-

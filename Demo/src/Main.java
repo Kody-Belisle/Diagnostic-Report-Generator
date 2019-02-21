@@ -17,8 +17,7 @@ public class Main
                 System.out.println("current dir = " + dir);
 
 
-                InputWindow animalWindow = new InputWindow();
-                animalWindow.setVisible(true);
+                new InputWindow().setVisible(true);
             }
         });
 
