@@ -18,6 +18,19 @@ public class InputWindow extends javax.swing.JFrame {
      */
     public InputWindow() {
         initComponents();
+        textFields.add(jTextField1);
+        textFields.add(jTextField2);
+        textFields.add(jTextField3);
+        textFields.add(jTextField4);
+        textFields.add(jTextField5);
+        textFields.add(jTextField6);
+        textFields.add(jTextField7);
+        textFields.add(jTextField8);
+        textFields.add(jTextField9);
+        textFields.add(jTextField10);
+
+
+
     }
 
     /**
@@ -541,7 +554,7 @@ public class InputWindow extends javax.swing.JFrame {
     }                                          
 
 
-    public void printCurrentAnimalList(){
+    private void printCurrentAnimalList(){
         for (String e : animalIDList) {
             System.out.println("In List: " + e);
         }
@@ -639,7 +652,7 @@ public class InputWindow extends javax.swing.JFrame {
         return animalCount;
     }
 
-    public void saveCustomer(int animalCount) {
+    private void saveCustomer(int animalCount) {
         //get data from buttons
         
         //TODO: check if all the necessary data is there
@@ -658,10 +671,16 @@ public class InputWindow extends javax.swing.JFrame {
 
         System.out.println("Added customer: " + customer.getName());
         reportList.add(customer);
+        //clear fields
+        for (javax.swing.JTextField e : textFields) {
+            e.setText("");
+        }
+
+
 
     }
 
-    public void getCellValues() {
+    private void getCellValues() {
 
         DefaultTableModel jTable1model = (DefaultTableModel) jTable1.getModel();
 
@@ -693,13 +712,14 @@ public class InputWindow extends javax.swing.JFrame {
             
             
             case 2:
+            //add x values
+            testXVals.add(0);
+            testXVals.add(0);
+            testXVals.add(0);
+            testXVals.add(3);
+            testXVals.add(3);
 
-            testXVals.add(0);
-            testXVals.add(0);
-            testXVals.add(0);
-            testXVals.add(3);
-            testXVals.add(3);
-            
+            //add y values
             testYVals.add(0);
             testYVals.add(1);
             testYVals.add(2);
@@ -715,14 +735,13 @@ public class InputWindow extends javax.swing.JFrame {
 
 
     //personal variables
-    public int testID = -1;
-    public ArrayList<String> animalIDList = new ArrayList<String>();
-    public ArrayList<Report> reportList = new ArrayList<Report>();
-    public int customerCount = 0;
-    public int fillX = 1;
-    public int fillY = 0;
-    public ArrayList<Integer> testXVals;
-    public ArrayList<Integer> testYVals;
+    private int testID = -1;
+    private ArrayList<String> animalIDList = new ArrayList<String>();
+    private ArrayList<Report> reportList = new ArrayList<Report>();
+    private int fillX = 1;
+    private int fillY = 0;
+    private ArrayList<Integer> testXVals;
+    private ArrayList<Integer> testYVals;
 
     // Variables declaration - do not modify                     
     private javax.swing.JButton jButton1;
@@ -772,5 +791,6 @@ public class InputWindow extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField7;
     private javax.swing.JTextField jTextField8;
     private javax.swing.JTextField jTextField9;
+    private ArrayList<javax.swing.JTextField> textFields = new ArrayList<>();
     // End of variables declaration                   
 }
