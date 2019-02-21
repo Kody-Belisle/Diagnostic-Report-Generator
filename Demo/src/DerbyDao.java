@@ -1,5 +1,7 @@
 package src;
 
+import org.pentaho.reporting.engine.classic.core.modules.misc.datafactory.sql.DriverConnectionProvider;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Properties;
@@ -17,6 +19,10 @@ public class DerbyDao {
     private static ArrayList<Statement> statements;
     private static ResultSet rs;
 
+    public DerbyDao() {
+
+    }
+
     private Connection getConnection() {
         System.out.println("DerbyDriver starting in " + framework + " mode");
         conn = null;
@@ -26,7 +32,7 @@ public class DerbyDao {
             // providing a user name and password is optional in the embedded
             // and derbyclient frameworks
             props.put("user", "user1");
-            props.put("password", "user1");
+            props.put("password", "");
 
             /* By default, the schema APP will be used when no username is
              * provided.
@@ -73,60 +79,13 @@ public class DerbyDao {
                         "state char(2) NOT NULL, primary key (client_name))");
                 System.out.println("Created table client");
 
-                // and add a few rows...
-
-                /* It is recommended to use PreparedStatements when you are
-                 * repeating execution of an SQL statement. PreparedStatements also
-                 * allows you to parameterize variables. By using PreparedStatements
-                 * you may increase performance (because the Derby engine does not
-                 * have to recompile the SQL statement each time it is executed) and
-                 * improve security (because of Java type checking).
-                 */
-                // parameter 1 is num (int), parameter 2 is addr (varchar)
-                /*psInsert = conn.prepareStatement(
-                        "insert into client values (?, ?, ?, ?, ?, ?, ?, ?)");
-                statements.add(psInsert);
-
-                psInsert.setString(1, "Test Company");
-                psInsert.setString(2, "Bob Jones");
-                psInsert.setString(3, "(208) 111-1111");
-                psInsert.setString(4, "test@gmail.com");
-                psInsert.setString(5, "123 Main St.");
-                psInsert.setString(6, "83706");
-                psInsert.setString(7, "Boise");
-                psInsert.setString(8, "ID");
-                psInsert.executeUpdate();
-                System.out.println("Inserted Test company, bob jones, at 123 Main st.");*/
-
-                // Let's update some rows as well...
-
-                // parameter 1 and 3 are num (int), parameter 2 is addr (varchar)
-            /*psUpdate = conn.prepareStatement(
-                    "update location set num=?, addr=? where num=?");
-            statements.add(psUpdate);
-
-            psUpdate.setInt(1, 180);
-            psUpdate.setString(2, "Grand Ave.");
-            psUpdate.setInt(3, 1956);
-            psUpdate.executeUpdate();
-            System.out.println("Updated 1956 Webster to 180 Grand");
-
-            psUpdate.setInt(1, 300);
-            psUpdate.setString(2, "Lakeshore Ave.");
-            psUpdate.setInt(3, 180);
-            psUpdate.executeUpdate();
-            System.out.println("Updated 180 Grand to 300 Lakeshore");*/
-
-
-            /*
-               We select the rows and verify the results.
-             */
             rs = s.executeQuery(
                         "SELECT * FROM client");
 
 
             conn.commit();
             System.out.println("Committed the transaction");
+
 
             /*
              * In embedded mode, an application should shut down the database.
@@ -153,7 +112,32 @@ public class DerbyDao {
         } finally {
             shutDown();
         }
+
         return conn;
+    }
+
+    /*
+     * DIFFERENT FROM GETCONNECTION()
+     * Is called from ReportGenerator in order to set up the data factory
+     * This method only set up the DriverConnectionProvider
+     */
+    public DriverConnectionProvider setUpConnProvider() {
+        //Get the current directory so that
+        //the path is not hardcoded
+        String protocol = System.getProperty("user.dir");
+        String dbName = "demoDB";
+
+        final DriverConnectionProvider singleDriverConnectionProvider = new DriverConnectionProvider();
+        singleDriverConnectionProvider.setDriver("org.apache.derby.jdbc.EmbeddedDriver");
+        //singleDriverConnectionProvider.setUrl("jdbc:derby:./sql/sampledata");
+        //System.out.println("Current Directory: " + System.getProperty("user.dir"));
+
+        System.out.println("Full URL:" + "jdbc:derby:" + protocol + "\\lib\\" + dbName + ";create=true");
+        singleDriverConnectionProvider.setUrl("jdbc:derby:" + protocol + "\\lib\\" + dbName + ";create=true");
+        singleDriverConnectionProvider.setProperty("user", "user1");
+        singleDriverConnectionProvider.setProperty("password", "");
+
+        return singleDriverConnectionProvider;
     }
 
     private ResultSet getClients(String clientName) {
