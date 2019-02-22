@@ -48,12 +48,14 @@ public class ReportGenerator extends AbstractReportGenerator
 {
 
     private Report report;
+    private DerbyDao dao;
     /**
      * Default constructor for this sample report generator
      */
     public ReportGenerator(Report report)
     {
         this.report = report;
+        this.dao = new DerbyDao();
     }
 
     private static final String QUERY_NAME = "ReportQuery";
@@ -98,23 +100,14 @@ public class ReportGenerator extends AbstractReportGenerator
      */
     public DataFactory getDataFactory()
     {
-        String dbName = "demoDB";
-        final DriverConnectionProvider sampleDriverConnectionProvider = new DriverConnectionProvider();
-        sampleDriverConnectionProvider.setDriver("org.apache.derby.jdbc.EmbeddedDriver");
-        //sampleDriverConnectionProvider.setUrl("jdbc:derby:./sql/sampledata");
-        System.out.println(System.getProperty("Current Directory: " + "user.dir"));
+        final DriverConnectionProvider connProvider = dao.setUpConnProvider();
 
-        sampleDriverConnectionProvider.setUrl("jdbc:derby:C:\\Users\\Hjohn\\IdeaProjects\\Diagnostic-Report-Generator\\lib\\"
-                + dbName + ";create=true");
-        sampleDriverConnectionProvider.setProperty("user", "user1");
-        sampleDriverConnectionProvider.setProperty("password", "");
-        /*
-        final SQLReportDataFactory dataFactory = new SQLReportDataFactory(sampleDriverConnectionProvider);
+        final SQLReportDataFactory dataFactory = new SQLReportDataFactory(connProvider);
         dataFactory.setQuery(QUERY_NAME,
-                "select client_name from client");
-        */
-        //return dataFactory;
-        return null;
+                "select client_name from Client");
+
+        return dataFactory;
+        //return null;
     }
 
     /**
