@@ -46,11 +46,14 @@ import org.pentaho.reporting.libraries.resourceloader.ResourceManager;
  */
 public class ReportGenerator extends AbstractReportGenerator
 {
+
+    private Report report;
     /**
      * Default constructor for this sample report generator
      */
-    public ReportGenerator()
+    public ReportGenerator(Report report)
     {
+        this.report = report;
     }
 
     private static final String QUERY_NAME = "ReportQuery";
@@ -127,34 +130,26 @@ public class ReportGenerator extends AbstractReportGenerator
     public Map<String, Object> getReportParameters()
     {
         final Map parameters = new HashMap<String, Object>();
-        /*parameters.put("Report Type", "CL Test");
-        parameters.put("Owner Address", new String [] {"777 W Main St.", "123 Main St.", "3 Fourth St."});
-        parameters.put("CUSTOMERNAME", "Jane Doe");
-        parameters.put("OwnerEmail", "test@gmail.com");
-        parameters.put("OwnerWebsite", "www.test.com");
-        parameters.put("Submitted By:", "Bob");*/
-        /*parameters.put("Col Headers BG Color", "yellow");
-        parameters.put("Customer Names",
-                new String [] {
-                        "American Souvenirs Inc",
-                        "Toys4GrownUps.com",
-                        "giftsbymail.co.uk",
-                        "BG&E Collectables",
-                        "Classic Gift Ideas, Inc",
-                });*/
 
-        parameters.put("TEST_TYPE", "CL Report");
+        if (report == null) {
+            System.out.println("ERROR: no report passed in");
+            return null;
+        }
+        System.out.println("Creating report for" + report.getName());
 
-        parameters.put("OWNER_ADDRESS", "1187 Edgemont Rd.");
-        parameters.put("OWNER_CITY_STATE_ZIP", "Emmett, ID 83617");
+        parameters.put("TEST_TYPE", report.getTestType());
+
+        parameters.put("OWNER_ADDRESS", "");
+        parameters.put("OWNER_CITY_STATE_ZIP", (""));
         parameters.put("OWNER_PHONE", "(208) 963-5679");
         parameters.put("OWNER_EMAIL", "lab@sageaglab.com");
         parameters.put("OWNER_WEBSITE", "www.sageaglab.com");
 
         //client info
-        parameters.put("CLIENT_NAME", "Jane Doe");
-        parameters.put("CLIENT_ADDRESS", "111 Some Rd.");
-        parameters.put("CLIENT_CITY_STATE_ZIP", "Boise, ID 83709");
+        parameters.put("CLIENT_NAME", report.getName());
+
+        parameters.put("CLIENT_ADDRESS", report.getAddress());
+        parameters.put("CLIENT_CITY_STATE_ZIP", report.getCity() + report.getState() + report.getZip());
 
         parameters.put("LOGID", "LOG O10419004");
 
@@ -189,7 +184,7 @@ public class ReportGenerator extends AbstractReportGenerator
         final File outputFilename = new File(ReportGenerator.class.getSimpleName() + ".pdf");
 
         // Generate the report
-        new ReportGenerator().generateReport(AbstractReportGenerator.OutputType.PDF, outputFilename);
+        new ReportGenerator(null).generateReport(AbstractReportGenerator.OutputType.PDF, outputFilename);
 
         // Output the location of the file
         System.err.println("Generated the report [" + outputFilename.getAbsolutePath() + "]");

@@ -11,23 +11,27 @@ public class Report {
         String address;
         String city;
         String state;
+        String zip;
         String dateReceived;
         String dateTested;
+        int testType;
         int animalCount;
         
         String logID;
         ArrayList<Float> testResults;
         private static  ArrayList<String> calculatedResult = new ArrayList<String>();
         
-        public Report(String name, String address, String city, String state, String dateReceived, String dateTested, int animalCount) {
+        public Report(String name, String address, String city, String state, String zip, String dateReceived, String dateTested, int animalCount, int testType) {
 
             this.name = name;
             this.address = address;
             this.city = city;
             this.state = state;
+            this.zip = zip;
             this.dateReceived = dateReceived;
             this.dateTested = dateTested;
             this.animalCount = animalCount;
+            this.testType = testType;
 
             testResults = new ArrayList<Float>();
         }
@@ -72,6 +76,8 @@ public class Report {
             return state;
         }
 
+        public String getZip() { return zip; }
+
         public String calculateLog() {
             return "";
         }
@@ -82,6 +88,20 @@ public class Report {
 
         public String getTested(){
             return dateTested;
+        }
+
+        public String getTestType() {
+            if (testType == 1) {
+                return "CAE";
+            }
+            if (testType == 2) {
+                return "CL";
+            }
+            if (testType == 3) {
+                return "Johne's";
+            }
+
+            return null;
         }
 
 

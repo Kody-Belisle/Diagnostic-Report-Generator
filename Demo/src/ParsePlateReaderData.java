@@ -163,13 +163,5 @@ public class ParsePlateReaderData {
 
 
     }
-     
-    public void printValues() {
-
-        for (float e : testValues) {
-            System.out.println(e);
-        }
-
-    }
 
 }

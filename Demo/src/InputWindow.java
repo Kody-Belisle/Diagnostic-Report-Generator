@@ -487,7 +487,10 @@ public class InputWindow extends javax.swing.JFrame {
                 //check if a test is selected
 
                 if (testID != -1) {
-
+                    //print all fields (delete later)
+                    for (javax.swing.JTextField e : textFields) {
+                        System.out.println("Field data: "+ e.getText());
+                    }
                     //add animals to map
                     animalCount = fillTable();
                     //save customer info and animal count
@@ -497,6 +500,8 @@ public class InputWindow extends javax.swing.JFrame {
                     JOptionPane.showMessageDialog(null, "Select a test.");
 
                 }
+
+
         
     }                                        
 
@@ -659,15 +664,30 @@ public class InputWindow extends javax.swing.JFrame {
         //need to decide which fields are necessary
         //put data in report object
 
+
         Report customer = new Report(
-            jTextField1.getText(),
-            jTextField2.getText(),
-            jTextField3.getText(),
-            (String) jComboBox1.getSelectedItem(),
-            jTextField5.getText(),
-            jTextField6.getText(),
-            animalCount
-        );        
+            jTextField10.getText(),                    //company name
+            jTextField2.getText(),                     //address
+            jTextField3.getText(),                     //city
+            (String) jComboBox1.getSelectedItem(),     //state
+            jTextField4.getText(),                     //zip
+            jTextField5.getText(),                     //date
+            jTextField6.getText(),                     //email address
+            animalCount,
+                testID
+        );
+    /*
+        private javax.swing.JTextField jTextField1;         //Client name
+        private javax.swing.JTextField jTextField2;         //Address
+        private javax.swing.JTextField jTextField3;         //City
+        private javax.swing.JTextField jTextField4;         //Zip
+        private javax.swing.JTextField jTextField5;         //Date
+        private javax.swing.JTextField jTextField6;         //Email Address
+        private javax.swing.JTextField jTextField7;         //Phone 1
+        private javax.swing.JTextField jTextField8;         //Phone 2
+        private javax.swing.JTextField jTextField9;         //LOGID
+        private javax.swing.JTextField jTextField10;        //CompanyName
+        */
 
         System.out.println("Added customer: " + customer.getName());
         reportList.add(customer);
@@ -781,16 +801,16 @@ public class InputWindow extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTable1;
     private javax.swing.JTable jTable2;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField10;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
-    private javax.swing.JTextField jTextField5;
-    private javax.swing.JTextField jTextField6;
-    private javax.swing.JTextField jTextField7;
-    private javax.swing.JTextField jTextField8;
-    private javax.swing.JTextField jTextField9;
+    private javax.swing.JTextField jTextField1;         //Client name
+    private javax.swing.JTextField jTextField10;        //CompanyName
+    private javax.swing.JTextField jTextField2;         //Address
+    private javax.swing.JTextField jTextField3;         //City
+    private javax.swing.JTextField jTextField4;         //Zip
+    private javax.swing.JTextField jTextField5;         //Date
+    private javax.swing.JTextField jTextField6;         //Email Address
+    private javax.swing.JTextField jTextField7;         //Phone 1
+    private javax.swing.JTextField jTextField8;         //Phone 2
+    private javax.swing.JTextField jTextField9;         //LOGID
     private ArrayList<javax.swing.JTextField> textFields = new ArrayList<>();
     // End of variables declaration                   
 }

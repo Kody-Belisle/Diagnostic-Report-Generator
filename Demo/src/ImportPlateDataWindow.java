@@ -1,5 +1,7 @@
 package src;
 
+import org.pentaho.reporting.engine.classic.core.ReportProcessingException;
+
 import java.awt.*;
 import javax.swing.*;
 import java.awt.event.*;
@@ -70,7 +72,7 @@ public class ImportPlateDataWindow extends JFrame {
                 }
 
                 for (Report r : reportList) {
-                    generateReport(r);
+                    printReport(r);
                     System.out.println("Generated Report");
                 }
 
@@ -88,13 +90,13 @@ public class ImportPlateDataWindow extends JFrame {
     }
 
 
-    public void setAnimalIDList(ArrayList<String> animalIDList){
+    protected void setAnimalIDList(ArrayList<String> animalIDList){
 
         this.animalIDList = animalIDList;
 
     }
 
-    public void setReportList(ArrayList<Report> reportList){
+    protected void setReportList(ArrayList<Report> reportList){
 
         this.reportList = reportList;
     }
@@ -103,40 +105,20 @@ public class ImportPlateDataWindow extends JFrame {
         this.testID = testID;
     }
 
-    public void generateReport(Report report) {
+    private void printReport(Report report) {
+        final File outputFilename = new File(ReportGenerator.class.getSimpleName() + ".pdf");
 
+        // Generate the report
         try {
-            DateFormat dateFormat = new SimpleDateFormat("yyyy_MM_dd HH-MM");
-            Date date = new Date();
-            String clientName = report.getName();
-            BufferedWriter writer = new BufferedWriter(new FileWriter("Diagnostic-Report-Generator/" + "Generated Reports/" + clientName + " " + dateFormat.format(date) + ".txt"));
-
-
-    
-            switch (testID) {
-
-
-                case 1:
-
-                case 2:
-
-                case 3:
-
-            }
-
-            
-            
-            writer.write("Submitted by: " + report.getName());
-
-
-
-
-            System.out.println("Wrote to file");
-            writer.close();
+            new ReportGenerator(report).generateReport(AbstractReportGenerator.OutputType.PDF, outputFilename);
         } catch (IOException e) {
-
-            System.out.println("IO exception");
-            System.exit(0);
+            e.printStackTrace();
+        } catch (ReportProcessingException e) {
+            e.printStackTrace();
         }
+
+        // Output the location of the file
+        System.err.println("Generated the report [" + outputFilename.getAbsolutePath() + "]");
+
     }
 }
