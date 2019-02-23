@@ -4,3 +4,4 @@ ReportGenerator.pdf
 derby.log
 lib/demoDB/log/log1.dat
 out/
+Customer List.csv
