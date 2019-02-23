@@ -491,6 +491,9 @@ public class InputWindow extends javax.swing.JFrame {
                     for (javax.swing.JTextField e : textFields) {
                         System.out.println("Field data: "+ e.getText());
                     }
+
+                    //deselect field
+
                     //add animals to map
                     animalCount = fillTable();
                     //save customer info and animal count
@@ -602,6 +605,8 @@ public class InputWindow extends javax.swing.JFrame {
 
         int animalCount = 0;
         DefaultTableModel jTable2model = (DefaultTableModel) jTable2.getModel();
+        jTable2.editCellAt(-1, -1);
+        jTable2.getSelectionModel().clearSelection();
         //print rows in animal ID input column
         int rowCount = jTable2model.getRowCount();
         System.out.println("Row Count: " + rowCount);
