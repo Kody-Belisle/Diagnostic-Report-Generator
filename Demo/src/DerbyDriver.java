@@ -325,7 +325,7 @@ public class DerbyDriver
                     // To shut down a specific database only, but keep the
                     // engine running (for example for connecting to other
                     // databases), specify a database in the connection URL:
-                    //DriverManager.getConnection("jdbc:derby:" + dbName + ";shutdown=true");
+                    //DriverManager.startUp("jdbc:derby:" + dbName + ";shutdown=true");
                 }
                 catch (SQLException se)
                 {
