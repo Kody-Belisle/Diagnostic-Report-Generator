@@ -7,13 +7,9 @@ import java.util.ArrayList;
  */
 public class Report {
         ArrayList<PlateTest> plateTests;
-        String name;
-        String address;
-        String city;
-        String state;
-        String zip;
-        String dateReceived;
-        String dateTested;
+        private Client singleClient;
+        private String dateReceived;
+        private String dateTested;
         int testType;
         int animalCount;
         
@@ -21,13 +17,8 @@ public class Report {
         ArrayList<Float> testResults;
         private static  ArrayList<String> calculatedResult = new ArrayList<String>();
         
-        public Report(String name, String address, String city, String state, String zip, String dateReceived, String dateTested, int animalCount, int testType) {
-
-            this.name = name;
-            this.address = address;
-            this.city = city;
-            this.state = state;
-            this.zip = zip;
+        public Report(Client client, String dateReceived, String dateTested, int animalCount, int testType) {
+            this.singleClient = client;
             this.dateReceived = dateReceived;
             this.dateTested = dateTested;
             this.animalCount = animalCount;
@@ -58,28 +49,13 @@ public class Report {
             return animalCount;
         }
 
-        public String getName() {
-
-            return name;
-        }
-
-        public String getAddress() {
-
-            return address;
-        }
-
-        public String getCity() {
-            return city;
-        }
-
-        public String getState() {
-            return state;
-        }
-
-        public String getZip() { return zip; }
 
         public String calculateLog() {
             return "";
+        }
+
+        public Client getSingleClient() {
+            return singleClient;
         }
 
         public String getReceived(){

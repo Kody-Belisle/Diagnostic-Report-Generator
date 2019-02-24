@@ -669,24 +669,23 @@ public class InputWindow extends javax.swing.JFrame {
         //need to decide which fields are necessary
         //put data in report object
 
-
-        Report customer = new Report(
+        Client customer = new Client(
             jTextField10.getText(),                    //company name
+            jTextField1.getText(),                     //client name
             jTextField2.getText(),                     //address
             jTextField3.getText(),                     //city
             (String) jComboBox1.getSelectedItem(),     //state
             jTextField4.getText(),                     //zip
-            jTextField5.getText(),                     //date
             jTextField6.getText(),                     //email address
-            animalCount,
-                testID
+            jTextField7.getText(),                     //phone 1
+            jTextField8.getText()                      //phone 2
         );
     /*
         private javax.swing.JTextField jTextField1;         //Client name
         private javax.swing.JTextField jTextField2;         //Address
         private javax.swing.JTextField jTextField3;         //City
         private javax.swing.JTextField jTextField4;         //Zip
-        private javax.swing.JTextField jTextField5;         //Date
+        private javax.swing.JTextField jTextField5;         //Date - With Report
         private javax.swing.JTextField jTextField6;         //Email Address
         private javax.swing.JTextField jTextField7;         //Phone 1
         private javax.swing.JTextField jTextField8;         //Phone 2
@@ -694,8 +693,16 @@ public class InputWindow extends javax.swing.JFrame {
         private javax.swing.JTextField jTextField10;        //CompanyName
         */
 
-        System.out.println("Added customer: " + customer.getName());
-        reportList.add(customer);
+        checkClientInfo(customer);
+
+        Report newReport = new Report(customer,
+                jTextField5.getText(),                      //Date
+                jTextField5.getText(),
+                animalCount,
+                testID
+        );
+
+        reportList.add(newReport);
         //clear fields
         for (javax.swing.JTextField e : textFields) {
             e.setText("");
@@ -817,5 +824,17 @@ public class InputWindow extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField8;         //Phone 2
     private javax.swing.JTextField jTextField9;         //LOGID
     private ArrayList<javax.swing.JTextField> textFields = new ArrayList<>();
-    // End of variables declaration                   
+    // End of variables declaration
+
+    private void checkClientInfo(Client client) {
+        System.out.println(client.getCompanyName());
+        System.out.println(client.getName());
+        System.out.println(client.getAddress());
+        System.out.println(client.getCity());
+        System.out.println(client.getState());
+        System.out.println(client.getZip());
+        System.out.println(client.getEmail());
+        System.out.println(client.getPhoneOne());
+        System.out.println(client.getPhoneTwo());
+    }
 }

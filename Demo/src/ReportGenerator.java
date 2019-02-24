@@ -128,7 +128,7 @@ public class ReportGenerator extends AbstractReportGenerator
             System.out.println("ERROR: no report passed in");
             return null;
         }
-        System.out.println("Creating report for" + report.getName());
+        System.out.println("Creating report for" + report.getSingleClient().getCompanyName());
 
         parameters.put("TEST_TYPE", report.getTestType());
 
@@ -139,10 +139,10 @@ public class ReportGenerator extends AbstractReportGenerator
         parameters.put("OWNER_WEBSITE", "www.sageaglab.com");
 
         //client info
-        parameters.put("CLIENT_NAME", report.getName());
+        parameters.put("CLIENT_NAME", report.getSingleClient().getCompanyName());
 
-        parameters.put("CLIENT_ADDRESS", report.getAddress());
-        parameters.put("CLIENT_CITY_STATE_ZIP", report.getCity() + report.getState() + report.getZip());
+        parameters.put("CLIENT_ADDRESS", report.getSingleClient().getAddress());
+        parameters.put("CLIENT_CITY_STATE_ZIP", report.getSingleClient().getCity() + report.getSingleClient().getState() + report.getSingleClient().getZip());
 
         parameters.put("LOGID", "LOG O10419004");
 

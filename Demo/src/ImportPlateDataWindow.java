@@ -5,14 +5,9 @@ import org.pentaho.reporting.engine.classic.core.ReportProcessingException;
 import java.awt.*;
 import javax.swing.*;
 import java.awt.event.*;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 
 public class ImportPlateDataWindow extends JFrame {
     
@@ -99,6 +94,9 @@ public class ImportPlateDataWindow extends JFrame {
     protected void setReportList(ArrayList<Report> reportList){
 
         this.reportList = reportList;
+        for (Report report: reportList) {
+            System.out.println("Client name: " + report.getSingleClient().getCompanyName());
+        }
     }
 
     public void setTestID(int testID) {
