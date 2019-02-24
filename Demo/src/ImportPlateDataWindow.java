@@ -104,11 +104,13 @@ public class ImportPlateDataWindow extends JFrame {
     }
 
     private void printReport(Report report) {
-        final File outputFilename = new File(ReportGenerator.class.getSimpleName() + ".pdf");
+        String clientName = report.getSingleClient().getCompanyName();
+        final File outputFilename = new File(clientName + "Report" + ".pdf");
 
         // Generate the report
         try {
             new ReportGenerator(report).generateReport(AbstractReportGenerator.OutputType.PDF, outputFilename);
+
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ReportProcessingException e) {

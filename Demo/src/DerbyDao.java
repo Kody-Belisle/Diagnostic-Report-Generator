@@ -67,6 +67,36 @@ public class DerbyDao {
 
     }
 
+    public void addClient(Client clientToAdd) {
+        try {
+            PreparedStatement psInsert = conn.prepareStatement(
+                    "insert into client values (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            statements.add(psInsert);
+
+            psInsert.setString(1, clientToAdd.getCompanyName());
+            psInsert.setString(2, clientToAdd.getName());
+            psInsert.setString(3, clientToAdd.getPhoneOne());
+            psInsert.setString(4, clientToAdd.getPhoneTwo());
+            psInsert.setString(5, clientToAdd.getEmail());
+            psInsert.setString(6, clientToAdd.getAddress());
+            psInsert.setString(7, clientToAdd.getZip());
+            psInsert.setString(8, clientToAdd.getCity());
+            psInsert.setString(9, clientToAdd.getState());
+            int results = psInsert.executeUpdate();
+
+            if (results <= 0) {
+                System.out.println("New Client not added to database");
+            } else {
+                System.out.println("Inserted New Client: " + clientToAdd.getCompanyName());
+            }
+
+            conn.commit();
+            System.out.println("Committed the change");
+        } catch (SQLException sqle) {
+            printSQLException(sqle);
+        }
+    }
+
     /*
      *   Only call startUp if it's the first time the DAO is being called.
      *   Otherwise, just return existing connection
@@ -116,6 +146,7 @@ public class DerbyDao {
             printSQLException(sqle);
 
         } finally {
+            //TODO: This should not be here permanently. Needs to be moved whever program will exit.
             shutDown();
         }
 

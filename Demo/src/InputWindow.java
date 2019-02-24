@@ -664,7 +664,7 @@ public class InputWindow extends javax.swing.JFrame {
 
     private void saveCustomer(int animalCount) {
         //get data from buttons
-        
+        DerbyDao dao = new DerbyDao();
         //TODO: check if all the necessary data is there
         //need to decide which fields are necessary
         //put data in report object
@@ -694,7 +694,7 @@ public class InputWindow extends javax.swing.JFrame {
         */
 
         checkClientInfo(customer);
-
+        dao.addClient(customer);
         Report newReport = new Report(customer,
                 jTextField5.getText(),                      //Date
                 jTextField5.getText(),
