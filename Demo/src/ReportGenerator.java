@@ -140,10 +140,10 @@ public class ReportGenerator extends AbstractReportGenerator
         parameters.put("OWNER_WEBSITE", "www.sageaglab.com");
 
         //client info
-        parameters.put("CLIENT_NAME", report.getSingleClient().getCompanyName());
+        parameters.put("COMPANY_NAME", report.getSingleClient().getCompanyName());
 
         parameters.put("CLIENT_ADDRESS", report.getSingleClient().getAddress());
-        parameters.put("CLIENT_CITY_STATE_ZIP", report.getSingleClient().getCity() + report.getSingleClient().getState() + report.getSingleClient().getZip());
+        parameters.put("CLIENT_CITY_STATE_ZIP", report.getSingleClient().getCity() + " " + report.getSingleClient().getState() +", " + report.getSingleClient().getZip());
 
         parameters.put("LOGID", "LOG O10419004");
 
