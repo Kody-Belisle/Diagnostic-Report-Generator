@@ -97,6 +97,60 @@ public class DerbyDao {
         }
     }
 
+    public void addAnimal(String animalID, String type, Double result, String textResult, String companyName, String logID) {
+        try {
+            PreparedStatement psInsert = conn.prepareStatement(
+                    "insert into animals values (?, ?, ?, ?, ?, ?)");
+            statements.add(psInsert);
+
+            psInsert.setString(1, type);
+            psInsert.setDouble(2, result);
+            psInsert.setString(3, animalID);
+            psInsert.setString(4, textResult);
+            psInsert.setString(5, logID);
+            psInsert.setString(6, companyName);
+            int results = psInsert.executeUpdate();
+
+            if (results <= 0) {
+                System.out.println("New Animal not added to database");
+            } else {
+                System.out.println("Inserted New Animal: " + animalID + " Owned by: " + companyName);
+            }
+
+            conn.commit();
+            System.out.println("Committed the change");
+        } catch (SQLException sqle) {
+            printSQLException(sqle);
+        }
+    }
+
+    public void addReport(String logID, String type, String clientName, String dateReceived, String dateTested, String resultFile) {
+        try {
+            PreparedStatement psInsert = conn.prepareStatement(
+                    "insert into report values (?, ?, ?, ?, ?, ?)");
+            statements.add(psInsert);
+
+            psInsert.setString(1, logID);
+            psInsert.setString(2, type);
+            psInsert.setString(3, clientName);
+            psInsert.setString(4, dateReceived);
+            psInsert.setString(5, dateTested);
+            psInsert.setString(6, resultFile);
+            int results = psInsert.executeUpdate();
+
+            if (results <= 0) {
+                System.out.println("New Report not added to database");
+            } else {
+                System.out.println("Inserted New Report: " + logID + " Generated For: " + clientName);
+            }
+
+            conn.commit();
+            System.out.println("Committed the change");
+        } catch (SQLException sqle) {
+            printSQLException(sqle);
+        }
+    }
+
     /*
      *   Only call startUp if it's the first time the DAO is being called.
      *   Otherwise, just return existing connection

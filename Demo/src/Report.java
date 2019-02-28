@@ -14,7 +14,7 @@ public class Report {
         int animalCount;
         
         String logID;
-        ArrayList<Float> testResults;
+        static ArrayList<Float> testResults;
         private static  ArrayList<String> calculatedResult = new ArrayList<String>();
         
         public Report(Client client, String dateReceived, String dateTested, int animalCount, int testType) {
@@ -26,7 +26,20 @@ public class Report {
 
             testResults = new ArrayList<Float>();
         }
-        
+
+        /*
+         *  Method to calculate text results: Positive, Negative, Neutral
+         *  After calculated, it adds animals to the database tied to the report and the client name
+         */
+        public int addFinalAnimals(){
+            for (int i = 0; i < animalCount; i++) {
+                calculateResults(i);
+                System.out.println("Added: " + calculatedResult.get(i));
+            }
+
+            //TODO: Actually calculate the results and add to database.
+            return 0;
+        }
         /**
          * prints out all the plate tests
          */
@@ -84,18 +97,17 @@ public class Report {
         /**
          * 
          * @param index
-         * @param testValues
          * uses calculations from provided excel sheet and puts results in array (should be a map at some point)
          */
-        public static void calculateResults(int index, ArrayList <Float> testValues) {
+        public static void calculateResults(int index) {
 
-            Float negativeControlOne = testValues.get(0);
-            Float negativeControlTwo = testValues.get(1);
+            Float negativeControlOne = testResults.get(0);
+            Float negativeControlTwo = testResults.get(1);
     
-            Float positiveControlOne = testValues.get(2);
-            Float positiveControlTwo = testValues.get(3);
+            Float positiveControlOne = testResults.get(2);
+            Float positiveControlTwo = testResults.get(3);
     
-            Float testResult = testValues.get(index);
+            Float testResult = testResults.get(index);
     
             Float negAvg = (negativeControlOne + negativeControlTwo)/2;
             Float posAvg = (positiveControlTwo + positiveControlOne)/2;

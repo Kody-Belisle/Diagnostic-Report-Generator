@@ -64,6 +64,8 @@ public class ImportPlateDataWindow extends JFrame {
                         n.addTestResult(parsedData.get(dataIndex));
                         System.out.println("Added: " + parsedData.get(dataIndex));
                     }
+                    //All test results added to a single test, calculate results and add to database
+                    n.addFinalAnimals();
                 }
 
                 for (Report r : reportList) {

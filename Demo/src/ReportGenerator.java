@@ -57,6 +57,12 @@ public class ReportGenerator extends AbstractReportGenerator
     {
         this.report = report;
         this.dao = new DerbyDao();
+
+        //Super basic testing for the DAO
+        //Double od = 0.281;
+        //dao.addReport("O456", "BLV", "Black Pond Acres", "2019-02-24", "2019-02-27", "results.txt");
+        //dao.addAnimal("Bess", "Sheep", od, "Positive", "Black Pond Acres", "O456");
+        //dao.addAnimal("Bess", "Sheep", od, "Negative", "Old McDonald Farms", "O123");
     }
 
     private static final String QUERY_NAME = "ReportQuery";
@@ -133,8 +139,8 @@ public class ReportGenerator extends AbstractReportGenerator
 
         parameters.put("TEST_TYPE", report.getTestType());
 
-        parameters.put("OWNER_ADDRESS", "");
-        parameters.put("OWNER_CITY_STATE_ZIP", (""));
+        parameters.put("OWNER_ADDRESS", "1187 Edgemont Ln");
+        parameters.put("OWNER_CITY_STATE_ZIP", ("Emmett, ID 83716"));
         parameters.put("OWNER_PHONE", "(208) 963-5679");
         parameters.put("OWNER_EMAIL", "lab@sageaglab.com");
         parameters.put("OWNER_WEBSITE", "www.sageaglab.com");
