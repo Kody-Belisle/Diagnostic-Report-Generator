@@ -59,7 +59,9 @@ public class ImportPlateDataWindow extends JFrame {
                 parsedData = parser.parseValues(2);
                 System.out.println("report count: "+ reportList.size());
                 //give the report objects the amount of values they need
+
                 for (Report n: reportList) {
+                    n.setControlValues(parser.getControlValues());
                     for (int i = 0; i < n.getAnimalCount(); i++) {
                         n.addTestResult(parsedData.get(dataIndex));
                         System.out.println("Added: " + parsedData.get(dataIndex));

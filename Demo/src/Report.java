@@ -7,9 +7,11 @@ import java.util.ArrayList;
  */
 public class Report {
         ArrayList<PlateTest> plateTests;
+        static ArrayList<Float> controlValues;
         private Client singleClient;
         private String dateReceived;
         private String dateTested;
+
         int testType;
         int animalCount;
         
@@ -35,6 +37,8 @@ public class Report {
             for (int i = 0; i < animalCount; i++) {
                 calculateResults(i);
                 System.out.println("Added: " + calculatedResult.get(i));
+
+
             }
 
             //TODO: Actually calculate the results and add to database.
@@ -100,12 +104,19 @@ public class Report {
          * uses calculations from provided excel sheet and puts results in array (should be a map at some point)
          */
         public static void calculateResults(int index) {
+            System.out.println("Calculating testResult: " + testResults.get(index));
 
-            Float negativeControlOne = testResults.get(0);
-            Float negativeControlTwo = testResults.get(1);
+            //debug
+            for (Float e: controlValues) {
+                System.out.println(e);
+            }
+
+
+            Float negativeControlOne = controlValues.get(0);
+            Float negativeControlTwo = controlValues.get(1);
     
-            Float positiveControlOne = testResults.get(2);
-            Float positiveControlTwo = testResults.get(3);
+            Float positiveControlOne = controlValues.get(2);
+            Float positiveControlTwo = controlValues.get(3);
     
             Float testResult = testResults.get(index);
     
@@ -125,5 +136,9 @@ public class Report {
                 calculatedResult.add("POSITVE");
             }
     
+        }
+
+        public void setControlValues(ArrayList<Float> controlValues) {
+            this.controlValues = controlValues;
         }
 }

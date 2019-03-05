@@ -28,6 +28,15 @@ public class ParsePlateReaderData {
 
     }
 
+    public ArrayList<Float> getControlValues() {
+        ArrayList<Float> controlValues = new ArrayList<Float>();
+        for (int i = 0; i < 4; i++) {
+            controlValues.add(testValues.get(i));
+        }
+
+        return controlValues;
+    }
+
 
 
     /**
@@ -104,8 +113,8 @@ public class ParsePlateReaderData {
         //48 should be second test
         int rowLength = 12;
         int colHeight = 8;
-        
-        getControlValues(arrangedValues);
+
+        setControlValues(arrangedValues);
         //list elements 0-3 are now: 
         //neg1, neg2, pos1, pos2
 
@@ -126,10 +135,11 @@ public class ParsePlateReaderData {
         testValues = arrangedValues;
     }
 
+
     /**
      * grabs the control values from our parsed list and puts them at the beginning of our new, ordered list
      */
-    private void getControlValues(ArrayList <Float> arrangedValues) {
+    private void setControlValues(ArrayList <Float> arrangedValues) {
 
             /*      
         
