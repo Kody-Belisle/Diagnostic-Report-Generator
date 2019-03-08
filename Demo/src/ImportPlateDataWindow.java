@@ -55,8 +55,8 @@ public class ImportPlateDataWindow extends JFrame {
                 File file = new File(filePath);
                 System.out.println("Generating Report");
                 //parse data then generate report
-                ParsePlateReaderData parser = new ParsePlateReaderData(file);
-                parsedData = parser.parseValues(2);
+                ParsePlateReaderData parser = new ParsePlateReaderData(file, testID);
+                parsedData = parser.parseValues();
                 System.out.println("report count: "+ reportList.size());
                 //give the report objects the amount of values they need
 

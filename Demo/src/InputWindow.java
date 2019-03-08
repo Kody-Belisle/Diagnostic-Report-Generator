@@ -296,7 +296,7 @@ public class InputWindow extends javax.swing.JFrame {
 
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder("Test Select"));
 
-        jRadioButton1.setLabel("CAE");
+        jRadioButton1.setLabel("BLV");
         jRadioButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jRadioButton1ActionPerformed(evt);
@@ -511,7 +511,7 @@ public class InputWindow extends javax.swing.JFrame {
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {                                         
         //continue button
         ImportPlateDataWindow plateData = new ImportPlateDataWindow();
-        
+        plateData.setTestID(testID);
         System.out.println("Set report list, size: " + reportList.size());
         printCurrentAnimalList();
         
@@ -573,9 +573,15 @@ public class InputWindow extends javax.swing.JFrame {
         DefaultTableModel jTable1model = (DefaultTableModel) jTable1.getModel();
         int tableOffset = 1;
 
+        clearMap();
         switch (testID) {
 
             case 1:
+                System.out.println("BLV test selected");
+                jTable1model.setValueAt("TEST VALUE", 2, 1 + tableOffset);
+                jTable1model.setValueAt("TEST VALUE", 3, 1 + tableOffset);
+                jTable1model.setValueAt("TEST VALUE", 2, 8 + tableOffset);
+                jTable1model.setValueAt("TEST VALUE", 3, 8 + tableOffset);
                 jRadioButton2.getModel().setSelected(false);
                 jRadioButton3.getModel().setSelected(false);
                 break;
@@ -590,6 +596,11 @@ public class InputWindow extends javax.swing.JFrame {
                 jRadioButton3.getModel().setSelected(false);
                 break;
             case 3:
+                System.out.println("Johne's test selected");
+                jTable1model.setValueAt("TEST VALUE", 0, 0 + tableOffset);
+                jTable1model.setValueAt("TEST VALUE", 1, 0 + tableOffset);
+                jTable1model.setValueAt("TEST VALUE", 2, 0 + tableOffset);
+                jTable1model.setValueAt("TEST VALUE", 3, 0 + tableOffset);
                 jRadioButton1.getModel().setSelected(false);
                 jRadioButton2.getModel().setSelected(false);
                 break;
@@ -599,6 +610,28 @@ public class InputWindow extends javax.swing.JFrame {
 
 
         }
+    }
+
+    private void clearMap() {
+
+        DefaultTableModel jTable1model = (DefaultTableModel) jTable1.getModel();
+
+        //clear table
+        for( int j = 0 ; j < jTable1model.getRowCount(); j++ ){
+            for( int i = 0 ; i< jTable1model.getColumnCount(); i++ ){
+                jTable1model.setValueAt("" , j , i );
+            }
+        }
+
+        //add row names back
+        jTable1model.setValueAt("A" , 0 , 0 );
+        jTable1model.setValueAt("B" , 1 , 0 );
+        jTable1model.setValueAt("C" , 2 , 0 );
+        jTable1model.setValueAt("D" , 3 , 0 );
+        jTable1model.setValueAt("E" , 4 , 0 );
+        jTable1model.setValueAt("F" , 5 , 0 );
+        jTable1model.setValueAt("G" , 6 , 0 );
+        jTable1model.setValueAt("H" , 7 , 0 );
     }
 
     private int fillTable() {
@@ -699,7 +732,8 @@ public class InputWindow extends javax.swing.JFrame {
                 jTextField5.getText(),                      //Date
                 jTextField5.getText(),
                 animalCount,
-                testID
+                testID,
+                jTextField9.getText()                      //logID
         );
 
         reportList.add(newReport);

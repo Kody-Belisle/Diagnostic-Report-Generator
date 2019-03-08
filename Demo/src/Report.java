@@ -19,13 +19,13 @@ public class Report {
         static ArrayList<Float> testResults;
         private static  ArrayList<String> calculatedResult = new ArrayList<String>();
         
-        public Report(Client client, String dateReceived, String dateTested, int animalCount, int testType) {
+        public Report(Client client, String dateReceived, String dateTested, int animalCount, int testType, String logID) {
             this.singleClient = client;
-            this.dateReceived = dateReceived;
             this.dateTested = dateTested;
             this.animalCount = animalCount;
             this.testType = testType;
-
+            this.logID = logID;
+            dateReceived = parseLogID();
             testResults = new ArrayList<Float>();
         }
 
@@ -66,11 +66,6 @@ public class Report {
             return animalCount;
         }
 
-
-        public String calculateLog() {
-            return "";
-        }
-
         public Client getSingleClient() {
             return singleClient;
         }
@@ -83,6 +78,22 @@ public class Report {
             return dateTested;
         }
 
+        public String getLogID() {
+            return logID;
+        }
+
+        public String parseLogID() {
+            //Log format: O10419004
+            //is Date Received – 1/4/2019
+            //O followed by M or MM (need two cases) followed by DD followed by YY followed by XXX TestNumber
+            //OMDDYYXXX or OMMDDYYXXX
+
+            char[] log =  logID.toCharArray();
+            if (log.length == 9) {
+                //one digit month
+            }
+            return "";
+        }
         public String getTestType() {
             if (testType == 1) {
                 return "CAE";

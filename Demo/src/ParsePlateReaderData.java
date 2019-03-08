@@ -14,9 +14,10 @@ public class ParsePlateReaderData {
     private int valueCount = 0;
     private int garbageValueCount = 13;
     private static ArrayList <Float> testValues;
+    private int testType;
 
-    public ParsePlateReaderData(File report) {
-
+    public ParsePlateReaderData(File report, int testType) {
+        this.testType = testType;
         try {
             scanner = new Scanner(report);
             scanner.useDelimiter(",");
@@ -40,12 +41,11 @@ public class ParsePlateReaderData {
 
 
     /**
-     * 
-     * @param testID
+     *
      * @return arrayList containing parsed values
      * grabs all of the floats out of the file we're parsing
      */
-    public ArrayList <Float> parseValues(int testID) {
+    public ArrayList <Float> parseValues() {
 
         //Get all tokens and store them in the arrayList
         while (scanner.hasNext()) {
@@ -78,35 +78,43 @@ public class ParsePlateReaderData {
     
     /**
      * properly arranges values from the input file (initially they are parsed along a row then down a column
-     *  and we need them to be parsed down a column then across a row)
+     *  and we need them to be parsed down a column then across a row while omitting test values from the final array)
      */
     private void arrangeValues() {
 
 
         ArrayList <Float> arrangedValues = new ArrayList<Float>();
+        int blank = -1;
+        int neg1 = -1;
+        int neg2 = -1;
+        int pos1 = -1;
+        int pos2 = -1;
 
-        /*      
-        
-                EXAMPLE DATA NOTES
+        switch (testType) {
+            case 1:
+                //BLV test
+                neg1 = 25;
+                neg2 = 32;
+                pos1 = 37;
+                pos2 = 44;
+                break;
+            case 2:
+                //cl test
+                blank = 0;
+                neg1 = 3;
+                neg2 = 12;
+                pos1 = 15;
+                pos2 = 24;
+                break;
+            case 3:
+                //Johne's test
+                neg1 = 24;
+                neg2 = 36;
+                pos1 = 0;
+                pos2 = 12;
+                break;
 
-            Element 0 is labeled as BLANK
-
-            Element 3 is negative control one
-
-            Element 12 is negative control two
-
-            Element 15 is positive control one
-
-            Element 24 is positive control two
-
-        */
-
-        //positions hardcoded for now
-        int blank = 0;
-        int neg1 = 3;
-        int neg2 = 12;
-        int pos1 = 15;
-        int pos2 = 24;
+        }
         
         //get the rest of the values in the correct order
         //36 should be first test
