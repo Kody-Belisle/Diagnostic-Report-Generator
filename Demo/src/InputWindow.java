@@ -801,13 +801,13 @@ public class InputWindow extends javax.swing.JFrame {
 
 
     //personal variables
-    private int testID = -1;
+    int testID = -1;
     private ArrayList<String> animalIDList = new ArrayList<String>();
     private ArrayList<Report> reportList = new ArrayList<Report>();
     private int fillX = 1;
     private int fillY = 0;
-    private ArrayList<Integer> testXVals;
-    private ArrayList<Integer> testYVals;
+    ArrayList<Integer> testXVals;
+    ArrayList<Integer> testYVals;
 
     // Variables declaration - do not modify                     
     private javax.swing.JButton jButton1;

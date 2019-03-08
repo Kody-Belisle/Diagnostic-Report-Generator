@@ -25,7 +25,7 @@ public class Report {
             this.animalCount = animalCount;
             this.testType = testType;
             this.logID = logID;
-            dateReceived = parseLogID();
+            this.dateReceived = parseLogID();
             testResults = new ArrayList<Float>();
         }
 
@@ -87,12 +87,24 @@ public class Report {
             //is Date Received – 1/4/2019
             //O followed by M or MM (need two cases) followed by DD followed by YY followed by XXX TestNumber
             //OMDDYYXXX or OMMDDYYXXX
-
+            StringBuilder outputString = new StringBuilder();
             char[] log =  logID.toCharArray();
+
             if (log.length == 9) {
                 //one digit month
+                for (int i = 1; i < 5; i++) {
+                    outputString.append(log[i]);
+                }
+
+            } else if (log.length == 10) {
+                //two digit month
+                for (int i = 1; i < 6; i++) {
+                    outputString.append(log[i]);
+                }
+            } else {
+                System.out.println("Unable to parse LOGID");
             }
-            return "";
+            return outputString.toString();
         }
         public String getTestType() {
             if (testType == 1) {
