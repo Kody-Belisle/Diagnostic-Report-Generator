@@ -140,7 +140,7 @@ public class ReportGenerator extends AbstractReportGenerator
         }
         System.out.println("Creating report for" + report.getSingleClient().getCompanyName());
 
-        parameters.put("TEST_TYPE", report.getTestType());
+        parameters.put("TEST_TYPE", report.getTestType() + " Report");
 
         parameters.put("OWNER_ADDRESS", "1187 Edgemont Ln");
         parameters.put("OWNER_CITY_STATE_ZIP", ("Emmett, ID 83716"));
