@@ -10,10 +10,6 @@ public class Main
             public void run() {
                 final String dir = System.getProperty("user.dir");
 
-                //Start Derby Driver
-                //new DerbyDriver().go(args);
-                //System.out.println("DerbyDriver finished");
-
                 System.out.println("current dir = " + dir);
 
 

@@ -1,6 +1,7 @@
 package src;
 
 
+import java.awt.event.*;
 import java.util.ArrayList;
 
 import javax.swing.*;
@@ -11,12 +12,16 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author Kody
  */
-public class InputWindow extends javax.swing.JFrame {
+public class InputWindow extends javax.swing.JFrame implements WindowListener, WindowFocusListener, WindowStateListener {
 
     /**
      * Creates new form InputWindow
      */
     public InputWindow() {
+        //Start Derby Driver
+        this.dao = new DerbyDao();
+        System.out.println("DerbyDao started");
+
         initComponents();
         textFields.add(jTextField1);
         textFields.add(jTextField2);
@@ -28,8 +33,6 @@ public class InputWindow extends javax.swing.JFrame {
         textFields.add(jTextField8);
         textFields.add(jTextField9);
         textFields.add(jTextField10);
-
-
 
     }
 
@@ -91,6 +94,7 @@ public class InputWindow extends javax.swing.JFrame {
         jMenuItem3 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        addWindowListener(this);
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Client Data"));
         jPanel1.setToolTipText("");
@@ -296,21 +300,21 @@ public class InputWindow extends javax.swing.JFrame {
 
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder("Test Select"));
 
-        jRadioButton1.setLabel("BLV");
+        jRadioButton1.setText("BLV");
         jRadioButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jRadioButton1ActionPerformed(evt);
             }
         });
 
-        jRadioButton2.setLabel("CL");
+        jRadioButton2.setText("CL");
         jRadioButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jRadioButton2ActionPerformed(evt);
             }
         });
 
-        jRadioButton3.setLabel("Johne's");
+        jRadioButton3.setText("Johne's");
         jRadioButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jRadioButton3ActionPerformed(evt);
@@ -409,17 +413,16 @@ public class InputWindow extends javax.swing.JFrame {
         jMenu1.setText("File");
 
         jMenuItem1.setText("Print Map");
-        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem1ActionPerformed(evt);
-            }
-        });
+        jMenuItem1.addActionListener(this::jMenuItem1ActionPerformed);
+
         jMenu1.add(jMenuItem1);
 
         jMenuItem2.setText("Import Client Data");
+        jMenuItem2.addActionListener(this::jMenuItem1ActionPerformed);
         jMenu1.add(jMenuItem2);
 
         jMenuItem3.setText("Export Client Data");
+        jMenuItem3.addActionListener(this::jMenuItem1ActionPerformed);
         jMenu1.add(jMenuItem3);
 
         jMenuBar1.add(jMenu1);
@@ -549,8 +552,14 @@ public class InputWindow extends javax.swing.JFrame {
         // TODO add your handling code here:
     }                                        
 
-    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {                                           
-        // TODO add your handling code here:
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {
+        JMenuItem source = (JMenuItem)(evt.getSource());
+        String s = "Action event detected." + "\n" + "Event source: " + source.getText();
+        System.out.println(s + "/n");
+        if (source == jMenuItem3) {
+            dao.exportClients();
+        }
+
     }                                          
 
     private void jComboBox4ActionPerformed(java.awt.event.ActionEvent evt) {                                           
@@ -810,6 +819,7 @@ public class InputWindow extends javax.swing.JFrame {
     private int fillY = 0;
     ArrayList<Integer> testXVals;
     ArrayList<Integer> testYVals;
+    private DerbyDao dao;
 
     // Variables declaration - do not modify                     
     private javax.swing.JButton jButton1;
@@ -872,5 +882,58 @@ public class InputWindow extends javax.swing.JFrame {
         System.out.println(client.getEmail());
         System.out.println(client.getPhoneOne());
         System.out.println(client.getPhoneTwo());
+    }
+
+    /**** WINDOW LISTENER METHODS ********/
+    @Override
+    public void windowGainedFocus(WindowEvent e) {
+
+    }
+
+    @Override
+    public void windowLostFocus(WindowEvent e) {
+
+    }
+
+    @Override
+    public void windowOpened(WindowEvent e) {
+
+    }
+
+    @Override
+    public void windowClosing(WindowEvent e) {
+        System.out.println("Window is closing");
+        dao.shutDown();
+
+    }
+
+    @Override
+    public void windowClosed(WindowEvent e) {
+
+    }
+
+    @Override
+    public void windowIconified(WindowEvent e) {
+
+    }
+
+    @Override
+    public void windowDeiconified(WindowEvent e) {
+
+    }
+
+    @Override
+    public void windowActivated(WindowEvent e) {
+
+    }
+
+    @Override
+    public void windowDeactivated(WindowEvent e) {
+
+    }
+
+    @Override
+    public void windowStateChanged(WindowEvent e) {
+
     }
 }

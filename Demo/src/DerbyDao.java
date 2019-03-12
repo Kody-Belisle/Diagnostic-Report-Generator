@@ -3,6 +3,7 @@ package src;
 import org.pentaho.reporting.engine.classic.core.modules.misc.datafactory.sql.DriverConnectionProvider;
 
 import java.sql.*;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Properties;
 
@@ -187,12 +188,15 @@ public class DerbyDao {
 
     public void exportClients() {
         try {
+            Timestamp time = new Timestamp(System.currentTimeMillis());
+            final SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyy.HH.mm");
 
             PreparedStatement ps = conn.prepareStatement(
                     "CALL SYSCS_UTIL.SYSCS_EXPORT_TABLE (?,?,?,?,?,?)");
             ps.setString(1, "USER1");
             ps.setString(2, "CLIENT");
-            ps.setString(3, "clients.txt");
+            final String outFile = "out/clients" + sdf.format((time)) + ".txt";
+            ps.setString(3, outFile);
             ps.setString(4, "%");
             ps.setString(5, null);
             ps.setString(6, null);
@@ -201,9 +205,6 @@ public class DerbyDao {
         } catch (SQLException sqle) {
             printSQLException(sqle);
 
-        } finally {
-            //TODO: This should not be here permanently. Needs to be moved whever program will exit.
-            shutDown();
         }
 
     }

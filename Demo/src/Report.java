@@ -17,7 +17,7 @@ public class Report {
         
         String logID;
         static ArrayList<Float> testResults;
-        private static  ArrayList<String> calculatedResult = new ArrayList<String>();
+        private static ArrayList<String> calculatedResult = new ArrayList<String>();
         
         public Report(Client client, String dateTested, int animalCount, int testType, String logID) {
             this.singleClient = client;
