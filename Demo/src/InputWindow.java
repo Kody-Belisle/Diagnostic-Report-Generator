@@ -729,17 +729,19 @@ public class InputWindow extends javax.swing.JFrame {
         checkClientInfo(customer);
         dao.addClient(customer);
         Report newReport = new Report(customer,
-                jTextField5.getText(),                      //Date
-                jTextField5.getText(),
+                jTextField5.getText(),                      //Date Tested
                 animalCount,
                 testID,
                 jTextField9.getText()                      //logID
         );
 
         reportList.add(newReport);
+
         //clear fields
         for (javax.swing.JTextField e : textFields) {
-            e.setText("");
+            if (!e.equals(jTextField5)) {
+                e.setText("");
+            }
         }
 
 

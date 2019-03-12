@@ -29,6 +29,7 @@ import java.util.HashMap;
 
 import org.pentaho.reporting.engine.classic.core.DataFactory;
 import org.pentaho.reporting.engine.classic.core.MasterReport;
+import org.pentaho.reporting.engine.classic.core.ParameterDataRow;
 import org.pentaho.reporting.engine.classic.core.ReportProcessingException;
 import org.pentaho.reporting.engine.classic.core.modules.misc.datafactory.sql.DriverConnectionProvider;
 import org.pentaho.reporting.engine.classic.core.modules.misc.datafactory.sql.SQLReportDataFactory;
@@ -36,6 +37,8 @@ import org.pentaho.reporting.engine.classic.core.wizard.RelationalAutoGeneratorP
 import org.pentaho.reporting.libraries.resourceloader.Resource;
 import org.pentaho.reporting.libraries.resourceloader.ResourceException;
 import org.pentaho.reporting.libraries.resourceloader.ResourceManager;
+
+import javax.swing.table.TableModel;
 
 /**
  * Generates a report in the following scenario:
@@ -111,7 +114,7 @@ public class ReportGenerator extends AbstractReportGenerator
 
         final SQLReportDataFactory dataFactory = new SQLReportDataFactory(connProvider);
         dataFactory.setQuery(QUERY_NAME,
-                "select client_name from Client");
+                "select client_name, name from Client");
 
         return dataFactory;
         //return null;

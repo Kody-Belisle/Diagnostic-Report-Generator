@@ -19,7 +19,7 @@ public class Report {
         static ArrayList<Float> testResults;
         private static  ArrayList<String> calculatedResult = new ArrayList<String>();
         
-        public Report(Client client, String dateReceived, String dateTested, int animalCount, int testType, String logID) {
+        public Report(Client client, String dateTested, int animalCount, int testType, String logID) {
             this.singleClient = client;
             this.dateTested = dateTested;
             this.animalCount = animalCount;

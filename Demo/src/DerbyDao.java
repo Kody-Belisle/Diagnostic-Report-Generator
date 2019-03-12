@@ -67,6 +67,16 @@ public class DerbyDao {
 
     }
 
+    /*
+     *   Only call startUp if it's the first time the DAO is being called.
+     *   Otherwise, just return existing connection
+     */
+    public void getConnection() {
+        if(!made) {
+            startUp();
+        }
+    }
+
     public void addClient(Client clientToAdd) {
         try {
             PreparedStatement psInsert = conn.prepareStatement(
@@ -151,15 +161,7 @@ public class DerbyDao {
         }
     }
 
-    /*
-     *   Only call startUp if it's the first time the DAO is being called.
-     *   Otherwise, just return existing connection
-     */
-    public void getConnection() {
-        if(!made) {
-            startUp();
-        }
-    }
+
     /*
      * DIFFERENT FROM startUp()
      * Is called from ReportGenerator in order to set up the data factory
