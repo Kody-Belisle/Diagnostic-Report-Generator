@@ -37,8 +37,6 @@ public class Report {
             for (int i = 0; i < animalCount; i++) {
                 calculateResults(i);
                 System.out.println("Added: " + calculatedResult.get(i));
-
-
             }
 
             //TODO: Actually calculate the results and add to database.
@@ -92,20 +90,31 @@ public class Report {
 
             if (log.length == 9) {
                 //one digit month
-                for (int i = 1; i < 5; i++) {
-                    outputString.append(log[i]);
+                for (int i = 1; i <= 5; i++) {
+                    if(i%2 == 0) {
+                        outputString.append("/");
+                        outputString.append(log[i]);
+                    } else {
+                        outputString.append(log[i]);
+                    }
                 }
 
             } else if (log.length == 10) {
                 //two digit month
-                for (int i = 1; i < 6; i++) {
-                    outputString.append(log[i]);
+                for (int i = 1; i <= 6; i++) {
+                    if( i % 2 == 0) {
+                        outputString.append(log[i]);
+                        outputString.append("/");
+                    } else {
+                        outputString.append(log[i]);
+                    }
                 }
             } else {
                 System.out.println("Unable to parse LOGID");
             }
             return outputString.toString();
         }
+
         public String getTestType() {
             if (testType == 1) {
                 return "CAE";
@@ -133,35 +142,41 @@ public class Report {
             for (Float e: controlValues) {
                 System.out.println(e);
             }
-
-
-            Float negativeControlOne = controlValues.get(0);
-            Float negativeControlTwo = controlValues.get(1);
-    
-            Float positiveControlOne = controlValues.get(2);
-            Float positiveControlTwo = controlValues.get(3);
     
             Float testResult = testResults.get(index);
-    
-            Float negAvg = (negativeControlOne + negativeControlTwo)/2;
-            Float posAvg = (positiveControlTwo + positiveControlOne)/2;
-    
+
+            Float marginalCutoff = getMargins();
             //test negative
-            if (testResult < (((posAvg - negAvg) / 4)) + negAvg) {
+            if (testResult < marginalCutoff) {
     
                 calculatedResult.add("NEGATIVE");
     
-            } else if (testResult > (((posAvg - negAvg) / 4)) + negAvg && testResult < ((((posAvg - negAvg) / 4)) + negAvg) + 0.3 ) {
+            } else if (testResult > marginalCutoff && testResult < (marginalCutoff + 0.3) ) {
     
                 calculatedResult.add("MARGINAL");
-            } else if (testResult > (((posAvg - negAvg) / 4)) + negAvg) {
+            } else if (testResult > marginalCutoff) {
     
                 calculatedResult.add("POSITVE");
             }
     
         }
 
+        public static Float getMargins() {
+            Float negativeControlOne = controlValues.get(0);
+            Float negativeControlTwo = controlValues.get(1);
+
+            Float positiveControlOne = controlValues.get(2);
+            Float positiveControlTwo = controlValues.get(3);
+
+            Float negAvg = (negativeControlOne + negativeControlTwo)/2;
+            Float posAvg = (positiveControlTwo + positiveControlOne)/2;
+
+            Float marginalCutoff = ((posAvg - negAvg)/4) + negAvg;
+            return marginalCutoff;
+        }
+
         public void setControlValues(ArrayList<Float> controlValues) {
             this.controlValues = controlValues;
         }
+
 }

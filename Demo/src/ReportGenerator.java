@@ -154,19 +154,19 @@ public class ReportGenerator extends AbstractReportGenerator
         parameters.put("CLIENT_ADDRESS", report.getSingleClient().getAddress());
         parameters.put("CLIENT_CITY_STATE_ZIP", report.getSingleClient().getCity() + " " + report.getSingleClient().getState() +", " + report.getSingleClient().getZip());
 
-        parameters.put("LOGID", "LOG O10419004");
+        parameters.put("LOGID", "LOG " + report.getLogID());
 
-        parameters.put("DATE_RECEIVED", "1/4/2019");
-        parameters.put("DATE_TESTED", "1/9/2019");
-
+        parameters.put("DATE_RECEIVED", report.getReceived());
+        parameters.put("DATE_TESTED", report.getTested());
 
         //test data
-        parameters.put("POSITIVE_OD", "0.698");
-        parameters.put("MARGINAL_LOW", "0.398");
-        parameters.put("MARGINAL_HIGH", "0.698");
+        parameters.put("POSITIVE_OD", String.format("%.3f", report.getMargins() + 0.3));
+        parameters.put("MARGINAL_LOW", String.format("%.3f", report.getMargins()));
+        parameters.put("MARGINAL_HIGH", String.format("%.3f", report.getMargins() + 0.3));
         return parameters;
         //return null;
     }
+
 
     /**
      * Simple command line application that will generate a PDF version of the report. In this report,
