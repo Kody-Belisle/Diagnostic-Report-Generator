@@ -1,5 +1,6 @@
 package src;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 /**
@@ -11,6 +12,7 @@ public class Report {
         private Client singleClient;
         private String dateReceived;
         private String dateTested;
+        private String animalType;
 
         int testType;
         int animalCount;
@@ -19,8 +21,9 @@ public class Report {
         static ArrayList<Float> testResults;
         private static ArrayList<String> calculatedResult = new ArrayList<String>();
         
-        public Report(Client client, String dateTested, int animalCount, int testType, String logID) {
+        public Report(Client client, String animalType, String dateTested, int animalCount, int testType, String logID) {
             this.singleClient = client;
+            this.animalType = animalType;
             this.dateTested = dateTested;
             this.animalCount = animalCount;
             this.testType = testType;
@@ -33,13 +36,21 @@ public class Report {
          *  Method to calculate text results: Positive, Negative, Neutral
          *  After calculated, it adds animals to the database tied to the report and the client name
          */
-        public int addFinalAnimals(){
+        public int addFinalAnimals(ArrayList<String> animalIds){
+            ArrayList<String> animals = animalIds;
+            //DerbyDao dao = new DerbyDao();
+
             for (int i = 0; i < animalCount; i++) {
                 calculateResults(i);
                 System.out.println("Added: " + calculatedResult.get(i));
+                //TODO: animal List includes test values and blanks. Possible idea: Add method
+                // in InputWindow that would parse only the populated animal names and pass that
+                // through. Animal count should be enough to track this accurately
+                //dao.addAnimal(animals.get(i), animalType, (double)testResults.get(i), calculatedResult.get(i), singleClient.getCompanyName(), logID);
             }
 
             //TODO: Actually calculate the results and add to database.
+
             return 0;
         }
         /**
@@ -62,6 +73,10 @@ public class Report {
         public int getAnimalCount() {
 
             return animalCount;
+        }
+
+        public String getAnimalType() {
+            return animalType;
         }
 
         public Client getSingleClient() {

@@ -8,10 +8,12 @@ import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class ImportPlateDataWindow extends JFrame {
     
     String filePath;
+    private String fileName;
     JMenuBar menuBar = new JMenuBar();
     JMenu menu = new JMenu("File");
     JMenuItem openButton = new JMenuItem("Open");
@@ -37,6 +39,7 @@ public class ImportPlateDataWindow extends JFrame {
                 chooser.setCurrentDirectory( new File (System.getProperty("user.dir")));
                 chooser.showOpenDialog(null);
                 chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+                fileName = chooser.getSelectedFile().getName();
                 String selectedFilePath = chooser.getSelectedFile().getAbsolutePath();
                 System.out.println("Selected file path: " + selectedFilePath);
                 tf.setText(selectedFilePath);
@@ -60,14 +63,16 @@ public class ImportPlateDataWindow extends JFrame {
                 System.out.println("report count: "+ reportList.size());
                 //give the report objects the amount of values they need
 
+
                 for (Report n: reportList) {
+                    //addReport(n);
                     n.setControlValues(parser.getControlValues());
                     for (int i = 0; i < n.getAnimalCount(); i++) {
                         n.addTestResult(parsedData.get(dataIndex));
                         System.out.println("Added: " + parsedData.get(dataIndex));
                     }
                     //All test results added to a single test, calculate results and add to database
-                    n.addFinalAnimals();
+                    n.addFinalAnimals(animalIDList);
                 }
 
                 for (Report r : reportList) {
@@ -88,6 +93,16 @@ public class ImportPlateDataWindow extends JFrame {
         setVisible(true);
     }
 
+    private void addReport(Report report) {
+        //TODO: Format dates correctly for entry into SQL
+        DerbyDao dao = new DerbyDao();
+
+        String dateRec = report.getReceived();
+        String dateTested = report.getTested();
+
+
+        dao.addReport(report.getLogID(), report.getAnimalType(), report.getSingleClient().getCompanyName(), report.getReceived(), report.getTested(), fileName);
+    }
 
     protected void setAnimalIDList(ArrayList<String> animalIDList){
 
@@ -107,9 +122,11 @@ public class ImportPlateDataWindow extends JFrame {
         this.testID = testID;
     }
 
+    
     private void printReport(Report report) {
         String clientName = report.getSingleClient().getCompanyName();
         final File outputFilename = new File(clientName + "Report" + ".pdf");
+
 
         // Generate the report
         try {

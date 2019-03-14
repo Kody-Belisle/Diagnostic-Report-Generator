@@ -113,9 +113,10 @@ public class ReportGenerator extends AbstractReportGenerator
         final DriverConnectionProvider connProvider = dao.setUpConnProvider();
 
         final SQLReportDataFactory dataFactory = new SQLReportDataFactory(connProvider);
-        dataFactory.setQuery(QUERY_NAME,
-                "select client_name, name from Client");
-
+        final String sqlString = "select CLIENT.CLIENT_NAME, ANIMALS.ANIMAL_ID as animalID, ANIMALS.RESULT as OD, ANIMALS.TEXT_RESULT as Result"
+            + " from client join animals on CLIENT.CLIENT_NAME = ANIMALS.CLIENT_NAME" +
+            " where CLIENT.CLIENT_NAME = '" + report.getSingleClient().getCompanyName() + "'";
+        dataFactory.setQuery(QUERY_NAME, sqlString);
         return dataFactory;
         //return null;
     }

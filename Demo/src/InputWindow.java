@@ -740,6 +740,7 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
 
         String dateTested = (String)jComboBox4.getSelectedItem() + "/" + (String)jComboBox3.getSelectedItem() + "/" + jTextField5.getText();
         Report newReport = new Report(customer,
+                (String)jComboBox2.getSelectedItem(),
                 dateTested,                      //Date Tested
                 animalCount,
                 testID,
