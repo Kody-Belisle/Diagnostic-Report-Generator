@@ -122,7 +122,7 @@ public class ImportPlateDataWindow extends JFrame {
         this.testID = testID;
     }
 
-    
+
     private void printReport(Report report) {
         String clientName = report.getSingleClient().getCompanyName();
         final File outputFilename = new File(clientName + "Report" + ".pdf");
