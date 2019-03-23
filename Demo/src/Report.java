@@ -1,6 +1,7 @@
 package src;
 
 import java.lang.reflect.Array;
+import java.text.ParseException;
 import java.util.ArrayList;
 
 /**
@@ -102,6 +103,7 @@ public class Report {
             //OMDDYYXXX or OMMDDYYXXX
             StringBuilder outputString = new StringBuilder();
             char[] log =  logID.toCharArray();
+            String finalDate = "";
 
             if (log.length == 9) {
                 //one digit month
@@ -127,7 +129,16 @@ public class Report {
             } else {
                 System.out.println("Unable to parse LOGID");
             }
-            return outputString.toString();
+
+            try {
+                //Pass the built string into the date formatter to make it possible to add to database
+                CustomDateFormatter formatter = new CustomDateFormatter();
+                finalDate = formatter.logDate(outputString.toString());
+
+            } catch (ParseException e) {
+                System.out.println(e.getMessage());
+            }
+            return finalDate;
         }
 
         public String getTestType() {

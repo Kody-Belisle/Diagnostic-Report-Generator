@@ -115,7 +115,7 @@ public class ReportGenerator extends AbstractReportGenerator
         final SQLReportDataFactory dataFactory = new SQLReportDataFactory(connProvider);
         final String sqlString = "select CLIENT.CLIENT_NAME, ANIMALS.ANIMAL_ID as animalID, ANIMALS.RESULT as OD, ANIMALS.TEXT_RESULT as Result"
             + " from client join animals on CLIENT.CLIENT_NAME = ANIMALS.CLIENT_NAME" +
-            " where CLIENT.CLIENT_NAME = 'Black Pond Acres'";
+            " where CLIENT.CLIENT_NAME = '" + report.getSingleClient().getCompanyName() + "'";
         dataFactory.setQuery(QUERY_NAME, sqlString);
         return dataFactory;
         //return null;

@@ -368,7 +368,7 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
 
         JDatePanelImpl datePanel = new JDatePanelImpl(model, p);
 
-        JDatePickerImpl datePicker = new JDatePickerImpl(datePanel, new CustomDateFormatter());
+        datePicker = new JDatePickerImpl(datePanel, new CustomDateFormatter());
 
         /*jComboBox3.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "DD", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31" }));
         jComboBox3.addActionListener(new java.awt.event.ActionListener() {
@@ -727,7 +727,6 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
     private void saveCustomer(int animalCount) {
         //get data from buttons
         DerbyDao dao = new DerbyDao();
-        //TODO: check if all the necessary data is there
         //need to decide which fields are necessary
         //put data in report object
 
@@ -758,7 +757,8 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
         checkClientInfo(customer);
         dao.addClient(customer);
 
-        String dateTested = (String)jComboBox4.getSelectedItem() + "/" + (String)jComboBox3.getSelectedItem() + "/" + jTextField5.getText();
+        //String dateTested = (String)jComboBox4.getSelectedItem() + "/" + (String)jComboBox3.getSelectedItem() + "/" + jTextField5.getText();
+        String dateTested = datePicker.getModel().getValue().toString();
         Report newReport = new Report(customer,
                 (String)jComboBox2.getSelectedItem(),
                 dateTested,                      //Date Tested
@@ -888,6 +888,7 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
     private javax.swing.JTextField jTextField3;         //City
     private javax.swing.JTextField jTextField4;         //Zip
     private javax.swing.JTextField jTextField5;         //Date
+    private JDatePickerImpl datePicker;                 //Date Tested
     private javax.swing.JTextField jTextField6;         //Email Address
     private javax.swing.JTextField jTextField7;         //Phone 1
     private javax.swing.JTextField jTextField8;         //Phone 2

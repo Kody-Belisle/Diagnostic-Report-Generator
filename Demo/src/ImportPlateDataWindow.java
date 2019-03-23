@@ -65,7 +65,7 @@ public class ImportPlateDataWindow extends JFrame {
 
 
                 for (Report n: reportList) {
-                    //addReport(n);
+                    addReport(n);
                     n.setControlValues(parser.getControlValues());
                     for (int i = 0; i < n.getAnimalCount(); i++) {
                         n.addTestResult(parsedData.get(dataIndex));
@@ -94,12 +94,7 @@ public class ImportPlateDataWindow extends JFrame {
     }
 
     private void addReport(Report report) {
-        //TODO: Format dates correctly for entry into SQL
         DerbyDao dao = new DerbyDao();
-
-        String dateRec = report.getReceived();
-        String dateTested = report.getTested();
-
 
         dao.addReport(report.getLogID(), report.getAnimalType(), report.getSingleClient().getCompanyName(), report.getReceived(), report.getTested(), fileName);
     }
