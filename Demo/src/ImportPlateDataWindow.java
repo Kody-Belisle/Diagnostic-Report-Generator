@@ -25,6 +25,7 @@ public class ImportPlateDataWindow extends JFrame {
 
     public ArrayList<Report> reportList = new ArrayList<Report>();
     ArrayList <String> animalIDList;
+    static int animalListCount;
     int testID;
 
     public ImportPlateDataWindow() {
@@ -52,7 +53,7 @@ public class ImportPlateDataWindow extends JFrame {
         send.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 ArrayList<Float> parsedData = new ArrayList<Float>();
-                int dataIndex = 5;  //first 5 are test values
+                int dataIndex = 4;
                 filePath = tf.getText();
                 //get the file from the field
                 File file = new File(filePath);
@@ -63,16 +64,18 @@ public class ImportPlateDataWindow extends JFrame {
                 System.out.println("report count: "+ reportList.size());
                 //give the report objects the amount of values they need
 
-
+                animalListCount = 0;
                 for (Report n: reportList) {
                     addReport(n);
                     n.setControlValues(parser.getControlValues());
                     for (int i = 0; i < n.getAnimalCount(); i++) {
                         n.addTestResult(parsedData.get(dataIndex));
                         System.out.println("Added: " + parsedData.get(dataIndex));
+                        dataIndex++;
                     }
                     //All test results added to a single test, calculate results and add to database
-                    n.addFinalAnimals(animalIDList);
+                    n.addFinalAnimals(animalListCount, animalIDList);
+                    animalListCount = animalListCount + n.getAnimalCount();
                 }
 
                 for (Report r : reportList) {
@@ -96,8 +99,10 @@ public class ImportPlateDataWindow extends JFrame {
     private void addReport(Report report) {
         DerbyDao dao = new DerbyDao();
 
+        //TODO: Change report primary key to be combo of client and logid
         dao.addReport(report.getLogID(), report.getAnimalType(), report.getSingleClient().getCompanyName(), report.getReceived(), report.getTested(), fileName);
     }
+
 
     protected void setAnimalIDList(ArrayList<String> animalIDList){
 
@@ -137,4 +142,6 @@ public class ImportPlateDataWindow extends JFrame {
         System.err.println("Generated the report [" + outputFilename.getAbsolutePath() + "]");
 
     }
+
+
 }

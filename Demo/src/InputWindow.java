@@ -539,7 +539,7 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
         printCurrentAnimalList();
         
         getCellValues();
-        
+
         plateData.setAnimalIDList(animalIDList);
         plateData.setReportList(reportList);
         plateData.setVisible(true);
@@ -607,29 +607,29 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
 
             case 1:
                 System.out.println("BLV test selected");
-                jTable1model.setValueAt("TEST VALUE", 2, 1 + tableOffset);
-                jTable1model.setValueAt("TEST VALUE", 3, 1 + tableOffset);
-                jTable1model.setValueAt("TEST VALUE", 2, 8 + tableOffset);
-                jTable1model.setValueAt("TEST VALUE", 3, 8 + tableOffset);
+                jTable1model.setValueAt("NEGATIVE", 2, 1 + tableOffset);
+                jTable1model.setValueAt("POSITIVE", 3, 1 + tableOffset);
+                jTable1model.setValueAt("NEGATIVE", 2, 8 + tableOffset);
+                jTable1model.setValueAt("POSITIVE", 3, 8 + tableOffset);
                 jRadioButton2.getModel().setSelected(false);
                 jRadioButton3.getModel().setSelected(false);
                 break;
             case 2:
                 System.out.println("CL test selected");
                 jTable1model.setValueAt("BLANK", 0, 0 + tableOffset);
-                jTable1model.setValueAt("TEST VALUE", 1, 0 + tableOffset);
-                jTable1model.setValueAt("TEST VALUE", 2, 0 + tableOffset);
-                jTable1model.setValueAt("TEST VALUE", 0, 3 + tableOffset);
-                jTable1model.setValueAt("TEST VALUE", 1, 3 + tableOffset);
+                jTable1model.setValueAt("NEGATIVE", 1, 0 + tableOffset);
+                jTable1model.setValueAt("POSITIVE", 2, 0 + tableOffset);
+                jTable1model.setValueAt("NEGATIVE", 0, 3 + tableOffset);
+                jTable1model.setValueAt("POSITIVE", 1, 3 + tableOffset);
                 jRadioButton1.getModel().setSelected(false);
                 jRadioButton3.getModel().setSelected(false);
                 break;
             case 3:
                 System.out.println("Johne's test selected");
-                jTable1model.setValueAt("TEST VALUE", 0, 0 + tableOffset);
-                jTable1model.setValueAt("TEST VALUE", 1, 0 + tableOffset);
-                jTable1model.setValueAt("TEST VALUE", 2, 0 + tableOffset);
-                jTable1model.setValueAt("TEST VALUE", 3, 0 + tableOffset);
+                jTable1model.setValueAt("POSITIVE", 0, 0 + tableOffset);
+                jTable1model.setValueAt("POSITIVE", 1, 0 + tableOffset);
+                jTable1model.setValueAt("NEGATIVE", 2, 0 + tableOffset);
+                jTable1model.setValueAt("NEGATIVE", 3, 0 + tableOffset);
                 jRadioButton1.getModel().setSelected(false);
                 jRadioButton2.getModel().setSelected(false);
                 break;
@@ -780,6 +780,9 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
 
     }
 
+    /*
+     * Method to get just the animals from the table
+     */
     private void getCellValues() {
 
         DefaultTableModel jTable1model = (DefaultTableModel) jTable1.getModel();
@@ -788,9 +791,10 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
         System.out.println("Row count: " + jTable1model.getRowCount());
 
         //iterate through cell map and put values in an array list
-        for (int i = 0; i < jTable1model.getRowCount(); i++) {   //y
-            for (int j = 0; j < jTable1model.getColumnCount(); j++) {  //x
-                if (jTable1model.getValueAt(i, j) != null) {
+        for (int j = 1; j < jTable1model.getColumnCount(); j++) {   //x
+             for (int i = 0; i < jTable1model.getRowCount(); i++) {  //y
+                String value = jTable1model.getValueAt(i, j).toString();
+                if (!value.isEmpty() && !value.equals("POSITIVE") && !value.equals("NEGATIVE") && !value.equals("BLANK")) {
                     animalIDList.add(jTable1model.getValueAt(i, j).toString());
                     System.out.println("Added " + jTable1model.getValueAt(i, 0).toString() + " to the animal ID list");
                 }
@@ -798,6 +802,7 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
             
         }
     }
+
 
 
     public void setTestVals(int testID) {

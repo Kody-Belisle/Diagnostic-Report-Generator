@@ -37,20 +37,15 @@ public class Report {
          *  Method to calculate text results: Positive, Negative, Neutral
          *  After calculated, it adds animals to the database tied to the report and the client name
          */
-        public int addFinalAnimals(ArrayList<String> animalIds){
+        public int addFinalAnimals(Integer startAt, ArrayList<String> animalIds){
             ArrayList<String> animals = animalIds;
-            //DerbyDao dao = new DerbyDao();
+            DerbyDao dao = new DerbyDao();
 
-            for (int i = 0; i < animalCount; i++) {
+            for (int i = startAt; i < animalCount; i++) {
                 calculateResults(i);
                 System.out.println("Added: " + calculatedResult.get(i));
-                //TODO: animal List includes test values and blanks. Possible idea: Add method
-                // in InputWindow that would parse only the populated animal names and pass that
-                // through. Animal count should be enough to track this accurately
-                //dao.addAnimal(animals.get(i), animalType, (double)testResults.get(i), calculatedResult.get(i), singleClient.getCompanyName(), logID);
+                dao.addAnimal(animals.get(i), animalType, (double)testResults.get(i), calculatedResult.get(i), singleClient.getCompanyName(), logID);
             }
-
-            //TODO: Actually calculate the results and add to database.
 
             return 0;
         }
@@ -164,10 +159,10 @@ public class Report {
         public static void calculateResults(int index) {
             System.out.println("Calculating testResult: " + testResults.get(index));
 
-            //debug
+            /*//debug
             for (Float e: controlValues) {
                 System.out.println(e);
-            }
+            }*/
     
             Float testResult = testResults.get(index);
 
@@ -175,14 +170,14 @@ public class Report {
             //test negative
             if (testResult < marginalCutoff) {
     
-                calculatedResult.add("NEGATIVE");
+                calculatedResult.add("Negative");
     
             } else if (testResult > marginalCutoff && testResult < (marginalCutoff + 0.3) ) {
     
-                calculatedResult.add("MARGINAL");
+                calculatedResult.add("Marginal");
             } else if (testResult > marginalCutoff) {
     
-                calculatedResult.add("POSITVE");
+                calculatedResult.add("Positive");
             }
     
         }
