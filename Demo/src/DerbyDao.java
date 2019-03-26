@@ -135,7 +135,7 @@ public class DerbyDao {
         }
     }
 
-    public void addReport(String logID, String type, String clientName, String dateReceived, String dateTested, String resultFile) {
+    public void addReport(String logID, String type, String dateReceived, String dateTested, String resultFile, String clientName) {
         try {
             PreparedStatement psInsert = conn.prepareStatement(
                     "insert into report values (?, ?, ?, ?, ?, ?)");
@@ -143,10 +143,10 @@ public class DerbyDao {
 
             psInsert.setString(1, logID);
             psInsert.setString(2, type);
-            psInsert.setString(3, clientName);
-            psInsert.setString(4, dateReceived);
-            psInsert.setString(5, dateTested);
-            psInsert.setString(6, resultFile);
+            psInsert.setString(3, dateReceived);
+            psInsert.setString(4, dateTested);
+            psInsert.setString(5, resultFile);
+            psInsert.setString(6, clientName);
             int results = psInsert.executeUpdate();
 
             if (results <= 0) {
@@ -162,6 +162,9 @@ public class DerbyDao {
         }
     }
 
+    public void getClients(ArrayList<String> names) {
+
+    }
 
     /*
      * DIFFERENT FROM startUp()

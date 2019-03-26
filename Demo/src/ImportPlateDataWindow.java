@@ -100,7 +100,7 @@ public class ImportPlateDataWindow extends JFrame {
         DerbyDao dao = new DerbyDao();
 
         //TODO: Change report primary key to be combo of client and logid
-        dao.addReport(report.getLogID(), report.getAnimalType(), report.getSingleClient().getCompanyName(), report.getReceived(), report.getTested(), fileName);
+        dao.addReport(report.getLogID(), report.getAnimalType(), report.getReceived(), report.getTested(), fileName, report.getSingleClient().getCompanyName());
     }
 
 
