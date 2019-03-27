@@ -123,6 +123,13 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
                         break;
                     case KeyEvent.VK_ENTER:
                         jTextField10.setText(jTextField10.getText());
+                        Client existing = dao.getOneClient(jTextField10.getText());
+                        if (existing == null) {
+                            JOptionPane.showMessageDialog(null, "Client not found.");
+                        } else {
+                            existingClient = true;
+                            setExistingClient(existing);
+                        }
                         break;
                     default:
                         EventQueue.invokeLater(new Runnable() {
@@ -647,6 +654,27 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
         }
     }
 
+    private void setExistingClient(Client client) {
+        /*Client customer = new Client(
+                jTextField10.getText(),                    //company name
+                jTextField1.getText(),                     //client name
+                jTextField2.getText(),                     //address
+                jTextField3.getText(),                     //city
+                (String) jComboBox1.getSelectedItem(),     //state
+                jTextField4.getText(),                     //zip
+                jTextField6.getText(),                     //email address
+                jTextField7.getText(),                     //phone 1
+                jTextField8.getText()                      //phone 2
+        );*/
+        jTextField1.setText(client.getName());
+        jTextField2.setText(client.getAddress());
+        jTextField3.setText(client.getCity());
+        jComboBox1.setSelectedItem(client.getState());
+        jTextField4.setText(client.getZip());
+        jTextField7.setText(client.getPhoneOne());
+        jTextField8.setText(client.getPhoneTwo());
+    }
+
     private void printCurrentAnimalList(){
         for (String e : animalIDList) {
             System.out.println("In List: " + e);
@@ -811,7 +839,9 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
         */
 
         checkClientInfo(customer);
-        dao.addClient(customer);
+        if(!existingClient) {
+            dao.addClient(customer);
+        }
 
         //String dateTested = (String)jComboBox4.getSelectedItem() + "/" + (String)jComboBox3.getSelectedItem() + "/" + jTextField5.getText();
         String dateTested = datePicker.getModel().getValue().toString();
@@ -899,7 +929,11 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
     int testID = -1;
     private ArrayList<String> animalIDList = new ArrayList<String>();
     private ArrayList<Report> reportList = new ArrayList<Report>();
+
+    //Names is the array of names used for autocomplete
+    //existingClient is boolean used to tell whether to add to database or not
     private ArrayList<String> names = new ArrayList<String>();
+    private boolean existingClient = false;
     private int fillX = 1;
     private int fillY = 0;
     ArrayList<Integer> testXVals;

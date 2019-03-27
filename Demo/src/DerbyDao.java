@@ -78,7 +78,8 @@ public class DerbyDao {
         }
     }
 
-    public void addClient(Client clientToAdd) {
+    public int addClient(Client clientToAdd) {
+        int results = 0;
         try {
             PreparedStatement psInsert = conn.prepareStatement(
                     "insert into client values (?, ?, ?, ?, ?, ?, ?, ?, ?)");
@@ -93,7 +94,7 @@ public class DerbyDao {
             psInsert.setString(7, clientToAdd.getZip());
             psInsert.setString(8, clientToAdd.getCity());
             psInsert.setString(9, clientToAdd.getState());
-            int results = psInsert.executeUpdate();
+            results = psInsert.executeUpdate();
 
             if (results <= 0) {
                 System.out.println("New Client not added to database");
@@ -103,9 +104,12 @@ public class DerbyDao {
 
             conn.commit();
             System.out.println("Committed the change");
+
         } catch (SQLException sqle) {
             printSQLException(sqle);
         }
+
+        return results;
     }
 
     public void addAnimal(String animalID, String type, Double result, String textResult, String companyName, String logID) {
@@ -180,6 +184,44 @@ public class DerbyDao {
             printSQLException(sqle);
         }
 
+    }
+
+    public Client getOneClient(String name) {
+
+        Client foundClient = null;
+
+        try {
+
+            PreparedStatement stmt = conn.prepareStatement("select * from client where client_name = ?");
+            statements.add(stmt);
+
+            stmt.setString(1, name);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs != null) {
+                while(rs.next()) {
+                    foundClient = new Client(
+                            rs.getString("client_name"),
+                            rs.getString("name"),
+                            rs.getString("address"),
+                            rs.getString("city"),
+                            rs.getString("state"),
+                            rs.getString("zip"),
+                            rs.getString("email"),
+                            rs.getString("phone"),
+                            rs.getString("second_phone")
+                    );
+                    return foundClient;
+                }
+            }
+
+
+
+        } catch (SQLException sqle) {
+            printSQLException(sqle);
+        }
+
+        return foundClient;
     }
 
     /*
