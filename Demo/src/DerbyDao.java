@@ -163,6 +163,22 @@ public class DerbyDao {
     }
 
     public void getClients(ArrayList<String> names) {
+        try {
+            PreparedStatement stmt = conn.prepareStatement("select client_name from client");
+            statements.add(stmt);
+            ResultSet rs = stmt.executeQuery();
+
+            while(rs.next()) {
+                String name = rs.getString("client_name");
+                names.add(name);
+            }
+
+            rs.close();
+            stmt.close();
+
+        } catch (SQLException sqle) {
+            printSQLException(sqle);
+        }
 
     }
 

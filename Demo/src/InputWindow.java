@@ -6,6 +6,7 @@ import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.SqlDateModel;
 import org.jdatepicker.impl.UtilDateModel;
 
+import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.Properties;
@@ -27,6 +28,7 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
     public InputWindow() {
         //Start Derby Driver
         this.dao = new DerbyDao();
+        dao.getClients(names);
         System.out.println("DerbyDao started");
 
         initComponents();
@@ -111,6 +113,27 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
         jTextField4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jTextField4ActionPerformed(evt);
+            }
+        });
+
+        jTextField10.addKeyListener(new KeyAdapter() {
+            public void keyReleased(KeyEvent e) {
+                switch(e.getKeyCode()) {
+                    case KeyEvent.VK_BACK_SPACE:
+                        break;
+                    case KeyEvent.VK_ENTER:
+                        jTextField10.setText(jTextField10.getText());
+                        break;
+                    default:
+                        EventQueue.invokeLater(new Runnable() {
+                            @Override
+
+                            public void run() {
+                                String txt = jTextField10.getText();
+                                autoComplete(txt);
+                            }
+                        });
+                }
             }
         });
 
@@ -588,8 +611,29 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
 
     private void jComboBox3ActionPerformed(java.awt.event.ActionEvent evt) {                                           
         // TODO add your handling code here:
-    }                                          
+    }
 
+
+    private void autoComplete(String text) {
+        String complete = "";
+        int start = text.length();
+        int last = text.length();
+
+        int a;
+        for(a = 0; a < names.size(); a++) {
+            if (names.get(a).startsWith(text)) {
+                complete = names.get(a);
+                last = complete.length();
+                break;
+            }
+        }
+
+        if(last > start) {
+            jTextField10.setText(complete);
+            jTextField10.setCaretPosition(last);
+            jTextField10.moveCaretPosition(start);
+        }
+    }
 
     private void printCurrentAnimalList(){
         for (String e : animalIDList) {
@@ -843,6 +887,7 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
     int testID = -1;
     private ArrayList<String> animalIDList = new ArrayList<String>();
     private ArrayList<Report> reportList = new ArrayList<Report>();
+    private ArrayList<String> names = new ArrayList<String>();
     private int fillX = 1;
     private int fillY = 0;
     ArrayList<Integer> testXVals;
