@@ -544,7 +544,10 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
                     for (javax.swing.JTextField e : textFields) {
                         System.out.println("Field data: "+ e.getText());
                     }
-
+                    if (jTextField9.getText().isEmpty()) {
+                        JOptionPane.showMessageDialog(null, "LogID required.");
+                        return;
+                    }
                     //deselect field
 
                     //add animals to map
@@ -842,7 +845,8 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
         if(!existingClient) {
             dao.addClient(customer);
         }
-
+        //Always set to false after adding or skipping client
+        existingClient = false;
         //String dateTested = (String)jComboBox4.getSelectedItem() + "/" + (String)jComboBox3.getSelectedItem() + "/" + jTextField5.getText();
         String dateTested = datePicker.getModel().getValue().toString();
         Report newReport = new Report(customer,

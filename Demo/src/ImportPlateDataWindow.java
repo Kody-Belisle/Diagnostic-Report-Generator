@@ -23,6 +23,7 @@ public class ImportPlateDataWindow extends JFrame {
     JTextField tf = new JTextField(50); // shows 50 characters before scrolling
     JButton send = new JButton("Generate Reports");
 
+    private DerbyDao dao = new DerbyDao();
     public ArrayList<Report> reportList = new ArrayList<Report>();
     ArrayList <String> animalIDList;
     static int animalListCount;
@@ -79,8 +80,15 @@ public class ImportPlateDataWindow extends JFrame {
                 }
 
                 for (Report r : reportList) {
-                    printReport(r);
-                    System.out.println("Generated Report");
+                    boolean made = printReport(r);
+                    //If the report was made successfully then delete the animals from the database
+                    //Should remove confusion about which animals belong to which client and which logID
+                    if (made) {
+                        System.out.println("Generated Report For: " + r.getSingleClient().getCompanyName());
+                        dao.removeAnimals(r.getSingleClient().getCompanyName(), r.getLogID(), r.getAnimalType());
+                    } else {
+                        System.err.println("Report not generated for " + r.getSingleClient().getCompanyName());
+                    }
                 }
 
                 setVisible(false);
@@ -99,7 +107,7 @@ public class ImportPlateDataWindow extends JFrame {
     private void addReport(Report report) {
         DerbyDao dao = new DerbyDao();
 
-        //TODO: Change report primary key to be combo of client and logid
+        //TODO: Might need to remove all primary key and give it it's own report id that auto increments
         dao.addReport(report.getLogID(), report.getAnimalType(), report.getReceived(), report.getTested(), fileName, report.getSingleClient().getCompanyName());
     }
 
@@ -123,24 +131,26 @@ public class ImportPlateDataWindow extends JFrame {
     }
 
 
-    private void printReport(Report report) {
+    private boolean printReport(Report report) {
         String clientName = report.getSingleClient().getCompanyName();
         final File outputFilename = new File(clientName + "Report" + ".pdf");
-
-
+        boolean made = false;
         // Generate the report
         try {
             new ReportGenerator(report).generateReport(AbstractReportGenerator.OutputType.PDF, outputFilename);
+            made = true;
 
         } catch (IOException e) {
             e.printStackTrace();
+            made = false;
         } catch (ReportProcessingException e) {
             e.printStackTrace();
+            made = false;
         }
 
         // Output the location of the file
-        System.err.println("Generated the report [" + outputFilename.getAbsolutePath() + "]");
-
+        //JOptionPane.showMessageDialog(null, "Generated report for " + clientName);
+        return made;
     }
 
 

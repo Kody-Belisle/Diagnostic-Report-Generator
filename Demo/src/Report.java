@@ -139,7 +139,7 @@ public class Report {
 
         public String getTestType() {
             if (testType == 1) {
-                return "CAE";
+                return "BLV";
             }
             if (testType == 2) {
                 return "CL";

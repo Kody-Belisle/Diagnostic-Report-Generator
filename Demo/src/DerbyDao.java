@@ -139,6 +139,31 @@ public class DerbyDao {
         }
     }
 
+    public void removeAnimals(String clientName, String logID, String animalType) {
+        try {
+            PreparedStatement psInsert = conn.prepareStatement(
+                    "delete from animals where client_name = ? and log_id = ? and type = ?");
+            statements.add(psInsert);
+
+            psInsert.setString(1, clientName);
+            psInsert.setString(2, logID);
+            psInsert.setString(3, animalType);
+
+            int results = psInsert.executeUpdate();
+
+            if (results <= 0) {
+                System.out.println("Animals were not deleted from database");
+            } else {
+                System.out.println("Deleted " + results + " Animals");
+            }
+
+            conn.commit();
+            System.out.println("Committed the change");
+        } catch (SQLException sqle) {
+            printSQLException(sqle);
+        }
+    }
+
     public void addReport(String logID, String type, String dateReceived, String dateTested, String resultFile, String clientName) {
         try {
             PreparedStatement psInsert = conn.prepareStatement(
