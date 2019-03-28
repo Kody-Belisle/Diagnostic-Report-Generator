@@ -41,10 +41,11 @@ public class Report {
             ArrayList<String> animals = animalIds;
             DerbyDao dao = new DerbyDao();
 
-            for (int i = startAt; i < animalCount; i++) {
-                calculateResults(i);
-                System.out.println("Added: " + calculatedResult.get(i));
-                dao.addAnimal(animals.get(i), animalType, (double)testResults.get(i), calculatedResult.get(i), singleClient.getCompanyName(), logID);
+            for (int i = 0; i < animalCount; i++) {
+                int index = startAt + i;
+                calculateResults(index);
+                System.out.println("Added: " + calculatedResult.get(index));
+                dao.addAnimal(animals.get(index), animalType, (double)testResults.get(index), calculatedResult.get(index), singleClient.getCompanyName(), logID);
             }
 
             return 0;
