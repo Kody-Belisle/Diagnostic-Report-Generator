@@ -29,7 +29,7 @@
     <javac classpathref="class.path" srcdir="${src}" destdir="${build}"/>
   </target>
 
-  <target name="dist" depends="compile"
+  <target name="dist" depends="clean, compile"
         description="generate the distribution">
     <!-- Create the distribution directory -->
     <mkdir dir="${dist}/lib"/>
@@ -39,6 +39,8 @@
     <manifest>
         <attribute name="Main-Class" value="src.Main" />
     </manifest>
+
+      <zipgroupfileset dir="${lib}" includes="*.jar"/>
   </jar>
   </target>
 
