@@ -7,6 +7,12 @@
   <property name="build" location="build"/>
   <property name="dist" location="dist"/>
 
+  <path id="class.path">
+    <fileset dir="../lib">
+      <include name="**/*.jar" />
+    </fileset>
+  </path>
+
   <target name="init">
     <!-- Create the time stamp -->
     <tstamp/>
@@ -16,8 +22,10 @@
 
   <target name="compile" depends="init"
         description="compile the source">
+
+
     <!-- Compile the Java code from ${src} into ${build} -->
-    <javac srcdir="${src}" destdir="${build}"/>
+    <javac classpathref="class.path" srcdir="${src}" destdir="${build}"/>
   </target>
 
   <target name="dist" depends="compile"
