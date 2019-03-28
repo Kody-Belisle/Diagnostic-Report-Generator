@@ -49,7 +49,24 @@ public class ImportClientData {
                 // prints all info for one customer
                 System.out.println("Line: " + line + " J: " + j + "\n");
                 Boolean flag = false;
+
+                //Client data setup
+                String companyName = null;
+                String clientName = null;
+                String address = null;
+                String city = null;
+                String state = null;
+                String zip = null;
+                String email = null;
+                String phone = null;
+
                 while (lineScanner.hasNext() && !flag) {
+
+
+
+
+
+
                     String token = "";
                     try {
                         token = scanner.next();
@@ -61,32 +78,52 @@ public class ImportClientData {
                     //System.out.print("Token: " + token + "\n");
                     if (i == 8) {
                         i = 0;
+                        Client client = new Client(companyName, clientName, address, city, state, zip, email, phone, null);
+                        DerbyDao dao = new DerbyDao();
+                        dao.addClient(client);
+                        //reset client data
+                        companyName = null;
+                        clientName = null;
+                        address = null;
+                        city = null;
+                        state = null;
+                        zip = null;
+                        email = null;
+                        phone = null;
                     }
                     switch (i) {
 
                         case 0:
                             System.out.println("Company Name: \t" + token);
+                            companyName = token;
                             break;
                         case 1:
                             System.out.println("Name: \t" + token);
+                            clientName = token;
                             break;
                         case 2:
                             System.out.println("Address: \t" + token);
+                            address = token;
                             break;
                         case 3:
                             System.out.println("City: \t" + token);
+                            city = token;
                             break;
                         case 4:
                             System.out.println("State: \t" + token);
+                            state = token;
                             break;
                         case 5:
                             System.out.println("Zip: \t" + token);
+                            zip = token;
                             break;
                         case 6:
                             System.out.println("Email address: \t" + token);
+                            email = token;
                             break;
                         case 7:
                             System.out.println("Phone: \t" + token);
+                            phone = token;
                             break;
                         default:
                             break;

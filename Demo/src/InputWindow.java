@@ -576,6 +576,18 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
         JMenuItem source = (JMenuItem)(evt.getSource());
         String s = "Action event detected." + "\n" + "Event source: " + source.getText();
         System.out.println(s + "/n");
+
+        if (source == jMenuItem1) {
+
+            try {
+                if (! jTable1.print()) {
+                    System.err.println("User cancelled printing");
+                }
+            } catch (java.awt.print.PrinterException e) {
+                System.err.format("Cannot print %s%n", e.getMessage());
+            }
+        }
+
         if (source == jMenuItem3) {
             dao.exportClients();
         }
