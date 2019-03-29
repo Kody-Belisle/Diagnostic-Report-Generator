@@ -8,19 +8,19 @@ import java.util.ArrayList;
  * stores all necessary report data and performs calculations on it
  */
 public class Report {
-        ArrayList<PlateTest> plateTests;
-        static ArrayList<Float> controlValues;
+        private ArrayList<PlateTest> plateTests;
+        private ArrayList<Float> controlValues;
         private Client singleClient;
         private String dateReceived;
         private String dateTested;
         private String animalType;
 
-        int testType;
-        int animalCount;
+        private int testType;
+        private int animalCount;
         
-        String logID;
-        static ArrayList<Float> testResults;
-        private static ArrayList<String> calculatedResult = new ArrayList<String>();
+        private String logID;
+        private ArrayList<Float> testResults;
+        private ArrayList<String> calculatedResult = new ArrayList<String>();
         
         public Report(Client client, String animalType, String dateTested, int animalCount, int testType, String logID) {
             this.singleClient = client;
@@ -42,10 +42,9 @@ public class Report {
             DerbyDao dao = new DerbyDao();
 
             for (int i = 0; i < animalCount; i++) {
-                int index = startAt + i;
-                calculateResults(index);
-                System.out.println("Added: " + calculatedResult.get(index));
-                dao.addAnimal(animals.get(index), animalType, (double)testResults.get(index), calculatedResult.get(index), singleClient.getCompanyName(), logID);
+                calculateResults(i);
+                System.out.println("Added: " + calculatedResult.get(i));
+                dao.addAnimal(animals.get(startAt + i), animalType, (double)testResults.get(i), calculatedResult.get(i), singleClient.getCompanyName(), logID);
             }
 
             return 0;
@@ -157,7 +156,7 @@ public class Report {
          * @param index
          * uses calculations from provided excel sheet and puts results in array (should be a map at some point)
          */
-        public static void calculateResults(int index) {
+        public void calculateResults(int index) {
             System.out.println("Calculating testResult: " + testResults.get(index));
 
             /*//debug
@@ -183,7 +182,7 @@ public class Report {
     
         }
 
-        public static Float getMargins() {
+        public Float getMargins() {
             Float negativeControlOne = controlValues.get(0);
             Float negativeControlTwo = controlValues.get(1);
 

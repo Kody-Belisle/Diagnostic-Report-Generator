@@ -7,7 +7,9 @@ import org.jdatepicker.impl.UtilDateModel;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Properties;
 
 import javax.swing.*;
@@ -299,10 +301,14 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
 
         jLabel9.setText("Animal Type:");
 
+        //Default value is today
+        Long millis = System.currentTimeMillis();
+        java.sql.Date date = new java.sql.Date(millis);
         SqlDateModel model = new SqlDateModel();
+        model.setValue(date);
         //UtilDateModel model = new UtilDateModel();
-//model.setDate(20,04,2014);
-// Need this...
+        //model.setDate(20,04,2014);
+        // Need this...
         Properties p = new Properties();
         p.put("text.today", "Today");
         p.put("text.month", "Month");
@@ -811,9 +817,7 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
 
         //clear fields
         for (javax.swing.JTextField e : textFields) {
-            if (!e.equals(jTextField5)) {
-                e.setText("");
-            }
+            e.setText("");
         }
 
 
