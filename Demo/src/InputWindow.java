@@ -22,6 +22,11 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
      * Creates new form InputWindow
      */
     public InputWindow() {
+        //Start Derby Driver
+        this.dao = new DerbyDao();
+        dao.getClients(names);
+        System.out.println("DerbyDao started");
+        
         initComponents();
     }
 
@@ -109,6 +114,35 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
         jLabel8.setText("Phone Two:");
 
         jLabel12.setText("Client Name:");
+
+        //Set up autocomplete on the company name
+        jTextField10.addKeyListener(new KeyAdapter() {
+            public void keyReleased(KeyEvent e) {
+                switch(e.getKeyCode()) {
+                    case KeyEvent.VK_BACK_SPACE:
+                        break;
+                    case KeyEvent.VK_ENTER:
+                        jTextField10.setText(jTextField10.getText());
+                        Client existing = dao.getOneClient(jTextField10.getText());
+                        if (existing == null) {
+                            JOptionPane.showMessageDialog(null, "Client not found.");
+                        } else {
+                            existingClient = true;
+                            setExistingClient(existing);
+                        }
+                        break;
+                    default:
+                        EventQueue.invokeLater(new Runnable() {
+                            @Override
+
+                            public void run() {
+                                String txt = jTextField10.getText();
+                                autoComplete(txt);
+                            }
+                        });
+                }
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);

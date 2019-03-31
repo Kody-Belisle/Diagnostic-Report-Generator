@@ -7,10 +7,12 @@
   <property name="build" location="build"/>
   <property name="dist" location="dist"/>
   <property name="lib" location="../lib"/>
+  <property name="DERBY_HOME" location="C:/Users/Hjohn/IdeaProjects/Diagnostic-Report-Generator"/>
 
   <path id="class.path">
     <fileset dir="${lib}">
       <include name="**/*.jar" />
+
     </fileset>
   </path>
 
@@ -35,7 +37,8 @@
     <mkdir dir="${dist}/lib"/>
 
     <!-- Put everything in ${build} into the MyProject-${DSTAMP}.jar file -->
-    <jar jarfile="${dist}/lib/ReportGenerator-${DSTAMP}.jar" basedir="${build}">
+    <jar jarfile="${dist}/lib/ReportGenerator-${DSTAMP}.jar" basedir=".">
+
     <manifest>
         <attribute name="Main-Class" value="src.Main" />
     </manifest>

@@ -31,6 +31,7 @@ public class DerbyDao {
             conn = null;
             //Get current user directory
             String protocol = "jdbc:derby:" + System.getProperty("user.dir");
+            //String protocol = "jdbc:derby:jar:(" + System.getProperty("user.dir");
             try {
                 Properties props = new Properties(); // connection properties
                 // providing a user name and password is optional in the embedded
@@ -51,8 +52,11 @@ public class DerbyDao {
                  * The directory derbyDB will is created at user.dir which is where
                  * jar will be plus lib folder
                  */
+
+                //TODO: Figure out how to connect to embedded derby database
                 conn = DriverManager.getConnection(protocol + "\\lib\\" + dbName
                         + ";create=true", props);
+                //conn = DriverManager.getConnection("jdbc:derby:" + dbName, props);
 
                 System.out.println("Connected to and created database " + dbName);
 
@@ -64,6 +68,8 @@ public class DerbyDao {
 
             } catch (SQLException sqle) {
                 printSQLException(sqle);
+            } catch (Exception e) {
+                System.err.println(e.getStackTrace());
             }
 
     }
