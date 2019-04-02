@@ -26,8 +26,18 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
         this.dao = new DerbyDao();
         dao.getClients(names);
         System.out.println("DerbyDao started");
-        
+
         initComponents();
+        textFields.add(jTextField1);
+        textFields.add(jTextField2);
+        textFields.add(jTextField3);
+        textFields.add(jTextField4);
+        textFields.add(jTextField5);
+        textFields.add(jTextField6);
+        textFields.add(jTextField7);
+        textFields.add(jTextField8);
+        textFields.add(jTextField9);
+        textFields.add(jTextField10);
     }
 
     /**
@@ -89,6 +99,7 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
         jMenuItem3 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        addWindowListener(this);
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Client Data"));
         jPanel1.setToolTipText("");
@@ -718,6 +729,8 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
         }
     }
 
+    //TODO: Use this method to clearMap after reports are generated. Report generation functionality is going
+    //to be moved to this class most likely so can make that call easily once it's handled here
     private void clearMap() {
 
         DefaultTableModel jTable1model = (DefaultTableModel) jTable1.getModel();
@@ -830,9 +843,9 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
         private javax.swing.JTextField jTextField9;         //LOGID
         private javax.swing.JTextField jTextField10;        //CompanyName
         */
-
-        checkClientInfo(customer);
-        if(!existingClient) {
+        if(existingClient) {
+            checkClientInfo(customer);
+        } else if(!existingClient) {
             dao.addClient(customer);
         }
         //Always set to false after adding or skipping client
@@ -853,8 +866,23 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
         for (javax.swing.JTextField e : textFields) {
             e.setText("");
         }
+    }
 
-
+    private void checkClientInfo(Client builtClient) {
+        Client existing = dao.getOneClient(jTextField10.getText());
+        if (existing == null) {
+            JOptionPane.showMessageDialog(null, "Client not found.");
+        } else {
+            boolean changed = false;
+            if(!existing.getCompanyName().equals(builtClient.getCompanyName()) || !existing.getName().equals(builtClient.getName())
+                || !existing.getAddress().equals(builtClient.getAddress()) || !existing.getCity().equals(builtClient.getCity()) ||
+                    !existing.getState().equals(builtClient.getState()) || !existing.getZip().equals(builtClient.getZip())
+                || !existing.getPhoneOne().equals(builtClient.getPhoneOne()) || !existing.getPhoneTwo().equals(builtClient.getPhoneTwo())
+                || !existing.getEmail().equals(builtClient.getEmail()))
+            {
+                changed = true;
+            }
+        }
 
     }
 
@@ -987,17 +1015,7 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
 
     // End of variables declaration
 
-    private void checkClientInfo(Client client) {
-        System.out.println(client.getCompanyName());
-        System.out.println(client.getName());
-        System.out.println(client.getAddress());
-        System.out.println(client.getCity());
-        System.out.println(client.getState());
-        System.out.println(client.getZip());
-        System.out.println(client.getEmail());
-        System.out.println(client.getPhoneOne());
-        System.out.println(client.getPhoneTwo());
-    }
+
 
     /**** WINDOW LISTENER METHODS ********/
     @Override
