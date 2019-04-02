@@ -747,6 +747,7 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
         jTextField3.setText(client.getCity());
         jComboBox1.setSelectedItem(client.getState());
         jTextField4.setText(client.getZip());
+        jTextField6.setText(client.getEmail());
         jTextField7.setText(client.getPhoneOne());
         jTextField8.setText(client.getPhoneTwo());
     }
@@ -945,14 +946,14 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
         if (existing == null) {
             JOptionPane.showMessageDialog(null, "Client not found.");
         } else {
-            boolean changed = false;
             if(!existing.getCompanyName().equals(builtClient.getCompanyName()) || !existing.getName().equals(builtClient.getName())
                 || !existing.getAddress().equals(builtClient.getAddress()) || !existing.getCity().equals(builtClient.getCity()) ||
                     !existing.getState().equals(builtClient.getState()) || !existing.getZip().equals(builtClient.getZip())
                 || !existing.getPhoneOne().equals(builtClient.getPhoneOne()) || !existing.getPhoneTwo().equals(builtClient.getPhoneTwo())
                 || !existing.getEmail().equals(builtClient.getEmail()))
             {
-                changed = true;
+                dao.updateSingleClient(builtClient);
+
             }
         }
 
