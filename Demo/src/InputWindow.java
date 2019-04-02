@@ -4,9 +4,12 @@ import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.SqlDateModel;
 import org.jdatepicker.impl.UtilDateModel;
+import org.pentaho.reporting.engine.classic.core.ReportProcessingException;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -574,17 +577,78 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
     }
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {
-        //continue button
-        ImportPlateDataWindow plateData = new ImportPlateDataWindow();
-        plateData.setTestID(testID);
+        //generate button
+        ArrayList<Float> parsedData = new ArrayList<Float>();
+        int dataIndex = 4;
+        String filePath = jTextField11.getText();
+        //get the file from the field
+        File file = new File(filePath);
+        System.out.println("Generating Report");
+        //parse data then generate report
+        ParsePlateReaderData parser = new ParsePlateReaderData(file, testID);
+        parsedData = parser.parseValues();
+        System.out.println("report count: "+ reportList.size());
+        //give the report objects the amount of values they need
+
         System.out.println("Set report list, size: " + reportList.size());
         printCurrentAnimalList();
 
         getCellValues();
+        int animalListCount = 0;
+        for (Report n: reportList) {
+            addReport(n);
+            n.setControlValues(parser.getControlValues());
+            for (int i = 0; i < n.getAnimalCount(); i++) {
+                n.addTestResult(parsedData.get(dataIndex));
+                System.out.println("Added: " + parsedData.get(dataIndex));
+                dataIndex++;
+            }
+            //All test results added to a single test, calculate results and add to database
+            n.addFinalAnimals(animalListCount, animalIDList);
+            animalListCount = animalListCount + n.getAnimalCount();
+        }
 
-        plateData.setAnimalIDList(animalIDList);
-        plateData.setReportList(reportList);
-        plateData.setVisible(true);
+        for (Report r : reportList) {
+            boolean made = printReport(r);
+            //If the report was made successfully then delete the animals from the database
+            //Should remove confusion about which animals belong to which client and which logID
+            if (made) {
+                System.out.println("Generated Report For: " + r.getSingleClient().getCompanyName());
+                dao.removeAnimals(r.getSingleClient().getCompanyName(), r.getLogID(), r.getAnimalType());
+            } else {
+                System.err.println("Report not generated for " + r.getSingleClient().getCompanyName());
+            }
+
+        }
+
+    }
+
+    private void addReport(Report report) {
+        DerbyDao dao = new DerbyDao();
+
+        //TODO: Might need to remove all primary key and give it it's own report id that auto increments
+        dao.addReport(report.getLogID(), report.getAnimalType(), report.getReceived(), report.getTested(), fileName, report.getSingleClient().getCompanyName());
+    }
+    private boolean printReport(Report report) {
+        String clientName = report.getSingleClient().getCompanyName();
+        final File outputFilename = new File(clientName + "Report" + ".pdf");
+        boolean made = false;
+        // Generate the report
+        try {
+            new ReportGenerator(report).generateReport(AbstractReportGenerator.OutputType.PDF, outputFilename);
+            made = true;
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            made = false;
+        } catch (ReportProcessingException e) {
+            e.printStackTrace();
+            made = false;
+        }
+
+        // Output the location of the file
+        //JOptionPane.showMessageDialog(null, "Generated report for " + clientName);
+        return made;
     }
 
 
@@ -633,8 +697,16 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
     }
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
         //Import Plate Data Button
+        JFileChooser chooser = new JFileChooser();
+        chooser.setCurrentDirectory( new File (System.getProperty("user.dir")));
+        chooser.showOpenDialog(null);
+        chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+        fileName = chooser.getSelectedFile().getName();
+        String selectedFilePath = chooser.getSelectedFile().getAbsolutePath();
+        System.out.println("Selected file path: " + selectedFilePath);
+        jTextField11.setText(selectedFilePath);
+
     }
 
     private void autoComplete(String text) {
@@ -960,7 +1032,7 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
     ArrayList<Integer> testYVals;
     private DerbyDao dao;
     private ArrayList<javax.swing.JTextField> textFields = new ArrayList<>();
-
+    private String fileName;
 
     // Variables declaration - do not modify
     private javax.swing.JButton jButton1;
