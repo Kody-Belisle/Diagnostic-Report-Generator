@@ -1,5 +1,6 @@
 package src;
 
+import javax.swing.table.DefaultTableModel;
 import java.io.*;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -7,16 +8,54 @@ import java.util.Arrays;
 import java.util.List;
 
 public class StateSerializer {
+    private final String filename = "state.ser";
+    private ArrayList<Report> reports;
+    private javax.swing.JTable currentMap;
 
     public static void main(String[] args) {
         Client testClient = new Client("Serialize Test", "John Doe", "123 Main St", "Boise", "ID", "83705", "", "", "");
         Report object = new Report(testClient, "Sheep", "2019-04-03", 3, 2, "O40319003");
-        String filename = "file.ser";
+
         String[] names = {"Bob", "Sally", "Dolly", "Jane", "Chuck"};
         List<String> animalList = Arrays.asList(names);
 
         ArrayList<String> animalIDs = new ArrayList<String>(animalList);
+    }
 
+    public void deserialize() {
+
+        javax.swing.JTable table = null;
+        ArrayList<Report> readList = null;
+        // Deserialization
+        try {
+            // Reading the object from a file
+            FileInputStream file = new FileInputStream(filename);
+            ObjectInputStream in = new ObjectInputStream(file);
+
+            // Method for deserialization of object
+            readList = (ArrayList<Report>) in.readObject();
+            table = (javax.swing.JTable) in.readObject();
+
+            in.close();
+            file.close();
+
+            for (Report report: readList) {
+                System.out.println("Object has been deserialized.");
+                System.out.println("Client = " + report.getSingleClient().getCompanyName());
+                System.out.println("Test Type = " + report.getTestType());
+                System.out.println("Date Received = " + report.getReceived());
+                System.out.println("Date Tested = " + report.getTested());
+                System.out.println("Animal Type = " + report.getAnimalType());
+                System.out.println("Log ID = " + report.getLogID());
+            }
+        } catch (IOException ex) {
+            System.out.println("IOException is caught");
+        } catch (ClassNotFoundException ex) {
+            System.out.println("ClassNotFoundException is caught");
+        }
+    }
+
+    public void serialize() {
         // Serialization
         try {
             //Saving of object in a file
@@ -24,8 +63,8 @@ public class StateSerializer {
             ObjectOutputStream out = new ObjectOutputStream(file);
 
             // Method for serialization of object
-            out.writeObject(object);
-            out.writeObject(animalIDs);
+            out.writeObject(reports);
+            out.writeObject(currentMap);
 
             out.close();
             file.close();
@@ -35,38 +74,21 @@ public class StateSerializer {
         } catch (IOException ex) {
             System.out.println("IOException is caught");
         }
+    }
 
+    public void setReports(ArrayList<Report> reportList) {
+        this.reports = reportList;
+    }
 
-        Report object1 = null;
-        ArrayList<String> readList = null;
-        // Deserialization
-        try {
-            // Reading the object from a file
-            FileInputStream file = new FileInputStream(filename);
-            ObjectInputStream in = new ObjectInputStream(file);
+    public void setCurrentMap(javax.swing.JTable wellMap) {
+        this.currentMap = wellMap;
+    }
 
-            // Method for deserialization of object
-            object1 = (Report) in.readObject();
-            readList = (ArrayList<String>) in.readObject();
+    public ArrayList<Report> getReports() {
+        return reports;
+    }
 
-            in.close();
-            file.close();
-
-            System.out.println("Object has been deserialized ");
-            System.out.println("Client = " + object1.getSingleClient().getCompanyName());
-            System.out.println("Test Type = " + object1.getTestType());
-            System.out.println("Date Received = " + object1.getReceived());
-            System.out.println("Date Tested = " + object1.getTested());
-            System.out.println("Animal Type = " + object1.getAnimalType());
-            System.out.println("Log ID = " + object1.getLogID());
-
-            for (String name: readList) {
-                System.out.println(name);
-            }
-        } catch (IOException ex) {
-            System.out.println("IOException is caught");
-        } catch (ClassNotFoundException ex) {
-            System.out.println("ClassNotFoundException is caught");
-        }
+    public javax.swing.JTable getCurrentMap() {
+        return currentMap;
     }
 }

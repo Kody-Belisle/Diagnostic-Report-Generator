@@ -16,6 +16,7 @@ import java.util.Date;
 import java.util.Properties;
 
 import javax.swing.*;
+import javax.swing.plaf.nimbus.State;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.text.DateFormatter;
 
@@ -1113,12 +1114,18 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
 
     @Override
     public void windowOpened(WindowEvent e) {
+        StateSerializer saveState = new StateSerializer();
+        saveState.deserialize();
 
     }
 
     @Override
     public void windowClosing(WindowEvent e) {
         System.out.println("Window is closing");
+        StateSerializer saveState = new StateSerializer();
+        saveState.setCurrentMap(jTable1);
+        saveState.setReports(reportList);
+        saveState.serialize();
         dao.shutDown();
 
     }
