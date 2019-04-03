@@ -116,7 +116,7 @@ public class ReportGenerator extends AbstractReportGenerator
         //TODO: refine query so that we're pulling animals for just one logID
         final String sqlString = "select REPORT.CLIENT_NAME, ANIMALS.ANIMAL_ID as animalID, ANIMALS.RESULT as OD, ANIMALS.TEXT_RESULT as Result"
             + " from report join animals on REPORT.LOG_ID = ANIMALS.LOG_ID" +
-            " where REPORT.CLIENT_NAME = '" + report.getSingleClient().getCompanyName() + "'" +
+            " where REPORT.CLIENT_NAME = '" + report.getSingleClient().getCompanyName() + "'" + " and ANIMALS.CLIENT_NAME = '" + report.getSingleClient().getCompanyName() + "'" +
             " and ANIMALS.type = '" + report.getAnimalType() + "' and ANIMALS.LOG_ID = '" + report.getLogID() + "'";
         dataFactory.setQuery(QUERY_NAME, sqlString);
         return dataFactory;

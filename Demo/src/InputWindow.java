@@ -383,6 +383,7 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
                                                 .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                 .addGap(0, 0, Short.MAX_VALUE))
                                         .addComponent(datePicker, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                        //.addComponent(datePicker, 0, javax.swing.GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 //.addComponent(jComboBox4, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 //.addGap(8, 8, 8)
@@ -916,10 +917,11 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
         private javax.swing.JTextField jTextField9;         //LOGID
         private javax.swing.JTextField jTextField10;        //CompanyName
         */
-        if(existingClient) {
+        if(existingClient) {            //It's an existing client. Check for changes and update if necessary
             checkClientInfo(customer);
-        } else if(!existingClient) {
+        } else if(!existingClient) {    //It's a new client. Add to DB and update name list
             dao.addClient(customer);
+            dao.getClients(names);
         }
         //Always set to false after adding or skipping client
         existingClient = false;
