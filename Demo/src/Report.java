@@ -8,7 +8,7 @@ import java.util.Map;
 /**
  * stores all necessary report data and performs calculations on it
  */
-public class Report {
+public class Report implements java.io.Serializable {
         private ArrayList<PlateTest> plateTests;
         private Client singleClient;
         private String dateReceived;

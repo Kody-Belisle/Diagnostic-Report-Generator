@@ -634,6 +634,7 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
         //TODO: Might need to remove all primary key and give it it's own report id that auto increments
         dao.addReport(report.getLogID(), report.getAnimalType(), report.getReceived(), report.getTested(), fileName, report.getSingleClient().getCompanyName());
     }
+
     private boolean printReport(Report report) {
         String clientName = report.getSingleClient().getCompanyName();
         final File outputFilename = new File(clientName + "Report" + ".pdf");

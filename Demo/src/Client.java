@@ -1,6 +1,6 @@
 package src;
 
-public class Client {
+public class Client implements java.io.Serializable {
     private String companyName;
     private String clientName;
     private String address;
