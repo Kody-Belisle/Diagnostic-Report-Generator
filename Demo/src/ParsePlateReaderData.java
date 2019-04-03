@@ -15,6 +15,7 @@ public class ParsePlateReaderData {
     private int garbageValueCount = 13;
     private static ArrayList <Float> testValues;
     private int testType;
+    TestType test;
 
     public ParsePlateReaderData(File report, int testType) {
         this.testType = testType;
@@ -26,6 +27,24 @@ public class ParsePlateReaderData {
         }
 
         testValues = new ArrayList<Float>();
+
+        switch (testType) {
+            case 1:
+                //BLV test
+                test = new BLVTest();
+                break;
+            case 2:
+                //cl test
+                test = new CLTest();
+                break;
+            case 3:
+                //Johne's test
+                test = new JohnesTest();
+                break;
+
+            default:
+                test = new CLTest();
+        }
 
     }
 
@@ -90,42 +109,21 @@ public class ParsePlateReaderData {
         int pos1 = -1;
         int pos2 = -1;
 
-        switch (testType) {
-            case 1:
-                //BLV test
-                neg1 = 25;
-                neg2 = 32;
-                pos1 = 37;
-                pos2 = 44;
-                break;
-            case 2:
-                //cl test
-                blank = 0;
-                neg1 = 3;
-                neg2 = 12;
-                pos1 = 15;
-                pos2 = 24;
-                break;
-            case 3:
-                //Johne's test
-                neg1 = 24;
-                neg2 = 36;
-                pos1 = 0;
-                pos2 = 12;
-                break;
 
-        }
-        
+        pos1 = test.getPos1();
+        pos2 = test.getPos2();
+        neg1 = test.getNeg1();
+        neg2 = test.getNeg2();
+        blank = test.getBlank();
         //get the rest of the values in the correct order
-        //36 should be first test
-        //48 should be second test
-        int rowLength = 12;
-        int colHeight = 8;
+
 
         setControlValues(arrangedValues);
-        //list elements 0-3 are now: 
+        //list elements 0-3 are now:
         //neg1, neg2, pos1, pos2
 
+        int rowLength = 12;
+        int colHeight = 8;
         for (int j = 0; j < rowLength; j++) {
 
                 for (int i = 0; i < colHeight; i++ ) {
@@ -149,31 +147,16 @@ public class ParsePlateReaderData {
      */
     private void setControlValues(ArrayList <Float> arrangedValues) {
 
-            /*      
-        
-                EXAMPLE DATA NOTES
-
-            Element 0 is labeled as BLANK
-
-            Element 3 is negative control one
-
-            Element 12 is negative control two
-
-            Element 15 is positive control one
-
-            Element 24 is positive control two
-
-        */
-
-        //not adding BLANK
-
-        arrangedValues.add(testValues.get(3));
+        arrangedValues.add(testValues.get(test.getNeg1()));
         System.out.println("negative control one: " + arrangedValues.get(0));
-        arrangedValues.add(testValues.get(12));
+
+        arrangedValues.add(testValues.get(test.getNeg2()));
         System.out.println("negative control two " + arrangedValues.get(1));
-        arrangedValues.add(testValues.get(15));
+
+        arrangedValues.add(testValues.get(test.getPos1()));
         System.out.println("positive control one: " + arrangedValues.get(2));
-        arrangedValues.add(testValues.get(24));
+
+        arrangedValues.add(testValues.get(test.getPos2()));
         System.out.println("positive control two: " + arrangedValues.get(3));
 
         //list elements 0-3 are now: 

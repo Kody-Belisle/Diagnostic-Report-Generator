@@ -163,9 +163,9 @@ public class ReportGenerator extends AbstractReportGenerator
         parameters.put("DATE_TESTED", report.getTested());
 
         //test data
-        parameters.put("POSITIVE_OD", String.format("%.3f", report.getMargins() + 0.3));
-        parameters.put("MARGINAL_LOW", String.format("%.3f", report.getMargins()));
-        parameters.put("MARGINAL_HIGH", String.format("%.3f", report.getMargins() + 0.3));
+        report.setParameters(parameters);
+
+
         return parameters;
         //return null;
     }

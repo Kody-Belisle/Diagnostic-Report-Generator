@@ -3,18 +3,19 @@ package src;
 import java.lang.reflect.Array;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Map;
 
 /**
  * stores all necessary report data and performs calculations on it
  */
 public class Report {
         private ArrayList<PlateTest> plateTests;
-        private ArrayList<Float> controlValues;
         private Client singleClient;
         private String dateReceived;
         private String dateTested;
         private String animalType;
 
+        private TestType testObject;
         private int testType;
         private int animalCount;
         
@@ -31,6 +32,16 @@ public class Report {
             this.logID = logID;
             this.dateReceived = parseLogID();
             testResults = new ArrayList<Float>();
+
+            switch (testType) {
+                case 1:
+                    //create BLV object
+                case 2:
+                    testObject = new CLTest();
+                    break;
+                case 3:
+                    //create Johne's object
+            }
         }
 
         /*
@@ -158,46 +169,20 @@ public class Report {
          */
         public void calculateResults(int index) {
             System.out.println("Calculating testResult: " + testResults.get(index));
-
-            /*//debug
-            for (Float e: controlValues) {
-                System.out.println(e);
-            }*/
-    
             Float testResult = testResults.get(index);
-
-            Float marginalCutoff = getMargins();
-            //test negative
-            if (testResult < marginalCutoff) {
-    
-                calculatedResult.add("Negative");
-    
-            } else if (testResult > marginalCutoff && testResult < (marginalCutoff + 0.3) ) {
-    
-                calculatedResult.add("Marginal");
-            } else if (testResult > marginalCutoff) {
-    
-                calculatedResult.add("Positive");
-            }
-    
+            calculatedResult.add(testObject.getResult(testResult));
         }
 
-        public Float getMargins() {
-            Float negativeControlOne = controlValues.get(0);
-            Float negativeControlTwo = controlValues.get(1);
 
-            Float positiveControlOne = controlValues.get(2);
-            Float positiveControlTwo = controlValues.get(3);
-
-            Float negAvg = (negativeControlOne + negativeControlTwo)/2;
-            Float posAvg = (positiveControlTwo + positiveControlOne)/2;
-
-            Float marginalCutoff = ((posAvg - negAvg)/4) + negAvg;
-            return marginalCutoff;
-        }
 
         public void setControlValues(ArrayList<Float> controlValues) {
-            this.controlValues = controlValues;
+            testObject.setControlValues(controlValues);
+        }
+
+        public void setParameters(Map parameters) {
+
+            testObject.setReportParameters(parameters);
+
         }
 
 }

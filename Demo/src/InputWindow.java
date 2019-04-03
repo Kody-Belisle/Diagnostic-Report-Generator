@@ -581,6 +581,10 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
         ArrayList<Float> parsedData = new ArrayList<Float>();
         int dataIndex = 4;
         String filePath = jTextField11.getText();
+        if (filePath.length() < 1) {
+            JOptionPane.showMessageDialog(null, "Input file required.");
+            return;
+        }
         //get the file from the field
         File file = new File(filePath);
         System.out.println("Generating Report");
@@ -653,7 +657,7 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
 
 
     private void jRadioButton1ActionPerformed(java.awt.event.ActionEvent evt) {
-        //CAE Test
+        //BLV Test
         testID = 1;
         populateTestValues();
     }
@@ -706,7 +710,9 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
         String selectedFilePath = chooser.getSelectedFile().getAbsolutePath();
         System.out.println("Selected file path: " + selectedFilePath);
         jTextField11.setText(selectedFilePath);
-
+        //TODO need to have test selected
+        //ColorCells cs = new ColorCells(jTable1, selectedFilePath, testID);
+        //jTable1.repaint();
     }
 
     private void autoComplete(String text) {
@@ -1014,6 +1020,7 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
         }
 
     }
+
 
 
 
