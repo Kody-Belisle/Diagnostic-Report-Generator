@@ -48,6 +48,7 @@ public class ParsePlateReaderData {
 
     }
 
+
     public ArrayList<Float> getControlValues() {
         ArrayList<Float> controlValues = new ArrayList<Float>();
         for (int i = 0; i < 4; i++) {
@@ -57,8 +58,11 @@ public class ParsePlateReaderData {
         return controlValues;
     }
 
-
-
+    public ArrayList<Float> getUnorderedControlValues() {
+        ArrayList<Float> controlValues = new ArrayList<>();
+        setControlValues(controlValues);
+        return controlValues;
+    }
     /**
      *
      * @return arrayList containing parsed values
@@ -93,6 +97,35 @@ public class ParsePlateReaderData {
 
         return testValues;
 
+    }
+
+    public ArrayList <Float> parseValuesWithoutArranging() {
+
+        //Get all tokens and store them in the arrayList
+        while (scanner.hasNext()) {
+
+            valueCount++;
+
+            if (valueCount <= garbageValueCount) {
+                scanner.next();
+                continue;
+            }
+
+            String value = scanner.next();
+
+            try{
+                Float.parseFloat(value);
+                testValues.add(Float.parseFloat(value));
+            }catch(NumberFormatException e){
+                //not float so do nothing
+            }
+
+        }
+
+        scanner.close();
+
+
+        return testValues;
     }
     
     /**
@@ -161,7 +194,6 @@ public class ParsePlateReaderData {
 
         //list elements 0-3 are now: 
         //neg1, neg2, pos1, pos2
-
 
     }
 

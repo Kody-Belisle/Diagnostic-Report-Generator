@@ -10,6 +10,7 @@ public class CLTest extends TestType{
         neg1 = 3;
         neg2 = 12;
         blank = 0;
+        testValueCount = 4;
     }
 
     @Override
@@ -20,10 +21,12 @@ public class CLTest extends TestType{
     }
 
     public String getResult(Float testResult) {
-
         Float marginalCutoff = getMargins();
+        System.out.println("Calculating testResult with margin of " + marginalCutoff);
+        System.out.println("test result: " + testResult);
         //test negative
         if (testResult < marginalCutoff) {
+            System.out.println("Is less than " + marginalCutoff + " so, negative");
 
             return "Negative";
 
@@ -31,7 +34,7 @@ public class CLTest extends TestType{
 
             return "Marginal";
         } else if (testResult > marginalCutoff) {
-
+            System.out.println("Is greater than " + marginalCutoff + " and not less than " + (marginalCutoff + 0.3) + " so, positive");
             return "Positive";
         }
 
@@ -39,14 +42,19 @@ public class CLTest extends TestType{
     }
 
     public Float getMargins() {
+        System.out.println("Calculating Margin");
         Float negativeControlOne = controlValues.get(0);
+
         Float negativeControlTwo = controlValues.get(1);
 
         Float positiveControlOne = controlValues.get(2);
         Float positiveControlTwo = controlValues.get(3);
 
         Float negAvg = (negativeControlOne + negativeControlTwo)/2;
+        //not actually average of negative/positive control values
+        System.out.println("Negavg: (0.146)" + negativeControlOne + "+ (1.2)" +  positiveControlOne);
         Float posAvg = (positiveControlTwo + positiveControlOne)/2;
+        System.out.println("Posavg: (1.105)" + positiveControlTwo + "+ (0.146)" +  negativeControlTwo);
 
         Float marginalCutoff = ((posAvg - negAvg)/4) + negAvg;
         return marginalCutoff;

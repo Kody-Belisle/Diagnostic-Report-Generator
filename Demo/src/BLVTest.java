@@ -10,6 +10,7 @@ public class BLVTest extends TestType{
         neg1 = 25;
         neg2 = 32;
         blank = -1;
+        testValueCount = 4;
     }
 
     @Override

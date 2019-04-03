@@ -712,8 +712,8 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
         System.out.println("Selected file path: " + selectedFilePath);
         jTextField11.setText(selectedFilePath);
         //TODO need to have test selected
-        //ColorCells cs = new ColorCells(jTable1, selectedFilePath, testID);
-        //jTable1.repaint();
+        ColorCells cs = new ColorCells(jTable1, selectedFilePath, testID);
+        jTable1.repaint();
     }
 
     private void autoComplete(String text) {

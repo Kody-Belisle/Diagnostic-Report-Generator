@@ -10,6 +10,7 @@ public abstract class TestType {
     int neg1;
     int neg2;
     int blank;
+    int testValueCount;
 
     public int getNeg1() {
         return neg1;
@@ -30,6 +31,8 @@ public abstract class TestType {
     public int getBlank() {
         return blank;
     }
+
+    public int getTestValueCount() {return testValueCount;}
 
     public void setControlValues(ArrayList<Float> controlValues) {
         this.controlValues = controlValues;
