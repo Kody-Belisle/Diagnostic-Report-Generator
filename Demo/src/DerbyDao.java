@@ -173,15 +173,15 @@ public class DerbyDao {
     public void addReport(String logID, String type, String dateReceived, String dateTested, String resultFile, String clientName) {
         try {
             PreparedStatement psInsert = conn.prepareStatement(
-                    "insert into report values (?, ?, ?, ?, ?, ?)");
+                    "insert into report (log_id, type, client_name, date_received, date_tested, results_file) values (?, ?, ?, ?, ?, ?)");
             statements.add(psInsert);
 
             psInsert.setString(1, logID);
             psInsert.setString(2, type);
-            psInsert.setString(3, dateReceived);
-            psInsert.setString(4, dateTested);
-            psInsert.setString(5, resultFile);
-            psInsert.setString(6, clientName);
+            psInsert.setString(3, clientName);
+            psInsert.setString(4, dateReceived);
+            psInsert.setString(5, dateTested);
+            psInsert.setString(6, resultFile);
             int results = psInsert.executeUpdate();
 
             if (results <= 0) {
@@ -218,9 +218,7 @@ public class DerbyDao {
     }
 
     public Client getOneClient(String name) {
-
         Client foundClient = null;
-
         try {
 
             PreparedStatement stmt = conn.prepareStatement("select * from client where client_name = ?");
@@ -245,14 +243,42 @@ public class DerbyDao {
                     return foundClient;
                 }
             }
-
-
-
         } catch (SQLException sqle) {
             printSQLException(sqle);
         }
 
         return foundClient;
+    }
+
+    public void updateSingleClient(Client client) {
+        try {
+
+            PreparedStatement stmt = conn.prepareStatement("update client set client_name = ?, name = ?, " +
+                    "phone = ?, second_phone = ?, email = ?, address = ?, zip = ?, city = ?, state = ?" +
+                    " where client_name = ?");
+            statements.add(stmt);
+
+            stmt.setString(1, client.getCompanyName());
+            stmt.setString(2, client.getName());
+            stmt.setString(3, client.getPhoneOne());
+            stmt.setString(4, client.getPhoneTwo());
+            stmt.setString(5, client.getEmail());
+            stmt.setString(6, client.getAddress());
+            stmt.setString(7, client.getZip());
+            stmt.setString(8, client.getCity());
+            stmt.setString(9, client.getState());
+            stmt.setString(10, client.getCompanyName());
+            int results = stmt.executeUpdate();
+
+            if (results <= 0) {
+                System.out.println("New Client not added to database");
+            } else {
+                System.out.println("Updated Client: " + client.getCompanyName());
+                conn.commit();
+            }
+        } catch (SQLException sqle) {
+            printSQLException(sqle);
+        }
     }
 
     /*
