@@ -78,12 +78,13 @@ public class ColorCells extends DefaultTableCellRenderer {
 
                 System.out.println("test value: " + parsedData.get(parsedDataIndex));
                 //check if we're looking at a test value
+                /*
                 if (parsedDataIndex == testObject.getNeg1() || parsedDataIndex == testObject.getNeg2() ||
                     parsedDataIndex == testObject.getPos1() || parsedDataIndex == testObject.getPos2() ||
                     parsedDataIndex == testObject.getBlank()) {
                     parsedDataIndex++;
                     continue;
-                }
+                }*/
 
                 if (testObject.getResult(parsedData.get(parsedDataIndex)).equals("Positive")) {  //if the result is positive
                     tableColors[j][i] = Color.RED;
@@ -91,6 +92,9 @@ public class ColorCells extends DefaultTableCellRenderer {
                 } else if (testObject.getResult(parsedData.get(parsedDataIndex)).equals("Negative")) {
                     tableColors[j][i] = Color.GREEN;
                     System.out.println("Setting row:" + j + " column:" + i + "to green");
+                } else {
+                    tableColors[j][i] = Color.CYAN;
+                    System.out.println("Setting row:" + j + " column:" + i + "to blue");
                 }
 
                 parsedDataIndex++;

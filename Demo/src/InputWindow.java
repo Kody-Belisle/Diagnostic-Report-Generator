@@ -31,6 +31,7 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
         dao.getClients(names);
         System.out.println("DerbyDao started");
 
+        this.state = new StateSerializer();
         initComponents();
         textFields.add(jTextField1);
         textFields.add(jTextField2);
@@ -713,6 +714,7 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
         String selectedFilePath = chooser.getSelectedFile().getAbsolutePath();
         System.out.println("Selected file path: " + selectedFilePath);
         jTextField11.setText(selectedFilePath);
+
         //TODO need to have test selected
         ColorCells cs = new ColorCells(jTable1, selectedFilePath, testID);
         jTable1.repaint();
@@ -1043,6 +1045,7 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
     ArrayList<Integer> testXVals;
     ArrayList<Integer> testYVals;
     private DerbyDao dao;
+    private StateSerializer state;
     private ArrayList<javax.swing.JTextField> textFields = new ArrayList<>();
     private String fileName;
 
@@ -1114,18 +1117,34 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
 
     @Override
     public void windowOpened(WindowEvent e) {
-        StateSerializer saveState = new StateSerializer();
-        saveState.deserialize();
+
+        //TODO: Make testObject in Reports, so that report generation continues
+        //TODO: Make reset table method to clear animals and colors
+        //TODO: Make method to set up current test correctly
+        //TODO: Adjust where animals are added
+
+        state.deserialize();
+        reportList = state.getReports();
+        jTable1.setModel(state.getCurrentMap());
+        testID = state.getCurrentTest();
+        jRadioButton2.setSelected(true);
+        setTestVals(testID);
+        if (!state.getResultName().equals("")) {
+            ColorCells cs = new ColorCells(jTable1, state.getResultName(), testID);
+            jTable1.repaint();
+        }
 
     }
 
     @Override
     public void windowClosing(WindowEvent e) {
         System.out.println("Window is closing");
-        StateSerializer saveState = new StateSerializer();
-        saveState.setCurrentMap(jTable1);
-        saveState.setReports(reportList);
-        saveState.serialize();
+
+        state.setCurrentMap(jTable1.getModel());
+        state.setReports(reportList);
+        state.setResultName(jTextField11.getText());
+        state.setCurrentTest(testID);
+        state.serialize();
         dao.shutDown();
 
     }

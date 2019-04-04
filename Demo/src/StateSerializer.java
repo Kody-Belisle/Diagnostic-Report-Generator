@@ -1,6 +1,7 @@
 package src;
 
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 import java.io.*;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -10,7 +11,10 @@ import java.util.List;
 public class StateSerializer {
     private final String filename = "state.ser";
     private ArrayList<Report> reports;
-    private javax.swing.JTable currentMap;
+    private DefaultTableModel currentMap;
+    private String resultName;
+    private int currentTest;
+
 
     public static void main(String[] args) {
         Client testClient = new Client("Serialize Test", "John Doe", "123 Main St", "Boise", "ID", "83705", "", "", "");
@@ -24,8 +28,9 @@ public class StateSerializer {
 
     public void deserialize() {
 
-        javax.swing.JTable table = null;
+        DefaultTableModel tableModel = null;
         ArrayList<Report> readList = null;
+
         // Deserialization
         try {
             // Reading the object from a file
@@ -34,7 +39,9 @@ public class StateSerializer {
 
             // Method for deserialization of object
             readList = (ArrayList<Report>) in.readObject();
-            table = (javax.swing.JTable) in.readObject();
+            tableModel = (DefaultTableModel) in.readObject();
+            resultName = (String) in.readObject();
+            currentTest = (Integer) in.readObject();
 
             in.close();
             file.close();
@@ -48,6 +55,10 @@ public class StateSerializer {
                 System.out.println("Animal Type = " + report.getAnimalType());
                 System.out.println("Log ID = " + report.getLogID());
             }
+
+            this.reports = readList;
+            this.currentMap = tableModel;
+
         } catch (IOException ex) {
             System.out.println("IOException is caught");
         } catch (ClassNotFoundException ex) {
@@ -65,6 +76,8 @@ public class StateSerializer {
             // Method for serialization of object
             out.writeObject(reports);
             out.writeObject(currentMap);
+            out.writeObject(resultName);
+            out.writeObject(currentTest);
 
             out.close();
             file.close();
@@ -80,15 +93,31 @@ public class StateSerializer {
         this.reports = reportList;
     }
 
-    public void setCurrentMap(javax.swing.JTable wellMap) {
-        this.currentMap = wellMap;
+    public void setCurrentMap(TableModel wellMap) {
+        this.currentMap = (DefaultTableModel) wellMap;
     }
 
     public ArrayList<Report> getReports() {
         return reports;
     }
 
-    public javax.swing.JTable getCurrentMap() {
+    public DefaultTableModel getCurrentMap() {
         return currentMap;
+    }
+
+    public String getResultName() {
+        return resultName;
+    }
+
+    public void setResultName(String resultName) {
+        this.resultName = resultName;
+    }
+
+    public int getCurrentTest() {
+        return currentTest;
+    }
+
+    public void setCurrentTest(int currentTest) {
+        this.currentTest = currentTest;
     }
 }
