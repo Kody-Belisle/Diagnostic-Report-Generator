@@ -15,7 +15,7 @@ public class Report implements java.io.Serializable {
         private String dateTested;
         private String animalType;
 
-        private TestType testObject;
+        private transient TestType testObject;
         private int testType;
         private int animalCount;
         
