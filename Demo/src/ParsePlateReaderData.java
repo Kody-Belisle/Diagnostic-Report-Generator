@@ -21,7 +21,7 @@ public class ParsePlateReaderData {
         this.testType = testType;
         try {
             scanner = new Scanner(report);
-            scanner.useDelimiter(",");
+            scanner.useDelimiter(",|\\n");
         } catch (FileNotFoundException e) {
             System.out.println("File not Found");
         }
@@ -75,10 +75,11 @@ public class ParsePlateReaderData {
 
             valueCount++;
 
+            /*
             if (valueCount <= garbageValueCount) {
                 scanner.next();
                 continue;
-            }
+            }*/
 
             String value = scanner.next();
 
@@ -106,18 +107,20 @@ public class ParsePlateReaderData {
 
             valueCount++;
 
+            /*
             if (valueCount <= garbageValueCount) {
                 scanner.next();
                 continue;
-            }
+            }*/
 
             String value = scanner.next();
-
+            //TODO: Handle BOM character
+            //TODO: "Read: value" is caught independently but need to ignore it
             try{
                 Float.parseFloat(value);
                 testValues.add(Float.parseFloat(value));
             }catch(NumberFormatException e){
-                //not float so do nothing
+                e.printStackTrace();
             }
 
         }

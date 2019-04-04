@@ -1122,17 +1122,19 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
         //TODO: Make reset table method to clear animals and colors
         //TODO: Make method to set up current test correctly
         //TODO: Adjust where animals are added
-
+        /*
         state.deserialize();
         reportList = state.getReports();
         jTable1.setModel(state.getCurrentMap());
         testID = state.getCurrentTest();
         jRadioButton2.setSelected(true);
+        fillX = state.getCurFillX();
+        fillY = state.getCurFillY();
         setTestVals(testID);
         if (!state.getResultName().equals("")) {
             ColorCells cs = new ColorCells(jTable1, state.getResultName(), testID);
             jTable1.repaint();
-        }
+        }*/
 
     }
 
@@ -1144,6 +1146,8 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
         state.setReports(reportList);
         state.setResultName(jTextField11.getText());
         state.setCurrentTest(testID);
+        state.setCurFillX(fillX);
+        state.setCurFillY(fillY);
         state.serialize();
         dao.shutDown();
 

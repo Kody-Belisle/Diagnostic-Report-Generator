@@ -14,6 +14,8 @@ public class StateSerializer {
     private DefaultTableModel currentMap;
     private String resultName;
     private int currentTest;
+    private int curFillX;
+    private int curFillY;
 
 
     public static void main(String[] args) {
@@ -42,6 +44,8 @@ public class StateSerializer {
             tableModel = (DefaultTableModel) in.readObject();
             resultName = (String) in.readObject();
             currentTest = (Integer) in.readObject();
+            curFillX = (Integer) in.readObject();
+            curFillY = (Integer) in.readObject();
 
             in.close();
             file.close();
@@ -78,6 +82,8 @@ public class StateSerializer {
             out.writeObject(currentMap);
             out.writeObject(resultName);
             out.writeObject(currentTest);
+            out.writeObject(curFillX);
+            out.writeObject(curFillY);
 
             out.close();
             file.close();
@@ -119,5 +125,21 @@ public class StateSerializer {
 
     public void setCurrentTest(int currentTest) {
         this.currentTest = currentTest;
+    }
+
+    public int getCurFillX() {
+        return curFillX;
+    }
+
+    public void setCurFillX(int curFillX) {
+        this.curFillX = curFillX;
+    }
+
+    public int getCurFillY() {
+        return curFillY;
+    }
+
+    public void setCurFillY(int curFillY) {
+        this.curFillY = curFillY;
     }
 }
