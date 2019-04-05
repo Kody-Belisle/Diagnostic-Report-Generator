@@ -102,23 +102,27 @@ public class ParsePlateReaderData {
 
     public ArrayList <Float> parseValuesWithoutArranging() {
 
+        String UTF8_BOM = "\uFEFF";
+
         //Get all tokens and store them in the arrayList
         while (scanner.hasNext()) {
 
             valueCount++;
 
-            /*
-            if (valueCount <= garbageValueCount) {
-                scanner.next();
-                continue;
-            }*/
-
             String value = scanner.next();
-            //TODO: Handle BOM character
-            //TODO: "Read: value" is caught independently but need to ignore it
-            try{
-                Float.parseFloat(value);
-                testValues.add(Float.parseFloat(value));
+            //Handle BOM character
+            //"Read: value" is caught and ignored
+            try {
+                if (value.startsWith(UTF8_BOM)) {
+                    value = value.substring(1);
+                    Float.parseFloat(value);
+                    testValues.add(Float.parseFloat(value));
+                } else if (value.startsWith("R")) {
+                    continue;
+                }else {
+                    Float.parseFloat(value);
+                    testValues.add(Float.parseFloat(value));
+                }
             }catch(NumberFormatException e){
                 e.printStackTrace();
             }
@@ -126,7 +130,6 @@ public class ParsePlateReaderData {
         }
 
         scanner.close();
-
 
         return testValues;
     }
