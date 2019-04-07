@@ -195,7 +195,6 @@ public class ParsePlateReaderData {
                         arrangedValues.add(testValues.get(element));
                     }
                 }
-                
 
         }
 

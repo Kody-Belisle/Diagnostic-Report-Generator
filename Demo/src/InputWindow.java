@@ -1031,7 +1031,34 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
 
     }
 
+    private void setTestGUI(int testType) {
+        switch (testType) {
+            case 1:
+                //BLV Test
+                testID = 1;
+                populateTestValues();
+                //setTestVals(1);
+                jRadioButton1.setSelected(true);
+                break;
+            case 2:
+                //CL Test
+                testID = 2;
+                populateTestValues();
+                setTestVals(2);
+                jRadioButton2.setSelected(true);
+                break;
+            case 3:
+                //Johne's Test
+                testID = 3;
+                populateTestValues();
+                //setTestVals(3);
+                jRadioButton3.setSelected(true);
+                break;
+            default:
+                break;
+        }
 
+    }
 
 
     //personal variables
@@ -1122,9 +1149,8 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
     @Override
     public void windowOpened(WindowEvent e) {
 
-        //TODO: Make testObject in Reports, so that report generation continues
+
         //TODO: Make reset table method to clear animals and colors
-        //TODO: Make method to set up current test correctly
         //TODO: Adjust where animals are added
 
         state.deserialize();
@@ -1134,19 +1160,10 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
             n.createTestObject(testID);
         }
 
-        jRadioButton2.setSelected(true);
-        setTestVals(testID);
-
+        setTestGUI(testID);
         jTable1.setModel(state.getCurrentMap());
         fillX = state.getCurFillX();
         fillY = state.getCurFillY();
-
-
-        /*
-        if (!state.getResultName().equals("")) {
-            ColorCells cs = new ColorCells(jTable1, state.getResultName(), testID);
-            jTable1.repaint();
-        }*/
 
     }
 

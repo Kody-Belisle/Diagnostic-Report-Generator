@@ -113,7 +113,7 @@ public class ReportGenerator extends AbstractReportGenerator
         final DriverConnectionProvider connProvider = dao.setUpConnProvider();
 
         final SQLReportDataFactory dataFactory = new SQLReportDataFactory(connProvider);
-        //TODO: refine query so that we're pulling animals for just one logID
+        //TODO: query is wrong. It's pulling duplicates on a single animal because of my "where clauses"
         final String sqlString = "select REPORT.CLIENT_NAME, ANIMALS.ANIMAL_ID as animalID, ANIMALS.RESULT as OD, ANIMALS.TEXT_RESULT as Result"
             + " from report join animals on REPORT.LOG_ID = ANIMALS.LOG_ID" +
             " where REPORT.CLIENT_NAME = '" + report.getSingleClient().getCompanyName() + "'" + " and ANIMALS.CLIENT_NAME = '" + report.getSingleClient().getCompanyName() + "'" +

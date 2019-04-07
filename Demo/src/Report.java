@@ -51,7 +51,7 @@ public class Report implements java.io.Serializable {
         public int addFinalAnimals(Integer startAt, ArrayList<String> animalIds){
             ArrayList<String> animals = animalIds;
             DerbyDao dao = new DerbyDao();
-            //TODO: Animals may be added twice to the database. Need to look into this
+
             for (int i = 0; i < animalCount; i++) {
                 calculateResults(i);
                 System.out.println("Added: " + calculatedResult.get(i));
