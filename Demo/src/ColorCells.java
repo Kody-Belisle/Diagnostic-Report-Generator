@@ -11,6 +11,7 @@ import java.util.ArrayList;
 public class ColorCells extends DefaultTableCellRenderer {
 
     Color[][] tableColors;
+    private ArrayList<Float> parsedData;
 
     public ColorCells(JTable table, String fileName, int testID) {
         tableColors = new Color[8][13];
@@ -38,7 +39,7 @@ public class ColorCells extends DefaultTableCellRenderer {
     }
 
     private void getCellColor(String fileName, int testID) {
-        ArrayList<Float> parsedData = new ArrayList<Float>();
+        parsedData = new ArrayList<Float>();
         ParsePlateReaderData parse = new ParsePlateReaderData(new File(fileName), testID);
         TestType testObject;
 
@@ -85,20 +86,25 @@ public class ColorCells extends DefaultTableCellRenderer {
                     parsedDataIndex++;
                     continue;
                 }*/
-
-                if (testObject.getResult(parsedData.get(parsedDataIndex)).equals("Positive")) {  //if the result is positive
+                Float resultValue = parsedData.get(parsedDataIndex);
+                if (testObject.getResult(resultValue).equals("Positive")) {  //if the result is positive
                     tableColors[j][i] = Color.RED;
-                    System.out.println("Setting row:" + j + " column:" + i + "to red");
-                } else if (testObject.getResult(parsedData.get(parsedDataIndex)).equals("Negative")) {
+                    System.out.println("Value is: " + resultValue + "Setting row:" + j + " column:" + i + "to red");
+                } else if (testObject.getResult(resultValue).equals("Negative")) {
                     tableColors[j][i] = Color.GREEN;
-                    System.out.println("Setting row:" + j + " column:" + i + "to green");
+                    System.out.println("Value is: " + resultValue + "Setting row:" + j + " column:" + i + "to green");
                 } else {
                     tableColors[j][i] = Color.CYAN;
-                    System.out.println("Setting row:" + j + " column:" + i + "to blue");
+                    System.out.println("Value is: " + resultValue + "Setting row:" + j + " column:" + i + "to blue");
                 }
 
                 parsedDataIndex++;
             }
         }
     }
+
+    public ArrayList<Float> getParsedData() {
+        return parsedData;
+    }
+
 }

@@ -51,7 +51,7 @@ public class Report implements java.io.Serializable {
         public int addFinalAnimals(Integer startAt, ArrayList<String> animalIds){
             ArrayList<String> animals = animalIds;
             DerbyDao dao = new DerbyDao();
-
+            //TODO: Animals may be added twice to the database. Need to look into this
             for (int i = 0; i < animalCount; i++) {
                 calculateResults(i);
                 System.out.println("Added: " + calculatedResult.get(i));
@@ -173,7 +173,17 @@ public class Report implements java.io.Serializable {
             calculatedResult.add(testObject.getResult(testResult));
         }
 
-
+        public void createTestObject(int testType) {
+            switch (testType) {
+                case 1:
+                    //create BLV object
+                case 2:
+                    this.testObject = new CLTest();
+                    break;
+                case 3:
+                    //create Johne's object
+            }
+        }
 
         public void setControlValues(ArrayList<Float> controlValues) {
             testObject.setControlValues(controlValues);

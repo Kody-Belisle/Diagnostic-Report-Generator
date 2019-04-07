@@ -581,19 +581,21 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {
         //generate button
-        ArrayList<Float> parsedData = new ArrayList<Float>();
+        ArrayList<Float> parsedArrangedData = new ArrayList<Float>();
         int dataIndex = 4;
+        /*
         String filePath = jTextField11.getText();
         if (filePath.length() < 1) {
             JOptionPane.showMessageDialog(null, "Input file required.");
             return;
         }
         //get the file from the field
-        File file = new File(filePath);
+        File file = new File(filePath);*/
         System.out.println("Generating Report");
-        //parse data then generate report
-        ParsePlateReaderData parser = new ParsePlateReaderData(file, testID);
-        parsedData = parser.parseValues();
+        //ParsePlateReaderData has static testValue, so call basic constructor
+        // and arrange the values grabbed from the first parse
+        ParsePlateReaderData parser = new ParsePlateReaderData(testID);
+        parsedArrangedData = parser.arrangeValues();
         System.out.println("report count: "+ reportList.size());
         //give the report objects the amount of values they need
 
@@ -606,8 +608,8 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
             addReport(n);
             n.setControlValues(parser.getControlValues());
             for (int i = 0; i < n.getAnimalCount(); i++) {
-                n.addTestResult(parsedData.get(dataIndex));
-                System.out.println("Added: " + parsedData.get(dataIndex));
+                n.addTestResult(parsedArrangedData.get(dataIndex));
+                System.out.println("Added: " + parsedArrangedData.get(dataIndex));
                 dataIndex++;
             }
             //All test results added to a single test, calculate results and add to database
@@ -633,7 +635,7 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
     private void addReport(Report report) {
         DerbyDao dao = new DerbyDao();
 
-        //TODO: Might need to remove all primary key and give it it's own report id that auto increments
+        //Primary Key is an auto incremented int field and has no other primary key
         dao.addReport(report.getLogID(), report.getAnimalType(), report.getReceived(), report.getTested(), fileName, report.getSingleClient().getCompanyName());
     }
 
@@ -718,6 +720,7 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
         //TODO need to have test selected
         ColorCells cs = new ColorCells(jTable1, selectedFilePath, testID);
         jTable1.repaint();
+        parsedValues = cs.getParsedData();
     }
 
     private void autoComplete(String text) {
@@ -1035,6 +1038,7 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
     int testID = -1;
     private ArrayList<String> animalIDList = new ArrayList<String>();
     private ArrayList<Report> reportList = new ArrayList<Report>();
+    private ArrayList<Float> parsedValues = new ArrayList<Float>();
 
     //Names is the array of names used for autocomplete
     //existingClient is boolean used to tell whether to add to database or not
@@ -1122,15 +1126,23 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
         //TODO: Make reset table method to clear animals and colors
         //TODO: Make method to set up current test correctly
         //TODO: Adjust where animals are added
-        /*
+
         state.deserialize();
         reportList = state.getReports();
-        jTable1.setModel(state.getCurrentMap());
         testID = state.getCurrentTest();
+        for(Report n: reportList) {
+            n.createTestObject(testID);
+        }
+
         jRadioButton2.setSelected(true);
+        setTestVals(testID);
+
+        jTable1.setModel(state.getCurrentMap());
         fillX = state.getCurFillX();
         fillY = state.getCurFillY();
-        setTestVals(testID);
+
+
+        /*
         if (!state.getResultName().equals("")) {
             ColorCells cs = new ColorCells(jTable1, state.getResultName(), testID);
             jTable1.repaint();
@@ -1144,7 +1156,7 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
 
         state.setCurrentMap(jTable1.getModel());
         state.setReports(reportList);
-        state.setResultName(jTextField11.getText());
+        //state.setResultName(jTextField11.getText());
         state.setCurrentTest(testID);
         state.setCurFillX(fillX);
         state.setCurFillY(fillY);

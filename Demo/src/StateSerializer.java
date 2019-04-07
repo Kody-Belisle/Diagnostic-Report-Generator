@@ -42,7 +42,7 @@ public class StateSerializer {
             // Method for deserialization of object
             readList = (ArrayList<Report>) in.readObject();
             tableModel = (DefaultTableModel) in.readObject();
-            resultName = (String) in.readObject();
+            //resultName = (String) in.readObject();
             currentTest = (Integer) in.readObject();
             curFillX = (Integer) in.readObject();
             curFillY = (Integer) in.readObject();
@@ -80,7 +80,7 @@ public class StateSerializer {
             // Method for serialization of object
             out.writeObject(reports);
             out.writeObject(currentMap);
-            out.writeObject(resultName);
+            //out.writeObject(resultName);
             out.writeObject(currentTest);
             out.writeObject(curFillX);
             out.writeObject(curFillY);

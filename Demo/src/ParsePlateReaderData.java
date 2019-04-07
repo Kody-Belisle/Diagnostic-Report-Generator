@@ -48,6 +48,28 @@ public class ParsePlateReaderData {
 
     }
 
+    public ParsePlateReaderData(int testType) {
+        this.testType = testType;
+
+        switch (testType) {
+            case 1:
+                //BLV test
+                test = new BLVTest();
+                break;
+            case 2:
+                //cl test
+                test = new CLTest();
+                break;
+            case 3:
+                //Johne's test
+                test = new JohnesTest();
+                break;
+
+            default:
+                test = new CLTest();
+        }
+    }
+
 
     public ArrayList<Float> getControlValues() {
         ArrayList<Float> controlValues = new ArrayList<Float>();
@@ -138,7 +160,7 @@ public class ParsePlateReaderData {
      * properly arranges values from the input file (initially they are parsed along a row then down a column
      *  and we need them to be parsed down a column then across a row while omitting test values from the final array)
      */
-    private void arrangeValues() {
+    public ArrayList<Float> arrangeValues() {
 
 
         ArrayList <Float> arrangedValues = new ArrayList<Float>();
@@ -178,6 +200,7 @@ public class ParsePlateReaderData {
         }
 
         testValues = arrangedValues;
+        return testValues;
     }
 
 
