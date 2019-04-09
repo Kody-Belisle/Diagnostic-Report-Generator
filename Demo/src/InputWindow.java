@@ -617,8 +617,10 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
             animalListCount = animalListCount + n.getAnimalCount();
         }
 
+        boolean allMade = true;
         for (Report r : reportList) {
             boolean made = printReport(r);
+
             //If the report was made successfully then delete the animals from the database
             //Should remove confusion about which animals belong to which client and which logID
             if (made) {
@@ -626,8 +628,13 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
                 dao.removeAnimals(r.getSingleClient().getCompanyName(), r.getLogID(), r.getAnimalType());
             } else {
                 System.err.println("Report not generated for " + r.getSingleClient().getCompanyName());
+                allMade = false;
             }
 
+        }
+
+        if(allMade) {
+            clearMap();
         }
 
     }
@@ -829,6 +836,8 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
             }
         }
 
+        ColorCells cs = new ColorCells(jTable1);
+        jTable1.repaint();
         //add row names back
         jTable1model.setValueAt("A" , 0 , 0 );
         jTable1model.setValueAt("B" , 1 , 0 );

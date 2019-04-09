@@ -38,6 +38,33 @@ public class ColorCells extends DefaultTableCellRenderer {
         });
     }
 
+    /*
+     * Second constructor for returning color to white
+     */
+    public ColorCells(JTable table) {
+        tableColors = new Color[8][13];
+        for (int i = 0; i < 12; i++) {
+            for (int j = 0; j < 8; j++) {
+                tableColors[j][i] = Color.WHITE;
+            }
+        }
+
+        table.setDefaultRenderer(Object.class, new TableCellRenderer() {
+            @Override
+            public Component getTableCellRendererComponent(JTable table,
+                                                           Object value, boolean isSelected, boolean hasFocus,
+                                                           int row, int column) {
+
+                Component c = ColorCells.super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+                c.setBackground(tableColors[row][column]);
+                //System.out.println("Set row: " + row + " column: " + column);
+                //System.out.println("To color: " + tableColors[row][column]);
+                return c;
+            }
+        });
+    }
+
+
     private void getCellColor(String fileName, int testID) {
         parsedData = new ArrayList<Float>();
         ParsePlateReaderData parse = new ParsePlateReaderData(new File(fileName), testID);
