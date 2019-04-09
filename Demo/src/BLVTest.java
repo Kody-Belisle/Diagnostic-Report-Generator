@@ -21,9 +21,17 @@ public class BLVTest extends TestType{
     @Override
     String getResult(Float testResult) {
 
-        if (testResult > (controlValues.get(2) + controlValues.get(1) / 2) ) {
+        Float pos1 = controlValues.get(2);
+        Float neg2 = controlValues.get(1);
+
+        Float poscheck = ( (pos1 + neg2) / 2 );
+
+        //System.out.println("poscheck is " + poscheck);
+        if (testResult > (poscheck) ) {
+            //System.out.println("Control value " + testResult + " is greater than" +  (poscheck) + " returning positive" );
             return "Positive";
-        } else if (testResult < (controlValues.get(2) + controlValues.get(1) / 2) ) {
+        } else if (testResult < (poscheck) ) {
+            //System.out.println("Control value " + testResult + " is less than" +  (poscheck) + " returning negative" );
             return "Negative";
         }
 

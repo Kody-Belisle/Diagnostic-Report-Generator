@@ -36,11 +36,14 @@ public class Report implements java.io.Serializable {
             switch (testType) {
                 case 1:
                     //create BLV object
+                    testObject = new BLVTest();
                 case 2:
                     testObject = new CLTest();
                     break;
                 case 3:
                     //create Johne's object
+                    testObject = new JohnesTest();
+                    ((JohnesTest) testObject).setAnimalType(animalType);
             }
         }
 
@@ -59,17 +62,6 @@ public class Report implements java.io.Serializable {
             }
 
             return 0;
-        }
-        /**
-         * prints out all the plate tests
-         */
-        public void printToConsole() {
-        
-            for (PlateTest e : plateTests) {
-
-                System.out.println(e.toString() + "\n");
-            }
-
         }
 
         public void addTestResult(Float testResult) {
@@ -171,18 +163,6 @@ public class Report implements java.io.Serializable {
             System.out.println("Calculating testResult: " + testResults.get(index));
             Float testResult = testResults.get(index);
             calculatedResult.add(testObject.getResult(testResult));
-        }
-
-        public void createTestObject(int testType) {
-            switch (testType) {
-                case 1:
-                    //create BLV object
-                case 2:
-                    this.testObject = new CLTest();
-                    break;
-                case 3:
-                    //create Johne's object
-            }
         }
 
         public void setControlValues(ArrayList<Float> controlValues) {

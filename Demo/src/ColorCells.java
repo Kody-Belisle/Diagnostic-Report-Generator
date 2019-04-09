@@ -12,8 +12,10 @@ public class ColorCells extends DefaultTableCellRenderer {
 
     Color[][] tableColors;
     private ArrayList<Float> parsedData;
+    private String animalType;
 
-    public ColorCells(JTable table, String fileName, int testID) {
+    public ColorCells(JTable table, String fileName, int testID, String animalType) {
+        this.animalType = animalType;
         tableColors = new Color[8][13];
         for (int i = 0; i < 12; i++) {
             for (int j = 0; j < 8; j++) {
@@ -31,8 +33,8 @@ public class ColorCells extends DefaultTableCellRenderer {
 
                 Component c = ColorCells.super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
                 c.setBackground(tableColors[row][column]);
-                System.out.println("Set row: " + row + " column: " + column);
-                System.out.println("To color: " + tableColors[row][column]);
+                //System.out.println("Set row: " + row + " column: " + column);
+                //System.out.println("To color: " + tableColors[row][column]);
                 return c;
             }
         });
@@ -79,6 +81,7 @@ public class ColorCells extends DefaultTableCellRenderer {
                 break;
             case 3:
                 testObject = new JohnesTest();
+                ((JohnesTest) testObject).setAnimalType(animalType);
                 break;
                 default:
                     testObject = new CLTest();
@@ -97,14 +100,14 @@ public class ColorCells extends DefaultTableCellRenderer {
         for (int j = 0; j < 8; j++) {
             for (int i = 1; i < 13; i++) {
 
-                System.out.println("Calculating cell i: " + i + " j: " + j);
+                //System.out.println("Calculating cell i: " + i + " j: " + j);
 
                 //check if we're out of data
                 if (parsedDataIndex >= maxDataIndex) {
                     return;
                 }
 
-                System.out.println("test value: " + parsedData.get(parsedDataIndex));
+                //System.out.println("test value: " + parsedData.get(parsedDataIndex));
                 //check if we're looking at a test value
                 /*
                 if (parsedDataIndex == testObject.getNeg1() || parsedDataIndex == testObject.getNeg2() ||
@@ -116,13 +119,13 @@ public class ColorCells extends DefaultTableCellRenderer {
                 Float resultValue = parsedData.get(parsedDataIndex);
                 if (testObject.getResult(resultValue).equals("Positive")) {  //if the result is positive
                     tableColors[j][i] = Color.RED;
-                    System.out.println("Value is: " + resultValue + "Setting row:" + j + " column:" + i + "to red");
+                    //System.out.println("Value is: " + resultValue + "Setting row:" + j + " column:" + i + "to red");
                 } else if (testObject.getResult(resultValue).equals("Negative")) {
                     tableColors[j][i] = Color.GREEN;
-                    System.out.println("Value is: " + resultValue + "Setting row:" + j + " column:" + i + "to green");
+                    //System.out.println("Value is: " + resultValue + "Setting row:" + j + " column:" + i + "to green");
                 } else {
                     tableColors[j][i] = Color.CYAN;
-                    System.out.println("Value is: " + resultValue + "Setting row:" + j + " column:" + i + "to blue");
+                    //System.out.println("Value is: " + resultValue + "Setting row:" + j + " column:" + i + "to blue");
                 }
 
                 parsedDataIndex++;

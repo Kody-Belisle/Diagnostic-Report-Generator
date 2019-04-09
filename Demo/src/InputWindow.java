@@ -19,6 +19,7 @@ import javax.swing.*;
 import javax.swing.plaf.nimbus.State;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.text.DateFormatter;
+import javax.swing.text.DefaultEditorKit;
 
 public class InputWindow extends javax.swing.JFrame implements WindowListener, WindowFocusListener, WindowStateListener  {
 
@@ -53,7 +54,7 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">
     private void initComponents() {
-
+        final JPopupMenu pm = new JPopupMenu();
         jPanel1 = new javax.swing.JPanel();
         jTextField1 = new javax.swing.JTextField();
         jTextField2 = new javax.swing.JTextField();
@@ -244,6 +245,8 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
                         "Animal ID"
                 }
         ));
+
+        jTable2.addKeyListener(new ClipboardKeyAdapter(jTable2));
         jScrollPane2.setViewportView(jTable2);
 
         jButton1.setText("Add Field");
@@ -725,7 +728,7 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
         jTextField11.setText(selectedFilePath);
 
         //TODO need to have test selected
-        ColorCells cs = new ColorCells(jTable1, selectedFilePath, testID);
+        ColorCells cs = new ColorCells(jTable1, selectedFilePath, testID,(String) jComboBox2.getSelectedItem());
         jTable1.repaint();
         parsedValues = cs.getParsedData();
     }
@@ -1158,21 +1161,21 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
     @Override
     public void windowOpened(WindowEvent e) {
 
-
-        //TODO: Make reset table method to clear animals and colors
-        //TODO: Adjust where animals are added
-
-        state.deserialize();
-        reportList = state.getReports();
-        testID = state.getCurrentTest();
-        for(Report n: reportList) {
-            n.createTestObject(testID);
-        }
-
-        setTestGUI(testID);
-        jTable1.setModel(state.getCurrentMap());
-        fillX = state.getCurFillX();
-        fillY = state.getCurFillY();
+//
+//        //TODO: Make reset table method to clear animals and colors
+//        //TODO: Adjust where animals are added
+//
+//        state.deserialize();
+//        reportList = state.getReports();
+//        testID = state.getCurrentTest();
+//        for(Report n: reportList) {
+//            n.createTestObject(testID);
+//        }
+//
+//        setTestGUI(testID);
+//        jTable1.setModel(state.getCurrentMap());
+//        fillX = state.getCurFillX();
+//        fillY = state.getCurFillY();
 
     }
 
