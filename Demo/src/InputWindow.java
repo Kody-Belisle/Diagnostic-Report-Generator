@@ -638,6 +638,11 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
 
         if(allMade) {
             clearMap();
+            reportList.clear();
+            jTextField11.setText("");
+            fillX = 1;
+            fillY = 0;
+            setTestGUI(testID);
         }
 
     }
@@ -755,17 +760,7 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
     }
 
     private void setExistingClient(Client client) {
-        /*Client customer = new Client(
-                jTextField10.getText(),                    //company name
-                jTextField1.getText(),                     //client name
-                jTextField2.getText(),                     //address
-                jTextField3.getText(),                     //city
-                (String) jComboBox1.getSelectedItem(),     //state
-                jTextField4.getText(),                     //zip
-                jTextField6.getText(),                     //email address
-                jTextField7.getText(),                     //phone 1
-                jTextField8.getText()                      //phone 2
-        );*/
+
         jTextField1.setText(client.getName());
         jTextField2.setText(client.getAddress());
         jTextField3.setText(client.getCity());
@@ -786,8 +781,8 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
 
         DefaultTableModel jTable1model = (DefaultTableModel) jTable1.getModel();
         int tableOffset = 1;
-
-        clearMap();
+        //TODO: make method to clear the map but repopulate with existing animals
+        //clearMap();
         switch (testID) {
 
             case 1:
