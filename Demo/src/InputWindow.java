@@ -1161,21 +1161,21 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
     @Override
     public void windowOpened(WindowEvent e) {
 
-//
-//        //TODO: Make reset table method to clear animals and colors
-//        //TODO: Adjust where animals are added
-//
-//        state.deserialize();
-//        reportList = state.getReports();
-//        testID = state.getCurrentTest();
-//        for(Report n: reportList) {
-//            n.createTestObject(testID);
-//        }
-//
-//        setTestGUI(testID);
-//        jTable1.setModel(state.getCurrentMap());
-//        fillX = state.getCurFillX();
-//        fillY = state.getCurFillY();
+
+        //TODO: Make reset table method to clear animals and colors
+        //TODO: Adjust where animals are added
+
+        state.deserialize();
+        reportList = state.getReports();
+        testID = state.getCurrentTest();
+        for(Report n: reportList) {
+            n.createTestObject(testID);
+        }
+
+        setTestGUI(testID);
+        jTable1.setModel(state.getCurrentMap());
+        fillX = state.getCurFillX();
+        fillY = state.getCurFillY();
 
     }
 

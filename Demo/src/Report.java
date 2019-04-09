@@ -139,6 +139,22 @@ public class Report implements java.io.Serializable {
             return finalDate;
         }
 
+    public void createTestObject(int testType) {
+        switch (testType) {
+            case 1:
+                //create BLV object
+                this.testObject = new BLVTest();
+            case 2:
+                this.testObject = new CLTest();
+                break;
+            case 3:
+                //create Johne's object
+                this.testObject = new JohnesTest();
+                ((JohnesTest) this.testObject).setAnimalType(animalType);
+
+        }
+    }
+
         public String getTestType() {
             if (testType == 1) {
                 return "BLV";

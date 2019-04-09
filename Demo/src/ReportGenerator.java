@@ -146,7 +146,7 @@ public class ReportGenerator extends AbstractReportGenerator
         parameters.put("TEST_TYPE", report.getTestType() + " Report");
 
         parameters.put("OWNER_ADDRESS", "1187 Edgemont Ln");
-        parameters.put("OWNER_CITY_STATE_ZIP", ("Emmett, ID 83716"));
+        parameters.put("OWNER_CITY_STATE_ZIP", ("Emmett, ID 83617"));
         parameters.put("OWNER_PHONE", "(208) 963-5679");
         parameters.put("OWNER_EMAIL", "lab@sageaglab.com");
         parameters.put("OWNER_WEBSITE", "www.sageaglab.com");
