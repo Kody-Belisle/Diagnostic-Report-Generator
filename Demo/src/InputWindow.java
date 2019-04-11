@@ -34,8 +34,12 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
 
         this.state = new StateSerializer();
         for(int i = 0; i < 4; i++) {
+            ArrayList<WellMap> newMapList = new ArrayList<>();
             ArrayList<String> newAnimalList = new ArrayList<>();
-            allTestAnimals.add(i, newAnimalList);
+            DefaultTableModel model = new DefaultTableModel();
+            WellMap startMap = new WellMap(newAnimalList, 1, 0, model);
+            newMapList.add(startMap);
+            allTestAnimals.add(i, newMapList);
         }
         initComponents();
         textFields.add(jTextField1);
@@ -608,8 +612,9 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
 
         System.out.println("Set report list, size: " + reportList.size());
         printCurrentAnimalList();
+        WellMap curMap = allTestAnimals.get(testID).get(0);
 
-        getCellValues();
+        getCellValues(curMap.getFillX(), curMap.getFillY());
         int animalListCount = 0;
         for (Report n: reportList) {
             addReport(n);
@@ -641,7 +646,7 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
         }
 
         if(allMade) {
-            clearMap();
+            clearMap(jTable1);
             reportList.clear();
             jTextField11.setText("");
             fillX = 1;
@@ -680,12 +685,13 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
         return made;
     }
 
-
+    //TODO: Abstracted the fillX and fillY, but the values are never updated
     private void jRadioButton1ActionPerformed(java.awt.event.ActionEvent evt) {
         //BLV Test
         if(testID != -1) {
-            getCellValues();
-            allTestAnimals.set(testID, animalIDList);
+            WellMap map = allTestAnimals.get(testID).get(0);
+            getCellValues(map.getFillX(), map.getFillY());
+            map.setAnimalList(animalIDList);
         }
 
         testID = 1;
@@ -695,8 +701,9 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
     private void jRadioButton2ActionPerformed(java.awt.event.ActionEvent evt) {
         //CL Test
         if(testID != -1) {
-            getCellValues();
-            allTestAnimals.set(testID, animalIDList);
+            WellMap map = allTestAnimals.get(testID).get(0);
+            getCellValues(map.getFillX(), map.getFillY());
+            map.setAnimalList(animalIDList);
         }
 
         testID = 2;
@@ -707,8 +714,9 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
     private void jRadioButton3ActionPerformed(java.awt.event.ActionEvent evt) {
         //Johne's Test
         if(testID != -1) {
-            getCellValues();
-            allTestAnimals.set(testID, animalIDList);
+            WellMap map = allTestAnimals.get(testID).get(0);
+            getCellValues(map.getFillX(), map.getFillY());
+            map.setAnimalList(animalIDList);
         }
 
         testID = 3;
@@ -801,7 +809,7 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
         DefaultTableModel jTable1model = (DefaultTableModel) jTable1.getModel();
         int tableOffset = 1;
         //TODO: make method to clear the map but repopulate with existing animals
-        clearMap();
+        clearMap(jTable1);
         switch (testID) {
 
             case 1:
@@ -845,9 +853,9 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
 
     //TODO: Use this method to clearMap after reports are generated. Report generation functionality is going
     //to be moved to this class most likely so can make that call easily once it's handled here
-    private void clearMap() {
+    private void clearMap(JTable table) {
 
-        DefaultTableModel jTable1model = (DefaultTableModel) jTable1.getModel();
+        DefaultTableModel jTable1model = (DefaultTableModel) table.getModel();
 
         //clear table
         for( int j = 0 ; j < jTable1model.getRowCount(); j++ ){
@@ -856,8 +864,8 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
             }
         }
 
-        ColorCells cs = new ColorCells(jTable1);
-        jTable1.repaint();
+        ColorCells cs = new ColorCells(table);
+        table.repaint();
         //add row names back
         jTable1model.setValueAt("A" , 0 , 0 );
         jTable1model.setValueAt("B" , 1 , 0 );
@@ -875,6 +883,8 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
         DefaultTableModel jTable2model = (DefaultTableModel) jTable2.getModel();
         jTable2.editCellAt(-1, -1);
         jTable2.getSelectionModel().clearSelection();
+
+        WellMap map = allTestAnimals.get(testID).get(0);
         //print rows in animal ID input column
         if(source == 0) {
             int rowCount = jTable2model.getRowCount();
@@ -887,11 +897,12 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
 
             for (int i = 0; i < rowCount; i++) {
                 String element = (String) jTable2model.getValueAt(i, 0);
-                animalCount = actualFillTable(element, animalCount);
+                animalCount = actualFillTable(element, animalCount, map.getFillX(), map.getFillY());
             }
 
             jTable2model.setNumRows(0);
         } else {    //Being called from test radio button switch. Animal count doesn't matter
+            /*
             ArrayList<String> curAnimalList = allTestAnimals.get(testID);
             if (curAnimalList.size() < 1) {
                 System.out.println("No animals to populate on table");
@@ -901,13 +912,13 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
             for (int j = 0; j < curAnimalList.size(); j++) {
                 String element = curAnimalList.get(j);
                 actualFillTable(element, animalCount);
-            }
+            }*/
 
         }
         return animalCount;
     }
 
-    private int actualFillTable(String element, int animalCount) {
+    private int actualFillTable(String element, int animalCount, int fillX, int fillY) {
         //TODO: abstract fillX and fillY and make parameters so that we can switch fill location per well map
         if (element != null && element != "" && element != " ") {
 
@@ -1026,7 +1037,7 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
     /*
      * Method to get just the animals from the table
      */
-    private void getCellValues() {
+    private void getCellValues(int fillX, int fillY) {
 
         //fillX 1 and fillY 0 means nothing has been added
         if(fillY != 0 && fillX != 1) {
@@ -1121,7 +1132,7 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
     private ArrayList<String> animalIDList = new ArrayList<String>();
     private ArrayList<Report> reportList = new ArrayList<Report>();
     private ArrayList<Float> parsedValues = new ArrayList<Float>();
-    private ArrayList<ArrayList<String>> allTestAnimals = new ArrayList<ArrayList<String>>(4);
+    private ArrayList<ArrayList<WellMap>> allTestAnimals = new ArrayList<ArrayList<WellMap>>(4);
     //Names is the array of names used for autocomplete
     //existingClient is boolean used to tell whether to add to database or not
     private ArrayList<String> names = new ArrayList<String>();
