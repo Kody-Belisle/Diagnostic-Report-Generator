@@ -32,19 +32,7 @@ public class Report implements java.io.Serializable {
             this.logID = logID;
             this.dateReceived = parseLogID();
             testResults = new ArrayList<Float>();
-
-            switch (testType) {
-                case 1:
-                    //create BLV object
-                    testObject = new BLVTest();
-                case 2:
-                    testObject = new CLTest();
-                    break;
-                case 3:
-                    //create Johne's object
-                    testObject = new JohnesTest();
-                    ((JohnesTest) testObject).setAnimalType(animalType);
-            }
+            createTestObject(testType);
         }
 
         /*
@@ -144,6 +132,7 @@ public class Report implements java.io.Serializable {
             case 1:
                 //create BLV object
                 this.testObject = new BLVTest();
+                break;
             case 2:
                 this.testObject = new CLTest();
                 break;
@@ -151,6 +140,7 @@ public class Report implements java.io.Serializable {
                 //create Johne's object
                 this.testObject = new JohnesTest();
                 ((JohnesTest) this.testObject).setAnimalType(animalType);
+                break;
 
         }
     }

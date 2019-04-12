@@ -165,6 +165,7 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
                                 autoComplete(txt);
                             }
                         });
+                        break;
                 }
             }
         });
@@ -648,9 +649,10 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
         if(allMade) {
             clearMap(jTable1);
             reportList.clear();
+            animalIDList.clear();
             jTextField11.setText("");
-            fillX = 1;
-            fillY = 0;
+            allTestAnimals.get(testID).get(0).fillX = 1;
+            allTestAnimals.get(testID).get(0).fillY = 0;
             setTestGUI(testID);
         }
 
@@ -696,6 +698,7 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
 
         testID = 1;
         populateTestValues();
+        setTestVals(1);
     }
 
     private void jRadioButton2ActionPerformed(java.awt.event.ActionEvent evt) {
@@ -721,6 +724,7 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
 
         testID = 3;
         populateTestValues();
+        setTestVals(3);
     }
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {
@@ -846,7 +850,7 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
 
             default:
                 System.out.println("Test not selected");
-
+                break;
 
         }
     }
@@ -897,7 +901,7 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
 
             for (int i = 0; i < rowCount; i++) {
                 String element = (String) jTable2model.getValueAt(i, 0);
-                animalCount = actualFillTable(element, animalCount, map.getFillX(), map.getFillY());
+                animalCount = actualFillTable(element, animalCount, map);
             }
 
             jTable2model.setNumRows(0);
@@ -918,11 +922,12 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
         return animalCount;
     }
 
-    private int actualFillTable(String element, int animalCount, int fillX, int fillY) {
+    private int actualFillTable(String element, int animalCount, WellMap map) {
+
         //TODO: abstract fillX and fillY and make parameters so that we can switch fill location per well map
         if (element != null && element != "" && element != " ") {
 
-            if (fillX > 12) {
+            if (map.fillX > 12) {
                 System.out.println("Too many animals");
                 //TODO: Make sure this doesn't break anything. If hit max animals then return max for single plate
                 return 96;
@@ -930,28 +935,28 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
 
             for (int l = 0; l < testXVals.size(); l++) {
 
-                if (fillX == (testXVals.get(l) + 1) && fillY == testYVals.get(l)) {
-                    System.out.println("Collision at: " + fillX + ", " + fillY);
-                    if (fillY < 7) {
-                        fillY++;
+                if (map.fillX == (testXVals.get(l) + 1) && map.fillY == testYVals.get(l)) {
+                    System.out.println("Collision at: " + map.fillX + ", " + map.fillY);
+                    if (map.fillY < 7) {
+                        map.fillY++;
                     } else {
-                        fillY = 0;
-                        fillX++;
+                        map.fillY = 0;
+                        map.fillX++;
                     }
                 }
 
             }
 
-            jTable1.setValueAt(element, fillY, fillX);
+            jTable1.setValueAt(element, map.fillY, map.fillX);
 
-            fillY++;
+            map.fillY++;
 
-            if (fillY > 7) {
+            if (map.fillY > 7) {
 
-                fillX++;
-                fillY = 0;
+                map.fillX++;
+                map.fillY = 0;
             }
-            System.out.println("Cellpos x: " + fillX + " y: " + fillY);
+            System.out.println("Cellpos x: " + map.fillX + " y: " + map.fillY);
             animalCount++;
         } else {
             System.out.println("Null or empty element, not pushing to map");
@@ -1068,10 +1073,19 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
         testYVals = new ArrayList<Integer>();
 
         switch (testID) {
-
             case 1:
+                //BLV
+                testXVals.add(1);
+                testXVals.add(1);
+                testXVals.add(8);
+                testXVals.add(8);
 
+                testYVals.add(2);
+                testYVals.add(3);
+                testYVals.add(2);
+                testYVals.add(3);
 
+                break;
 
             case 2:
                 //add x values
@@ -1088,7 +1102,23 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
                 testYVals.add(0);
                 testYVals.add(1);
 
+                break;
+
             case 3:
+                //Johne's Test
+                testXVals.add(0);
+                testXVals.add(0);
+                testXVals.add(0);
+                testXVals.add(0);
+
+                testYVals.add(0);
+                testYVals.add(1);
+                testYVals.add(2);
+                testYVals.add(3);
+
+                break;
+            default:
+                break;
 
         }
 
@@ -1100,7 +1130,7 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
                 //BLV Test
                 testID = 1;
                 populateTestValues();
-                //setTestVals(1);
+                setTestVals(1);
                 jRadioButton1.setSelected(true);
                 break;
             case 2:
@@ -1114,7 +1144,7 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
                 //Johne's Test
                 testID = 3;
                 populateTestValues();
-                //setTestVals(3);
+                setTestVals(3);
                 jRadioButton3.setSelected(true);
                 break;
             default:
@@ -1218,7 +1248,7 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
 
         //TODO: Make reset table method to clear animals and colors
         //TODO: Adjust where animals are added
-
+        /*
         state.deserialize();
         reportList = state.getReports();
         testID = state.getCurrentTest();
@@ -1229,7 +1259,7 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
         setTestGUI(testID);
         jTable1.setModel(state.getCurrentMap());
         fillX = state.getCurFillX();
-        fillY = state.getCurFillY();
+        fillY = state.getCurFillY();*/
 
     }
 

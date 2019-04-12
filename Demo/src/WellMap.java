@@ -6,8 +6,8 @@ import java.util.ArrayList;
 
 public class WellMap implements Serializable {
     private ArrayList<String> animalList;
-    private int fillX;
-    private int fillY;
+    int fillX;
+    int fillY;
     private DefaultTableModel singleModel;
 
     public WellMap(ArrayList<String> list, int x, int y, DefaultTableModel model) {
