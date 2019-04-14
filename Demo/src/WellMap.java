@@ -22,7 +22,10 @@ public class WellMap implements Serializable {
     }
 
     public void setAnimalList(ArrayList<String> animalList) {
-        this.animalList = animalList;
+        this.animalList.clear();
+        for (String animal: animalList) {
+            this.animalList.add(animal);
+        }
     }
 
     public int getFillX() {
