@@ -15,9 +15,19 @@ public class CLTest extends TestType{
 
     @Override
     void setReportParameters(Map parameters) {
-        parameters.put("POSITIVE_OD", String.format("%.3f", getMargins() + 0.3));
-        parameters.put("MARGINAL_LOW", String.format("%.3f", getMargins()));
-        parameters.put("MARGINAL_HIGH", String.format("%.3f", getMargins() + 0.3));
+        StringBuilder headerText = new StringBuilder();
+
+        headerText.append("Optical Density (OD) results for serum samples that are equal to or greater than ");
+        headerText.append(String.format("%.3f", getMargins() + 0.3));
+        headerText.append(" are considered positive. Results between ");
+        headerText.append(String.format("%.3f", getMargins()));
+        headerText.append(" and ");
+        headerText.append(String.format("%.3f", getMargins() + 0.3));
+        headerText.append(" are considered marginal");
+        parameters.put("HEADER_TEXT", headerText.toString());
+        //parameters.put("POSITIVE_OD", String.format("%.3f", getMargins() + 0.3));
+        //parameters.put("MARGINAL_LOW", String.format("%.3f", getMargins()));
+        //parameters.put("MARGINAL_HIGH", String.format("%.3f", getMargins() + 0.3));
     }
 
     public String getResult(Float testResult) {

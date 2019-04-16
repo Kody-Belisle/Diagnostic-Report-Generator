@@ -15,7 +15,16 @@ public class BLVTest extends TestType{
 
     @Override
     void setReportParameters(Map parameters) {
+        Float pos1 = controlValues.get(2);
+        Float neg2 = controlValues.get(1);
 
+        Float poscheck = ( (pos1 + neg2) / 2 );
+
+        StringBuilder headerText = new StringBuilder();
+        headerText.append("Optical Density (OD) results for serum samples that are equal to or greater than ");
+        headerText.append(poscheck.toString());
+        headerText.append(" are considered positive.");
+        parameters.put("HEADER_TEXT", headerText.toString());
     }
 
     @Override

@@ -19,7 +19,12 @@ public class JohnesTest extends TestType{
 
     @Override
     void setReportParameters(Map parameters) {
-
+        StringBuilder headerText = new StringBuilder();
+        headerText.append("Results for serum samples that are equal to or greater than ");
+        headerText.append("15%");
+        headerText.append(" are considered positive.  Milk samples are considered positive if results are equal to or greater than ");
+        headerText.append("10%.");
+        parameters.put("HEADER_TEXT", headerText.toString());
     }
 
     @Override
