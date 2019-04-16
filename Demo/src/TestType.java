@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.Map;
 
 public abstract class TestType {
+    ArrayList<String> animalIDList;
+    ArrayList<Report> reportList;
+
     ArrayList<Float> controlValues;
     int pos1;
     int pos2;
@@ -11,6 +14,11 @@ public abstract class TestType {
     int neg2;
     int blank;
     int testValueCount;
+
+    protected TestType() {
+        reportList = new ArrayList<Report>();
+        animalIDList = new ArrayList<String>();
+    }
 
     public int getNeg1() {
         return neg1;

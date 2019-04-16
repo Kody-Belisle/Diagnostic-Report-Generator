@@ -4,6 +4,7 @@ import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.SqlDateModel;
 import org.jdatepicker.impl.UtilDateModel;
+import org.junit.jupiter.api.Test;
 import org.pentaho.reporting.engine.classic.core.ReportProcessingException;
 
 import java.awt.*;
@@ -55,6 +56,17 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
             newMapList.add(startMap);
             allTestAnimals.add(i, newMapList);
         }
+
+        currentTest = new BLVTest();
+        BLVTest blv = new BLVTest();
+        CLTest cl = new CLTest();
+        JohnesTest johnes = new JohnesTest();
+        allTests = new ArrayList<>();
+        allTests.add(currentTest);
+        allTests.add(blv);
+        allTests.add(cl);
+        allTests.add(johnes);
+
     }
 
     /**
@@ -604,17 +616,17 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
         // and arrange the values grabbed from the first parse
         ParsePlateReaderData parser = new ParsePlateReaderData(testID);
         parsedArrangedData = parser.arrangeValues();
-        System.out.println("report count: "+ reportList.size());
+        System.out.println("report count: "+ currentTest.reportList.size());
         //give the report objects the amount of values they need
 
-        System.out.println("Set report list, size: " + reportList.size());
+        System.out.println("Set report list, size: " + currentTest.reportList.size());
         printCurrentAnimalList();
         WellMap curMap = allTestAnimals.get(testID).get(0);
 
         //TODO: This small chunk of adding animals needs to be moved to when the result parsing is complete
         getCellValues(curMap.getFillX(), curMap.getFillY());
         int animalListCount = 0;
-        for (Report n: reportList) {
+        for (Report n: currentTest.reportList) {
             addReport(n);
             n.setControlValues(parser.getControlValues());
             for (int i = 0; i < n.getAnimalCount(); i++) {
@@ -623,12 +635,12 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
                 dataIndex++;
             }
             //All test results added to a single test, calculate results and add to database
-            n.addFinalAnimals(animalListCount, animalIDList);
+            n.addFinalAnimals(animalListCount, currentTest.animalIDList);
             animalListCount = animalListCount + n.getAnimalCount();
         }
 
         boolean allMade = true;
-        for (Report r : reportList) {
+        for (Report r : currentTest.reportList) {
             boolean made = printReport(r);
 
             //If the report was made successfully then delete the animals from the database
@@ -645,12 +657,12 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
 
         if(allMade) {
             clearMap(jTable1);
-            reportList.clear();
-            animalIDList.clear();
+            currentTest.reportList.clear();
+            currentTest.animalIDList.clear();
             jTextField11.setText("");
             allTestAnimals.get(testID).get(0).fillX = 1;
             allTestAnimals.get(testID).get(0).fillY = 0;
-            allTestAnimals.get(testID).get(0).setAnimalList(animalIDList);
+            allTestAnimals.get(testID).get(0).setAnimalList(currentTest.animalIDList);
             setTestGUI(testID);
         }
 
@@ -692,11 +704,12 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
             //If test selected, get map belonging to test we are switching from and save off animals
             WellMap map = allTestAnimals.get(testID).get(0);
             getCellValues(map.getFillX(), map.getFillY());
-            map.setAnimalList(animalIDList);
-            animalIDList.clear();
+            map.setAnimalList(currentTest.animalIDList);
+            currentTest.animalIDList.clear();
         }
 
         testID = 1;
+        currentTest = allTests.get(testID);
         setTestVals(1);
         populateTestValues();
 
@@ -707,11 +720,12 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
         if(testID != -1) {
             WellMap map = allTestAnimals.get(testID).get(0);
             getCellValues(map.getFillX(), map.getFillY());
-            map.setAnimalList(animalIDList);
-            animalIDList.clear();
+            map.setAnimalList(currentTest.animalIDList);
+            currentTest.animalIDList.clear();
         }
 
         testID = 2;
+        currentTest = allTests.get(testID);
         setTestVals(2);
         populateTestValues();
 
@@ -722,11 +736,12 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
         if(testID != -1) {
             WellMap map = allTestAnimals.get(testID).get(0);
             getCellValues(map.getFillX(), map.getFillY());
-            map.setAnimalList(animalIDList);
-            animalIDList.clear();
+            map.setAnimalList(currentTest.animalIDList);
+            currentTest.animalIDList.clear();
         }
 
         testID = 3;
+        currentTest = allTests.get(testID);
         setTestVals(3);
         populateTestValues();
 
@@ -812,7 +827,8 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
     }
 
     private void printCurrentAnimalList(){
-        for (String e : animalIDList) {
+
+        for (String e : currentTest.animalIDList) {
             System.out.println("In List: " + e);
         }
     }
@@ -1032,7 +1048,7 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
                 jTextField9.getText()                      //logID
         );
 
-        reportList.add(newReport);
+        currentTest.reportList.add(newReport);
 
         //clear fields
         for (javax.swing.JTextField e : textFields) {
@@ -1080,7 +1096,7 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
                 for (int i = 0; i < jTable1model.getRowCount(); i++) {  //y
                     String value = jTable1model.getValueAt(i, j).toString();
                     if (!value.isEmpty() && !value.equals("POSITIVE") && !value.equals("NEGATIVE") && !value.equals("BLANK")) {
-                        animalIDList.add(jTable1model.getValueAt(i, j).toString());
+                        currentTest.animalIDList.add(jTable1model.getValueAt(i, j).toString());
                         System.out.println("Added " + jTable1model.getValueAt(i, 0).toString() + " to the animal ID list");
                     }
                 }
@@ -1182,9 +1198,11 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
 
         //  0 is blank, 1 is BLV, 2 is CL, 3 is Johne's. Each is a linked list of maps
     int testID = -1;
-    private ArrayList<String> animalIDList = new ArrayList<String>();
-    private ArrayList<Report> reportList = new ArrayList<Report>();
+    //private ArrayList<String> animalIDList = new ArrayList<String>();
+    //private ArrayList<Report> reportList = new ArrayList<Report>();
     private ArrayList<Float> parsedValues = new ArrayList<Float>();
+    private ArrayList<TestType> allTests;
+    private TestType currentTest;
     //Holds all well maps. Currently another arraylist but want to switch to be linkedList as inner data structure
     private ArrayList<ArrayList<WellMap>> allTestAnimals = new ArrayList<ArrayList<WellMap>>(4);
     //Names is the array of names used for autocomplete
@@ -1269,8 +1287,6 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
     @Override
     public void windowOpened(WindowEvent e) {
 
-
-        //TODO: Make reset table method to clear animals and colors
         //TODO: Adjust where animals are added
         /*
         state.deserialize();
@@ -1292,7 +1308,7 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
         System.out.println("Window is closing");
 
         state.setCurrentMap(jTable1.getModel());
-        state.setReports(reportList);
+        //state.setReports(reportList);
         //state.setResultName(jTextField11.getText());
         state.setCurrentTest(testID);
         state.setCurFillX(fillX);
