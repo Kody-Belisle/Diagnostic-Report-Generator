@@ -55,6 +55,7 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
         }
 
         currentTabPane = allTabPanes.get(0);
+        currentTable = (JTable)((JViewport)((JScrollPane)currentTabPane.getComponent(0)).getComponent(0)).getComponent(0);
 
         initComponents();
         textFields.add(jTextField1);
@@ -137,7 +138,7 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
         jButton5 = new javax.swing.JButton();
         jPanel7 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        //jTable1 = new javax.swing.JTable();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -486,7 +487,7 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
                                 .addComponent(jButton5))
         );
 
-
+        /*
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
                 new Object [][] {
                         {"A", null, null, null, null, null, null, null, null, null, null, null, null},
@@ -505,7 +506,7 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
         jTable1.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_LAST_COLUMN);
         jTable1.setRowHeight(32);
         //jTable1 and ScrollPanel aren't actually being called
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(jTable1);*/
 
         for(int i = 0; i < 4; i++) {
             jPanel7.add(allTabPanes.get(i), i);
@@ -679,7 +680,8 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
         }
 
         if(allMade) {
-            clearMap(jTable1);
+            //clearMap(jTable1);
+            clearMap(currentTable);
             currentTest.reportList.clear();
             currentTest.animalIDList.clear();
             jTextField11.setText("");
@@ -738,6 +740,8 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
         currentTest = allTests.get(testID);
         currentTabPane = allTabPanes.get(testID);
         setTabbedPanePanel(testID);
+        currentTable = (JTable)((JViewport)((JScrollPane)currentTabPane.getComponent(currentTabPane.getSelectedIndex())).getComponent(0)).getComponent(0);
+
         setTestVals(1);
         populateTestValues();
 
@@ -760,6 +764,7 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
         currentTest = allTests.get(testID);
         currentTabPane = allTabPanes.get(testID);
         setTabbedPanePanel(testID);
+        currentTable = (JTable)((JViewport)((JScrollPane)currentTabPane.getComponent(currentTabPane.getSelectedIndex())).getComponent(0)).getComponent(0);
 
         setTestVals(2);
         populateTestValues();
@@ -783,6 +788,7 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
         currentTest = allTests.get(testID);
         currentTabPane = allTabPanes.get(testID);
         setTabbedPanePanel(testID);
+        currentTable = (JTable)((JViewport)((JScrollPane)currentTabPane.getComponent(currentTabPane.getSelectedIndex())).getComponent(0)).getComponent(0);
 
         setTestVals(3);
         populateTestValues();
@@ -870,7 +876,7 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
         if (source == jMenuItem1) {
 
             try {
-                if (! jTable1.print()) {
+                if (!currentTable.print()) {
                     System.err.println("User cancelled printing");
                 }
             } catch (java.awt.print.PrinterException e) {
@@ -895,8 +901,10 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
         jTextField11.setText(selectedFilePath);
 
         if(testID != -1) {
-            ColorCells cs = new ColorCells(jTable1, selectedFilePath, testID,(String) jComboBox2.getSelectedItem());
-            jTable1.repaint();
+            //ColorCells cs = new ColorCells(jTable1, selectedFilePath, testID,(String) jComboBox2.getSelectedItem());
+            //jTable1.repaint();
+            ColorCells cs = new ColorCells(currentTable, selectedFilePath, testID,(String) jComboBox2.getSelectedItem());
+            currentTable.repaint();
             parsedValues = cs.getParsedData();
         } else {
             JOptionPane.showMessageDialog(null, "Select a test.");
@@ -950,10 +958,12 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
      * animal information if possible
      */
     private void populateTestValues() {
-        DefaultTableModel jTable1model = (DefaultTableModel) jTable1.getModel();
+        //DefaultTableModel jTable1model = (DefaultTableModel) jTable1.getModel();
+        DefaultTableModel jTable1model = (DefaultTableModel) currentTable.getModel();
 
         int tableOffset = 1;
-        clearMap(jTable1);
+        //clearMap(jTable1);
+        clearMap(currentTable);
         switch (testID) {
 
             case 1:
@@ -1093,7 +1103,8 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
 
             }
 
-            jTable1.setValueAt(element, map.fillY, map.fillX);
+            //jTable1.setValueAt(element, map.fillY, map.fillX);
+            currentTable.setValueAt(element, map.fillY, map.fillX);
 
             map.fillY++;
 
@@ -1197,7 +1208,8 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
         }
 
         if(!none) {
-            DefaultTableModel jTable1model = (DefaultTableModel) jTable1.getModel();
+            //DefaultTableModel jTable1model = (DefaultTableModel) jTable1.getModel();
+            DefaultTableModel jTable1model = (DefaultTableModel) currentTable.getModel();
 
             System.out.println("Column count: " + jTable1model.getColumnCount());
             System.out.println("Row count: " + jTable1model.getRowCount());
@@ -1366,7 +1378,7 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
     private javax.swing.JRadioButton jRadioButton3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTable jTable1;
+    //private javax.swing.JTable jTable1;
     private javax.swing.JTable jTable2;
     private JTextField jTextField1;
     private JTextField jTextField10;
@@ -1381,6 +1393,7 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
     private JTextField jTextField8;
     private JTextField jTextField9;
     private javax.swing.JTabbedPane currentTabPane;
+    private JTable currentTable;
     private ArrayList<JTabbedPane> allTabPanes;
     // End of variables declaration
 
@@ -1420,7 +1433,7 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
     public void windowClosing(WindowEvent e) {
         System.out.println("Window is closing");
 
-        state.setCurrentMap(jTable1.getModel());
+        //state.setCurrentMap(jTable1.getModel());
         //state.setReports(reportList);
         //state.setResultName(jTextField11.getText());
         state.setCurrentTest(testID);
