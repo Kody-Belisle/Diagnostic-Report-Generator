@@ -114,7 +114,7 @@ public class ReportGenerator extends AbstractReportGenerator
         System.out.println("Set up connection provider");
         final SQLReportDataFactory dataFactory = new SQLReportDataFactory(connProvider);
         //TODO: query is wrong. It's pulling duplicates on a single animal because of my "where clauses"
-        final String sqlString = "select REPORT.CLIENT_NAME, ANIMALS.ANIMAL_ID as animalID, ANIMALS.RESULT as OD, ANIMALS.TEXT_RESULT as Result"
+        final String sqlString = "select DISTINCT REPORT.CLIENT_NAME, ANIMALS.ANIMAL_ID as animalID, ANIMALS.RESULT as OD, ANIMALS.TEXT_RESULT as Result"
             + " from report join animals on REPORT.LOG_ID = ANIMALS.LOG_ID" +
             " where REPORT.CLIENT_NAME = '" + report.getSingleClient().getCompanyName() + "'" + " and ANIMALS.CLIENT_NAME = '" + report.getSingleClient().getCompanyName() + "'" +
             " and ANIMALS.type = '" + report.getAnimalType() + "' and ANIMALS.LOG_ID = '" + report.getLogID() + "'";

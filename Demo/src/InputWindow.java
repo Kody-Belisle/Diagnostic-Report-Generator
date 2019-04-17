@@ -35,6 +35,27 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
 
         this.state = new StateSerializer();
 
+        allTabPanes = new ArrayList<>(4);
+        for(int i = 0; i < 4; i++) {
+            ArrayList<WellMap> newMapList = new ArrayList<>();
+            ArrayList<String> newAnimalList = new ArrayList<>();
+            DefaultTableModel model = new DefaultTableModel();
+            WellMap startMap = new WellMap(newAnimalList, 1, 0, model);
+            //startMap.setSingleModel((DefaultTableModel)jTable1.getModel());
+            newMapList.add(startMap);
+            allTestAnimals.add(i, newMapList);
+
+            JTabbedPane newPane = new JTabbedPane();
+            JScrollPane newScroll = new JScrollPane();
+            JTable newTable = new JTable();
+            makeNewTable(newTable);
+            newScroll.setViewportView(newTable);
+            newPane.add("1", newScroll);
+            allTabPanes.add(newPane);
+        }
+
+        currentTabPane = allTabPanes.get(0);
+
         initComponents();
         textFields.add(jTextField1);
         textFields.add(jTextField2);
@@ -47,25 +68,21 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
         textFields.add(jTextField9);
         textFields.add(jTextField10);
 
-        for(int i = 0; i < 4; i++) {
-            ArrayList<WellMap> newMapList = new ArrayList<>();
-            ArrayList<String> newAnimalList = new ArrayList<>();
-            DefaultTableModel model = new DefaultTableModel();
-            WellMap startMap = new WellMap(newAnimalList, 1, 0, model);
-            startMap.setSingleModel((DefaultTableModel)jTable1.getModel());
-            newMapList.add(startMap);
-            allTestAnimals.add(i, newMapList);
-        }
-
         currentTest = new BLVTest();
         BLVTest blv = new BLVTest();
         CLTest cl = new CLTest();
         JohnesTest johnes = new JohnesTest();
-        allTests = new ArrayList<>();
+        allTests = new ArrayList<>(4);
         allTests.add(currentTest);
         allTests.add(blv);
         allTests.add(cl);
         allTests.add(johnes);
+
+        currentIndex = new ArrayList<>(4);
+        currentIndex.add(0);
+        currentIndex.add(0);
+        currentIndex.add(0);
+        currentIndex.add(0);
 
     }
 
@@ -79,24 +96,24 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
     private void initComponents() {
         final JPopupMenu pm = new JPopupMenu();
         jPanel1 = new javax.swing.JPanel();
-        jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
-        jTextField3 = new javax.swing.JTextField();
-        jTextField4 = new javax.swing.JTextField();
+        jTextField1 = new JTextField();
+        jTextField2 = new JTextField();
+        jTextField3 = new JTextField();
+        jTextField4 = new JTextField();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jComboBox1 = new javax.swing.JComboBox<>();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        jTextField6 = new javax.swing.JTextField();
+        jTextField6 = new JTextField();
         jLabel10 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
-        jTextField7 = new javax.swing.JTextField();
-        jTextField8 = new javax.swing.JTextField();
+        jTextField7 = new JTextField();
+        jTextField8 = new JTextField();
         jLabel12 = new javax.swing.JLabel();
-        jTextField10 = new javax.swing.JTextField();
+        jTextField10 = new JTextField();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTable2 = new javax.swing.JTable();
         jPanel2 = new javax.swing.JPanel();
@@ -112,11 +129,11 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
         jLabel7 = new javax.swing.JLabel();
         jComboBox2 = new javax.swing.JComboBox<>();
         jLabel9 = new javax.swing.JLabel();
-        jTextField5 = new javax.swing.JTextField();
+        jTextField5 = new JTextField();
         jLabel11 = new javax.swing.JLabel();
-        jTextField9 = new javax.swing.JTextField();
+        jTextField9 = new JTextField();
         jPanel6 = new javax.swing.JPanel();
-        jTextField11 = new javax.swing.JTextField();
+        jTextField11 = new JTextField();
         jButton5 = new javax.swing.JButton();
         jPanel7 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -319,7 +336,8 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
                                 .addContainerGap(46, Short.MAX_VALUE))
         );
 
-        jButton4.setText("Update Table");
+
+        jButton4.setText("Add Well Map");
         jButton4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton4ActionPerformed(evt);
@@ -468,6 +486,7 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
                                 .addComponent(jButton5))
         );
 
+
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
                 new Object [][] {
                         {"A", null, null, null, null, null, null, null, null, null, null, null, null},
@@ -485,15 +504,19 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
         ));
         jTable1.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_LAST_COLUMN);
         jTable1.setRowHeight(32);
+        //jTable1 and ScrollPanel aren't actually being called
         jScrollPane1.setViewportView(jTable1);
 
+        for(int i = 0; i < 4; i++) {
+            jPanel7.add(allTabPanes.get(i), i);
+        }
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
         jPanel7.setLayout(jPanel7Layout);
         jPanel7Layout.setHorizontalGroup(
                 jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 877, Short.MAX_VALUE))
+                                .addComponent(currentTabPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 877, Short.MAX_VALUE))
         );
         jPanel7Layout.setVerticalGroup(
                 jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -501,7 +524,7 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
                         .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7Layout.createSequentialGroup()
                                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(currentTabPane, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
         );
 
@@ -586,7 +609,7 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
 
         if (testID != -1) {
             //print all fields (delete later)
-            for (javax.swing.JTextField e : textFields) {
+            for (JTextField e : textFields) {
                 System.out.println("Field data: "+ e.getText());
             }
             if (jTextField9.getText().isEmpty()) {
@@ -699,6 +722,7 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
 
     //Tried to save off entire DefaultTableModel but it saved by reference, it was not a copy
     private void jRadioButton1ActionPerformed(java.awt.event.ActionEvent evt) {
+        int oldID;
         //BLV Test
         if(testID != -1) {
             //If test selected, get map belonging to test we are switching from and save off animals
@@ -706,10 +730,14 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
             getCellValues(map.getFillX(), map.getFillY());
             map.setAnimalList(currentTest.animalIDList);
             currentTest.animalIDList.clear();
+            oldID = testID;
+        }else {
+            oldID = 0;
         }
-
         testID = 1;
         currentTest = allTests.get(testID);
+        currentTabPane = allTabPanes.get(testID);
+        setTabbedPanePanel(testID);
         setTestVals(1);
         populateTestValues();
 
@@ -717,15 +745,22 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
 
     private void jRadioButton2ActionPerformed(java.awt.event.ActionEvent evt) {
         //CL Test
+        int oldID;
         if(testID != -1) {
             WellMap map = allTestAnimals.get(testID).get(0);
             getCellValues(map.getFillX(), map.getFillY());
             map.setAnimalList(currentTest.animalIDList);
             currentTest.animalIDList.clear();
+            oldID = testID;
+        } else {
+            oldID = 0;
         }
 
         testID = 2;
         currentTest = allTests.get(testID);
+        currentTabPane = allTabPanes.get(testID);
+        setTabbedPanePanel(testID);
+
         setTestVals(2);
         populateTestValues();
 
@@ -733,22 +768,98 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
 
     private void jRadioButton3ActionPerformed(java.awt.event.ActionEvent evt) {
         //Johne's Test
+        int oldID;
         if(testID != -1) {
             WellMap map = allTestAnimals.get(testID).get(0);
             getCellValues(map.getFillX(), map.getFillY());
             map.setAnimalList(currentTest.animalIDList);
             currentTest.animalIDList.clear();
+            oldID = testID;
+        }else {
+            oldID = 0;
         }
 
         testID = 3;
         currentTest = allTests.get(testID);
+        currentTabPane = allTabPanes.get(testID);
+        setTabbedPanePanel(testID);
+
         setTestVals(3);
         populateTestValues();
 
     }
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
+
+        System.out.println("Add Well Map Pressed");
+        if(testID != -1) {
+            System.out.println("In Well Map Add");
+
+            JTable newTable = new JTable();
+            makeNewTable(newTable);
+            JScrollPane newScroll = new JScrollPane(newTable, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+            newScroll.setViewportView(newTable);
+            //clearMap(jTable1);
+            currentIndex.set(testID, currentIndex.get(testID) + 1);
+            currentTabPane.add("Tab " + currentIndex.get(testID), newScroll);
+
+
+        } else {
+            JOptionPane.showMessageDialog(null, "Select a test.");
+        }
+
+    }
+
+    //TODO: Set all components in jPanel7 to begin with and then just toggle which is visible
+    private void setTabbedPanePanel(int newIndex) {
+        JTabbedPane newPane = allTabPanes.get(newIndex);
+        for(int i = 0; i < 4; i++) {
+            if(i != newIndex) {
+                jPanel7.getComponent(i).setVisible(false);
+            } else {
+                jPanel7.getComponent(i).setVisible(true);
+            }
+        }
+
+
+        javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
+        jPanel7.setLayout(jPanel7Layout);
+        jPanel7Layout.setHorizontalGroup(
+                jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(newPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 877, Short.MAX_VALUE))
+        );
+        jPanel7Layout.setVerticalGroup(
+                jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGap(0, 322, Short.MAX_VALUE)
+                        .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7Layout.createSequentialGroup()
+                                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(newPane, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+        );
+        jPanel7.repaint();
+    }
+
+    private void makeNewTable(JTable table) {
+        table.setModel(new javax.swing.table.DefaultTableModel(
+                new Object [][] {
+                        {"A", null, null, null, null, null, null, null, null, null, null, null, null},
+                        {"B", null, null, null, null, null, null, null, null, null, null, null, null},
+                        {"C", null, null, null, null, null, null, null, null, null, null, null, null},
+                        {"D", null, null, null, null, null, null, null, null, null, null, null, null},
+                        {"E", null, null, null, null, null, null, null, null, null, null, null, null},
+                        {"F", null, null, null, null, null, null, null, null, null, null, null, null},
+                        {"G", null, null, null, null, null, null, null, null, null, null, null, null},
+                        {"H", null, null, null, null, null, null, null, null, null, null, null, null}
+                },
+                new String [] {
+                        "Plate Visualizer", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"
+                }
+        ));
+        table.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_LAST_COLUMN);
+        table.setRowHeight(32);
     }
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {
@@ -1051,7 +1162,7 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
         currentTest.reportList.add(newReport);
 
         //clear fields
-        for (javax.swing.JTextField e : textFields) {
+        for (JTextField e : textFields) {
             e.setText("");
         }
     }
@@ -1202,6 +1313,7 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
     //private ArrayList<Report> reportList = new ArrayList<Report>();
     private ArrayList<Float> parsedValues = new ArrayList<Float>();
     private ArrayList<TestType> allTests;
+    private static ArrayList<Integer> currentIndex;
     private TestType currentTest;
     //Holds all well maps. Currently another arraylist but want to switch to be linkedList as inner data structure
     private ArrayList<ArrayList<WellMap>> allTestAnimals = new ArrayList<ArrayList<WellMap>>(4);
@@ -1215,7 +1327,7 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
     ArrayList<Integer> testYVals;
     private DerbyDao dao;
     private StateSerializer state;
-    private ArrayList<javax.swing.JTextField> textFields = new ArrayList<>();
+    private ArrayList<JTextField> textFields = new ArrayList<>();
     private String fileName;
 
     // Variables declaration - do not modify
@@ -1256,19 +1368,20 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTable1;
     private javax.swing.JTable jTable2;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField10;
-    private javax.swing.JTextField jTextField11;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
-    private javax.swing.JTextField jTextField5;
+    private JTextField jTextField1;
+    private JTextField jTextField10;
+    private JTextField jTextField11;
+    private JTextField jTextField2;
+    private JTextField jTextField3;
+    private JTextField jTextField4;
+    private JTextField jTextField5;
     private JDatePickerImpl datePicker;                 //Date Tested
-    private javax.swing.JTextField jTextField6;
-    private javax.swing.JTextField jTextField7;
-    private javax.swing.JTextField jTextField8;
-    private javax.swing.JTextField jTextField9;
-
+    private JTextField jTextField6;
+    private JTextField jTextField7;
+    private JTextField jTextField8;
+    private JTextField jTextField9;
+    private javax.swing.JTabbedPane currentTabPane;
+    private ArrayList<JTabbedPane> allTabPanes;
     // End of variables declaration
 
 
