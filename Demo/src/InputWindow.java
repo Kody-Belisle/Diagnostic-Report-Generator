@@ -17,6 +17,7 @@ import java.util.Date;
 import java.util.Properties;
 
 import javax.swing.*;
+import javax.swing.event.*;
 import javax.swing.plaf.nimbus.State;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.text.DateFormatter;
@@ -50,7 +51,7 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
             JTable newTable = new JTable();
             makeNewTable(newTable);
             newScroll.setViewportView(newTable);
-            newPane.add("1", newScroll);
+            newPane.add("Map 1", newScroll);
             allTabPanes.add(newPane);
         }
 
@@ -509,8 +510,15 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
         jScrollPane1.setViewportView(jTable1);*/
 
         for(int i = 0; i < 4; i++) {
+            allTabPanes.get(i).addChangeListener(new ChangeListener() {
+                @Override
+                public void stateChanged(ChangeEvent e) {
+                    tabChanged(e);
+                }
+            });
             jPanel7.add(allTabPanes.get(i), i);
         }
+
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
         jPanel7.setLayout(jPanel7Layout);
         jPanel7Layout.setHorizontalGroup(
@@ -724,18 +732,11 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
 
     //Tried to save off entire DefaultTableModel but it saved by reference, it was not a copy
     private void jRadioButton1ActionPerformed(java.awt.event.ActionEvent evt) {
-        int oldID;
         //BLV Test
         if(testID != -1) {
-            //If test selected, get map belonging to test we are switching from and save off animals
-            WellMap map = allTestAnimals.get(testID).get(0);
-            getCellValues(map.getFillX(), map.getFillY());
-            map.setAnimalList(currentTest.animalIDList);
-            currentTest.animalIDList.clear();
-            oldID = testID;
-        }else {
-            oldID = 0;
+            saveValues();
         }
+
         testID = 1;
         currentTest = allTests.get(testID);
         currentTabPane = allTabPanes.get(testID);
@@ -749,15 +750,8 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
 
     private void jRadioButton2ActionPerformed(java.awt.event.ActionEvent evt) {
         //CL Test
-        int oldID;
         if(testID != -1) {
-            WellMap map = allTestAnimals.get(testID).get(0);
-            getCellValues(map.getFillX(), map.getFillY());
-            map.setAnimalList(currentTest.animalIDList);
-            currentTest.animalIDList.clear();
-            oldID = testID;
-        } else {
-            oldID = 0;
+            saveValues();
         }
 
         testID = 2;
@@ -773,15 +767,9 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
 
     private void jRadioButton3ActionPerformed(java.awt.event.ActionEvent evt) {
         //Johne's Test
-        int oldID;
+
         if(testID != -1) {
-            WellMap map = allTestAnimals.get(testID).get(0);
-            getCellValues(map.getFillX(), map.getFillY());
-            map.setAnimalList(currentTest.animalIDList);
-            currentTest.animalIDList.clear();
-            oldID = testID;
-        }else {
-            oldID = 0;
+            saveValues();
         }
 
         testID = 3;
@@ -795,19 +783,32 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
 
     }
 
+    private void saveValues() {
+        int index = currentIndex.get(testID);
+        WellMap map = allTestAnimals.get(testID).get(index);
+        getCellValues(map.getFillX(), map.getFillY());
+        map.setAnimalList(currentTest.animalIDList);
+        currentTest.animalIDList.clear();
+
+    }
+
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {
 
         System.out.println("Add Well Map Pressed");
         if(testID != -1) {
             System.out.println("In Well Map Add");
-
+            ArrayList<String> newAnimalList = new ArrayList<>();
+            DefaultTableModel model = new DefaultTableModel();
+            WellMap newWellMap = new WellMap(newAnimalList, 1, 0, model);
+            allTestAnimals.get(testID).add(newWellMap);
             JTable newTable = new JTable();
             makeNewTable(newTable);
             JScrollPane newScroll = new JScrollPane(newTable, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
             newScroll.setViewportView(newTable);
             //clearMap(jTable1);
-            currentIndex.set(testID, currentIndex.get(testID) + 1);
-            currentTabPane.add("Tab " + currentIndex.get(testID), newScroll);
+            int numTab = currentTabPane.getTabCount() + 1;
+            currentTabPane.add("Map " + numTab, newScroll);
+
 
 
         } else {
@@ -866,6 +867,21 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
         ));
         table.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_LAST_COLUMN);
         table.setRowHeight(32);
+    }
+
+
+    private void tabChanged(ChangeEvent change) {
+        JTabbedPane sourceTabbedPane = (JTabbedPane) change.getSource();
+
+        int index = sourceTabbedPane.getSelectedIndex();
+        System.out.println("Tab changed to: " + sourceTabbedPane.getTitleAt(index));
+        saveValues();
+
+        currentTable = (JTable)((JViewport)((JScrollPane)currentTabPane.getComponent(index)).getComponent(0)).getComponent(0);
+
+        setTestVals(testID);
+        populateTestValues();
+        currentIndex.set(testID, index);
     }
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {
@@ -1040,7 +1056,9 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
         jTable2.editCellAt(-1, -1);
         jTable2.getSelectionModel().clearSelection();
 
-        WellMap map = allTestAnimals.get(testID).get(0);
+        int index = allTabPanes.get(testID).getSelectedIndex();
+        WellMap map = allTestAnimals.get(testID).get(index);
+        //WellMap map = allTestAnimals.get(testID).get(0);
         //print rows in animal ID input column
         if(source == 0) {
             int rowCount = jTable2model.getRowCount();
