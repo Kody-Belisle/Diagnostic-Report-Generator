@@ -2,6 +2,8 @@ package src;
 
 import org.pentaho.reporting.engine.classic.core.modules.misc.datafactory.sql.DriverConnectionProvider;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.sql.*;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -27,19 +29,22 @@ public class DerbyDao {
 
     public void startUp() {
 
+            String protocol = "";
             System.out.println("DerbyDriver starting in " + framework + " mode");
             conn = null;
             //Get current user directory
-            //String protocol = "jdbc:derby:" + System.getProperty("user.dir");
-            String protocol = "jdbc:derby:";
-            //String protocol = "jdbc:derby:jar:(" + System.getProperty("user.dir");
 
-        String driver = "org.apache.derby.jdbc.EmbeddedDriver";
-        try {
-            Class.forName(driver);
-        } catch(java.lang.ClassNotFoundException e) {
-            e.printStackTrace();
-        }
+            protocol = "jdbc:derby:" + System.getProperty("user.dir");
+
+            //String protocol = "jdbc:derby:jar:" + System.getProperty("user.dir");
+
+            //This code here loads the driver for the executable jar
+            String driver = "org.apache.derby.jdbc.EmbeddedDriver";
+            try {
+                Class.forName(driver);
+            } catch(java.lang.ClassNotFoundException e) {
+                e.printStackTrace();
+            }
 
             try {
                 Properties props = new Properties(); // connection properties
@@ -63,10 +68,13 @@ public class DerbyDao {
                  */
 
                 //TODO: Figure out how to connect to embedded derby database
-                conn = DriverManager.getConnection(protocol + "\\lib\\" + dbName
-                 + ";create=true", props);
-                //conn = DriverManager.getConnection(protocol + dbName
-                  //      + ";create=true", props);
+
+                    conn = DriverManager.getConnection(protocol + "\\lib\\" + dbName
+                            + ";create=true", props);
+                    /*
+                    conn = DriverManager.getConnection(protocol + dbName
+                            + ";create=true", props);
+                    */
                 //conn = DriverManager.getConnection("jdbc:derby:" + dbName, props);
 
                 System.out.println("Connected to and created database " + dbName);

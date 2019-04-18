@@ -111,7 +111,7 @@ public class ReportGenerator extends AbstractReportGenerator
     public DataFactory getDataFactory()
     {
         final DriverConnectionProvider connProvider = dao.setUpConnProvider();
-
+        System.out.println("Set up connection provider");
         final SQLReportDataFactory dataFactory = new SQLReportDataFactory(connProvider);
         //TODO: query is wrong. It's pulling duplicates on a single animal because of my "where clauses"
         final String sqlString = "select REPORT.CLIENT_NAME, ANIMALS.ANIMAL_ID as animalID, ANIMALS.RESULT as OD, ANIMALS.TEXT_RESULT as Result"

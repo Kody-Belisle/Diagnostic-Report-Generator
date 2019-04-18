@@ -34,21 +34,17 @@
   <target name="dist" depends="clean, compile"
         description="generate the distribution">
     <!-- Create the distribution directory -->
-    <mkdir dir="${dist}/lib"/>
-    <mkdir dir="${dist}/lib/demoDB"/>
-    <!-- Copy database folder into dist -->
-    <mkdir dir="${dist}/lib/demoDB"/>
-    <copydir src="${lib}/demoDB"
-             dest="${dist}/lib/demoDB"/>
+    <mkdir dir="${dist}/"/>
 
     <!-- Put everything in ${build} into the MyProject-${DSTAMP}.jar file -->
-    <jar jarfile="${dist}/lib/ReportGenerator-${DSTAMP}.jar" basedir="${build}" >
+    <jar jarfile="${dist}/ReportGenerator-${DSTAMP}.jar" basedir="${build}" >
 
     <manifest>
         <attribute name="Main-Class" value="src.Main" />
     </manifest>
 
-      <zipgroupfileset dir="${lib}" includes="*.jar"/>
+        <zipgroupfileset dir="${lib}" includes="*"/>
+      <!---<zipgroupfileset dir="${lib}" includes="*.jar"/> -->
   </jar>
   </target>
 
