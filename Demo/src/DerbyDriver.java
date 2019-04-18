@@ -112,6 +112,7 @@ public class DerbyDriver
     void go(String[] args)
     {
         /* parse the arguments to determine which framework is desired*/
+        System.out.println("test");
         parseArguments(args);
 
         System.out.println("DerbyDriver starting in " + framework + " mode");
@@ -320,6 +321,7 @@ public class DerbyDriver
                 try
                 {
                     // the shutdown=true attribute shuts down Derby
+                    System.out.println("Attempting embedded connection");
                     DriverManager.getConnection("jdbc:derby:;shutdown=true");
 
                     // To shut down a specific database only, but keep the
