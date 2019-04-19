@@ -655,7 +655,9 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
         printCurrentAnimalList();
         WellMap curMap = allTestAnimals.get(testID).get(0);
 
-        //TODO: This small chunk of adding animals needs to be moved to when the result parsing is complete
+        //TODO: Need to loop through all well maps that have imported data and make one big data array. Set up
+        //  modulus to handle the multiple well map gaps and test values.
+        // Also need to make one big animal array so that we can continue along
         getCellValues(curMap.getFillX(), curMap.getFillY());
         int animalListCount = 0;
         for (Report n: currentTest.reportList) {
