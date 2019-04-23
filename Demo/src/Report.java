@@ -18,6 +18,7 @@ public class Report implements java.io.Serializable {
         private transient TestType testObject;
         private int testType;
         private int animalCount;
+        private int wellMap;
         
         private String logID;
         private ArrayList<Float> testResults;

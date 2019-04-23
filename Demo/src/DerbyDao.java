@@ -51,11 +51,14 @@ public class DerbyDao {
                 // providing a user name and password is optional in the embedded
                 // and derbyclient frameworks
                 //Because user is specified, SCHEMA IS USER1
-                props.put("user", "app");
+
+                //props.put("user", "app");
+                props.put("user", "user1");
                 props.put("password", "");
 
 
-                String dbName = "reportDB"; // the name of the database
+                //String dbName = "reportDB"; // the name of the database
+                String dbName = "demoDB";
 
                 /*
                  * This connection specifies create=true in the connection URL to

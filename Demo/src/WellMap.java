@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 public class WellMap implements Serializable {
     private ArrayList<String> animalList;
+    String resultFile;
     int fillX;
     int fillY;
     private DefaultTableModel singleModel;
@@ -15,6 +16,7 @@ public class WellMap implements Serializable {
         this.fillX = x;
         this.fillY = y;
         this.singleModel = model;
+        this.resultFile = "";
     }
 
     public ArrayList<String> getAnimalList() {
