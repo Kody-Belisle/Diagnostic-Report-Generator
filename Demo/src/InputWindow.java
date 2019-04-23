@@ -3,25 +3,20 @@ package src;
 import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.SqlDateModel;
-import org.jdatepicker.impl.UtilDateModel;
-import org.junit.jupiter.api.Test;
 import org.pentaho.reporting.engine.classic.core.ReportProcessingException;
 
+import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Properties;
-
-import javax.swing.*;
-import javax.swing.event.*;
-import javax.swing.plaf.nimbus.State;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.text.DateFormatter;
-import javax.swing.text.DefaultEditorKit;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class InputWindow extends javax.swing.JFrame implements WindowListener, WindowFocusListener, WindowStateListener  {
 
@@ -102,19 +97,19 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
         jTextField2 = new JTextField();
         jTextField3 = new JTextField();
         jTextField4 = new JTextField();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
+        jLabel1 = new JLabel();
+        jLabel2 = new JLabel();
+        jLabel3 = new JLabel();
+        jComboBox1 = new JComboBox<>();
+        jLabel4 = new JLabel();
+        jLabel5 = new JLabel();
         jTextField6 = new JTextField();
-        jLabel10 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
+        jLabel10 = new JLabel();
+        jLabel6 = new JLabel();
+        jLabel8 = new JLabel();
         jTextField7 = new JTextField();
         jTextField8 = new JTextField();
-        jLabel12 = new javax.swing.JLabel();
+        jLabel12 = new JLabel();
         jTextField10 = new JTextField();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTable2 = new javax.swing.JTable();
@@ -124,15 +119,15 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
         jButton3 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
-        jRadioButton1 = new javax.swing.JRadioButton();
-        jRadioButton2 = new javax.swing.JRadioButton();
-        jRadioButton3 = new javax.swing.JRadioButton();
+        jRadioButton1 = new JRadioButton();
+        jRadioButton2 = new JRadioButton();
+        jRadioButton3 = new JRadioButton();
         jPanel5 = new javax.swing.JPanel();
-        jLabel7 = new javax.swing.JLabel();
-        jComboBox2 = new javax.swing.JComboBox<>();
-        jLabel9 = new javax.swing.JLabel();
+        jLabel7 = new JLabel();
+        jComboBox2 = new JComboBox<>();
+        jLabel9 = new JLabel();
         jTextField5 = new JTextField();
-        jLabel11 = new javax.swing.JLabel();
+        jLabel11 = new JLabel();
         jTextField9 = new JTextField();
         jPanel6 = new javax.swing.JPanel();
         jTextField11 = new JTextField();
@@ -293,25 +288,13 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
         jScrollPane2.setViewportView(jTable2);
 
         jButton1.setText("Add Field");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
+        jButton1.addActionListener(this::jButton1ActionPerformed);
 
         jButton2.setText("Next Customer");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
-            }
-        });
+        jButton2.addActionListener(this::jButton2ActionPerformed);
 
         jButton3.setText("Generate");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
-            }
-        });
+        jButton3.addActionListener(this::jButton3ActionPerformed);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -340,34 +323,18 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
 
 
         jButton4.setText("Add Well Map");
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
-            }
-        });
+        jButton4.addActionListener(this::jButton4ActionPerformed);
 
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder("Test Select"));
 
         jRadioButton1.setText("BLV");
-        jRadioButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButton1ActionPerformed(evt);
-            }
-        });
+        jRadioButton1.addActionListener(this::jRadioButton1ActionPerformed);
 
-        jRadioButton2.setLabel("CL");
-        jRadioButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButton2ActionPerformed(evt);
-            }
-        });
+        jRadioButton2.setText("CL");
+        jRadioButton2.addActionListener(this::jRadioButton2ActionPerformed);
 
-        jRadioButton3.setLabel("Johne's");
-        jRadioButton3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButton3ActionPerformed(evt);
-            }
-        });
+        jRadioButton3.setText("Johne's");
+        jRadioButton3.addActionListener(this::jRadioButton3ActionPerformed);
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -463,11 +430,7 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
         jPanel6.setBorder(javax.swing.BorderFactory.createTitledBorder("Plate Data"));
 
         jButton5.setText("Import Plate Data");
-        jButton5.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton5ActionPerformed(evt);
-            }
-        });
+        jButton5.addActionListener(this::jButton5ActionPerformed);
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
@@ -510,12 +473,7 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
         jScrollPane1.setViewportView(jTable1);*/
 
         for(int i = 0; i < 4; i++) {
-            allTabPanes.get(i).addChangeListener(new ChangeListener() {
-                @Override
-                public void stateChanged(ChangeEvent e) {
-                    tabChanged(e);
-                }
-            });
+            allTabPanes.get(i).addChangeListener(this::tabChanged);
             jPanel7.add(allTabPanes.get(i), i);
         }
 
@@ -545,13 +503,24 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
                 jMenuItem1ActionPerformed(evt);
             }
         });
+
         jMenu1.add(jMenuItem1);
 
         jMenuItem2.setText("Import Client Data");
         jMenu1.add(jMenuItem2);
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
 
         jMenuItem3.setText("Export Client Data");
         jMenu1.add(jMenuItem3);
+        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
 
         jMenuBar1.add(jMenu1);
 
@@ -626,25 +595,43 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
                 return;
             }
             //deselect field
-
-            //add animals to map
-            animalCount = fillTable(0);
-            //save customer info and animal count
-            saveCustomer(animalCount);
-            //clear table (currently done in filltable)
+            if (logIDRegex(jTextField9.getText())) {
+                //add animals to map
+                animalCount = fillTable(0);
+                //save customer info and animal count
+                saveCustomer(animalCount);
+                //clear table (currently done in filltable)
+            } else {
+                JOptionPane.showMessageDialog(null, "LogID invalid format. Accepted format is OMMDDYYXXX");
+            }
         } else {
             JOptionPane.showMessageDialog(null, "Select a test.");
 
         }
     }
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {
+    /* Used to enforce the format of the LogID. Narrowed the field to only accept OMMDDYYXXX */
+    private boolean logIDRegex(String logID) {
+        boolean proper = true;
+        String pattern = "O((0|1)\\d{1})((0|1|2|3)\\d{1})(\\d{2})(\\d{3})";
 
-        if (fileName == null) {
-            JOptionPane.showMessageDialog(null, "Import a plate data file");
-            return;
+        // Create a Pattern object
+        Pattern r = Pattern.compile(pattern);
+
+        // Now create matcher object.
+        Matcher m = r.matcher(logID);
+        if(!m.matches()) {
+            proper = false;
         }
+        return proper;
+    }
 
+
+    // TODO: For generation loop through all well map result file names and if not null
+    //      then parse again, arrange values and save animals.
+    // Add a new value to report class saying which well map it's tied to so that
+    //  when we loop through the first time only the reports from the correct well map are used
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {
         //generate button
         ArrayList<Float> parsedArrangedData = new ArrayList<Float>();
         int dataIndex = 4;
@@ -661,9 +648,7 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
         printCurrentAnimalList();
         WellMap curMap = allTestAnimals.get(testID).get(0);
 
-        //TODO: Need to loop through all well maps that have imported data and make one big data array. Set up
-        //  modulus to handle the multiple well map gaps and test values.
-        // Also need to make one big animal array so that we can continue along
+        //TODO: Parse per well map for a single test. Per map add the animals off to the database
         getCellValues(curMap.getFillX(), curMap.getFillY());
         int animalListCount = 0;
         for (Report n: currentTest.reportList) {
@@ -695,6 +680,7 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
 
         }
 
+        //TODO: Modify this to remove all tabs and reset the correct values
         if(allMade) {
             //clearMap(jTable1);
             clearMap(currentTable);
@@ -725,10 +711,7 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
             new ReportGenerator(report).generateReport(AbstractReportGenerator.OutputType.PDF, outputFilename);
             made = true;
 
-        } catch (IOException e) {
-            e.printStackTrace();
-            made = false;
-        } catch (ReportProcessingException e) {
+        } catch (IOException | ReportProcessingException e) {
             e.printStackTrace();
             made = false;
         }
@@ -741,7 +724,7 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
     //Tried to save off entire DefaultTableModel but it saved by reference, it was not a copy
     private void jRadioButton1ActionPerformed(java.awt.event.ActionEvent evt) {
         //BLV Test
-        if(testID != -1 && testID != 1) {
+        if(testID != -1) {
             saveValues();
         }
 
@@ -754,11 +737,17 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
         setTestVals(1);
         populateTestValues();
 
+        String selectedFilePath = allTestAnimals.get(testID).get(currentIndex.get(testID)).resultFile;
+        if(!selectedFilePath.isEmpty()) {
+            ColorCells cs = new ColorCells(currentTable, selectedFilePath, testID, (String) jComboBox2.getSelectedItem());
+            currentTable.repaint();
+        }
+
     }
 
     private void jRadioButton2ActionPerformed(java.awt.event.ActionEvent evt) {
         //CL Test
-        if(testID != -1 && testID != 2) {
+        if(testID != -1) {
             saveValues();
         }
 
@@ -771,12 +760,17 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
         setTestVals(2);
         populateTestValues();
 
+        String selectedFilePath = allTestAnimals.get(testID).get(currentIndex.get(testID)).resultFile;
+        if(!selectedFilePath.isEmpty()) {
+            ColorCells cs = new ColorCells(currentTable, selectedFilePath, testID, (String) jComboBox2.getSelectedItem());
+            currentTable.repaint();
+        }
     }
 
     private void jRadioButton3ActionPerformed(java.awt.event.ActionEvent evt) {
         //Johne's Test
 
-        if(testID != -1 && testID != 3) {
+        if(testID != -1) {
             saveValues();
         }
 
@@ -788,6 +782,12 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
 
         setTestVals(3);
         populateTestValues();
+
+        String selectedFilePath = allTestAnimals.get(testID).get(currentIndex.get(testID)).resultFile;
+        if(!selectedFilePath.isEmpty()) {
+            ColorCells cs = new ColorCells(currentTable, selectedFilePath, testID, (String) jComboBox2.getSelectedItem());
+            currentTable.repaint();
+        }
 
     }
 
@@ -825,7 +825,7 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
 
     }
 
-    //TODO: Set all components in jPanel7 to begin with and then just toggle which is visible
+
     private void setTabbedPanePanel(int newIndex) {
         JTabbedPane newPane = allTabPanes.get(newIndex);
         for(int i = 0; i < 4; i++) {
@@ -890,6 +890,11 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
         setTestVals(testID);
         populateTestValues();
         currentIndex.set(testID, index);
+        String selectedFilePath = allTestAnimals.get(testID).get(currentIndex.get(testID)).resultFile;
+        if(!selectedFilePath.isEmpty()) {
+            ColorCells cs = new ColorCells(currentTable, selectedFilePath, testID, (String) jComboBox2.getSelectedItem());
+            currentTable.repaint();
+        }
     }
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {
@@ -927,6 +932,7 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
         if(testID != -1) {
             //ColorCells cs = new ColorCells(jTable1, selectedFilePath, testID,(String) jComboBox2.getSelectedItem());
             //jTable1.repaint();
+            allTestAnimals.get(testID).get(currentIndex.get(testID)).resultFile = selectedFilePath;
             ColorCells cs = new ColorCells(currentTable, selectedFilePath, testID,(String) jComboBox2.getSelectedItem());
             currentTable.repaint();
             parsedValues = cs.getParsedData();
@@ -1113,10 +1119,6 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
                 System.out.println("Too many animals");
                 //Return max amount of animals possible
                 return 96;
-            }
-
-            if (testXVals == null) {
-                System.out.println("error: testXVals is null");
             }
 
             for (int l = 0; l < testXVals.size(); l++) {
@@ -1318,7 +1320,6 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
     }
 
     private void setTestGUI(int testType) {
-        System.out.println("Setting selected test to " + testType);
         switch (testType) {
             case 1:
                 //BLV Test
@@ -1366,8 +1367,8 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
     private boolean existingClient = false;
     private int fillX = 1;
     private int fillY = 0;
-    private ArrayList<Integer> testXVals;
-    private ArrayList<Integer> testYVals;
+    ArrayList<Integer> testXVals;
+    ArrayList<Integer> testYVals;
     private DerbyDao dao;
     private StateSerializer state;
     private ArrayList<JTextField> textFields = new ArrayList<>();
@@ -1381,18 +1382,18 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
     private javax.swing.JButton jButton5;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JComboBox<String> jComboBox2;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
+    private JLabel jLabel1;
+    private JLabel jLabel10;
+    private JLabel jLabel11;
+    private JLabel jLabel12;
+    private JLabel jLabel2;
+    private JLabel jLabel3;
+    private JLabel jLabel4;
+    private JLabel jLabel5;
+    private JLabel jLabel6;
+    private JLabel jLabel7;
+    private JLabel jLabel8;
+    private JLabel jLabel9;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
@@ -1404,9 +1405,9 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
-    private javax.swing.JRadioButton jRadioButton1;
-    private javax.swing.JRadioButton jRadioButton2;
-    private javax.swing.JRadioButton jRadioButton3;
+    private JRadioButton jRadioButton1;
+    private JRadioButton jRadioButton2;
+    private JRadioButton jRadioButton3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     //private javax.swing.JTable jTable1;
@@ -1445,58 +1446,23 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
     public void windowOpened(WindowEvent e) {
 
         //TODO: Adjust where animals are added
-
-        int selectedOption = JOptionPane.showConfirmDialog(null,
-                "Load previous program state?",
-                "Choose",
-                JOptionPane.YES_NO_OPTION);
-        if (selectedOption == JOptionPane.YES_OPTION) {
-            System.out.println("Loading previous program state");
-
+        /*
         state.deserialize();
-        allTestAnimals = state.getMapList();
-
-        //print loaded animals
-        for (ArrayList<WellMap> l : allTestAnimals) {
-            for (WellMap wm : l) {
-                if (wm.getAnimalList().size() > 0)
-                    System.out.println(wm.getAnimalList());
-            }
-        }
-
-
-
+        reportList = state.getReports();
         testID = state.getCurrentTest();
-        currentTabPane = allTabPanes.get(testID);
-        currentTable = (JTable)((JViewport)((JScrollPane)currentTabPane.getComponent(currentTabPane.getSelectedIndex())).getComponent(0)).getComponent(0);
-
-        switch (testID) {
-            case 1:
-                //BLV Test
-                jRadioButton1ActionPerformed(null);
-                jRadioButton1.setSelected(true);
-                break;
-            case 2:
-                //CL Test
-                jRadioButton2ActionPerformed(null);
-                jRadioButton2.setSelected(true);
-                break;
-            case 3:
-                //Johne's Test
-                jRadioButton3ActionPerformed(null);
-                jRadioButton3.setSelected(true);
-                break;
-            default:
-                break;
+        for(Report n: reportList) {
+            n.createTestObject(testID);
         }
 
-        int index = allTabPanes.get(testID).getSelectedIndex();
-        WellMap map = allTestAnimals.get(testID).get(index);
-        map.fillX = state.getCurFillX();
-        map.fillY = state.getCurFillY();
-
+        if (!state.getResultName().equals("")) {
+            ColorCells cs = new ColorCells(jTable1, state.getResultName(), testID);
+            jTable1.repaint();
         }
 
+        setTestGUI(testID);
+        jTable1.setModel(state.getCurrentMap());
+        fillX = state.getCurFillX();
+        fillY = state.getCurFillY();*/
 
     }
 
@@ -1507,22 +1473,7 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
         //state.setCurrentMap(jTable1.getModel());
         //state.setReports(reportList);
         //state.setResultName(jTextField11.getText());
-
-        state.setMapList(allTestAnimals);
-        int index = allTabPanes.get(testID).getSelectedIndex();
-        WellMap map = allTestAnimals.get(testID).get(index);
-        getCellValues(map.getFillX(), map.getFillY());
-        map.setAnimalList(currentTest.animalIDList);
-        //print saved animals
-        for (ArrayList<WellMap> l : allTestAnimals) {
-            for (WellMap wm : l) {
-                if (wm.getAnimalList().size() > 0)
-                    System.out.println(wm.getAnimalList());
-            }
-        }
-
         state.setCurrentTest(testID);
-
         state.setCurFillX(fillX);
         state.setCurFillY(fillY);
         state.serialize();

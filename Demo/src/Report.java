@@ -1,5 +1,6 @@
 package src;
 
+import javax.swing.*;
 import java.lang.reflect.Array;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -18,6 +19,8 @@ public class Report implements java.io.Serializable {
         private transient TestType testObject;
         private int testType;
         private int animalCount;
+
+
         private int wellMap;
         
         private String logID;
@@ -79,6 +82,12 @@ public class Report implements java.io.Serializable {
             return dateTested;
         }
 
+        public int getWellMap() { return wellMap; }
+
+        public void setWellMap(int wellMap) {
+            this.wellMap = wellMap;
+        }
+
         public String getLogID() {
             return logID;
         }
@@ -114,7 +123,8 @@ public class Report implements java.io.Serializable {
                     }
                 }
             } else {
-                System.out.println("Unable to parse LOGID");
+                JOptionPane.showMessageDialog(null, "LogID in wrong format.");
+                //System.out.println("Unable to parse LOGID");
             }
 
             try {
