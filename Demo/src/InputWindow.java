@@ -602,7 +602,7 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
                 saveCustomer(animalCount);
                 //clear table (currently done in filltable)
             } else {
-                JOptionPane.showMessageDialog(null, "LogID invalid format. Accepted format is OMMDDYYXXX");
+                JOptionPane.showMessageDialog(null, "LogID invalid format. Accepted format is OMDDYYXXX or OMMDDYYXXX");
             }
         } else {
             JOptionPane.showMessageDialog(null, "Select a test.");
@@ -613,7 +613,8 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
     /* Used to enforce the format of the LogID. Narrowed the field to only accept OMMDDYYXXX */
     private boolean logIDRegex(String logID) {
         boolean proper = true;
-        String pattern = "O((0|1)\\d{1})((0|1|2|3)\\d{1})(\\d{2})(\\d{3})";
+        //String pattern = "O((0|1)\\d{1})((0|1|2|3)\\d{1})(\\d{2})(\\d{3})";
+        String pattern = "(O((0|1)\\d{1})((0|1|2|3)\\d{1})(\\d{2})(\\d{3})|O\\d{1}(0|1|2|3)\\d{1}(\\d{2})(\\d{3}))";
 
         // Create a Pattern object
         Pattern r = Pattern.compile(pattern);
@@ -627,55 +628,71 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
     }
 
 
-    // TODO: For generation loop through all well map result file names and if not null
-    //      then parse again, arrange values and save animals.
-    // Add a new value to report class saying which well map it's tied to so that
-    //  when we loop through the first time only the reports from the correct well map are used
+    
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {
         //generate button
         ArrayList<Float> parsedArrangedData = new ArrayList<Float>();
-        int dataIndex = 4;
+        ArrayList<Report> repToGen = new ArrayList<>();
+        JTable curTable;
+        WellMap curMap;
+        for(int outer = 0; outer < currentTabPane.getTabCount(); outer++) {
+            curMap = allTestAnimals.get(testID).get(outer);
+            int dataIndex = 4;
+            //If current map does not have an uploaded results file then don't add animals and don't generate reports
+            if(!curMap.resultFile.isEmpty()) {
+                //Don't need to color just using to populate the correct parseplatereader
+                curTable = (JTable)((JViewport)((JScrollPane)currentTabPane.getComponent(outer)).getComponent(0)).getComponent(0);
+                ColorCells cs = new ColorCells(curTable, curMap.resultFile, testID, (String) jComboBox2.getSelectedItem());
+                System.out.println("Generating Report");
+                //ParsePlateReaderData has static testValue, so call basic constructor
+                // and arrange the values grabbed from the first parse
+                ParsePlateReaderData parser = new ParsePlateReaderData(testID);
+                parsedArrangedData = parser.arrangeValues();
+                System.out.println("report count: " + currentTest.reportList.size());
+                //give the report objects the amount of values they need
 
-        System.out.println("Generating Report");
-        //ParsePlateReaderData has static testValue, so call basic constructor
-        // and arrange the values grabbed from the first parse
-        ParsePlateReaderData parser = new ParsePlateReaderData(testID);
-        parsedArrangedData = parser.arrangeValues();
-        System.out.println("report count: "+ currentTest.reportList.size());
-        //give the report objects the amount of values they need
-
-        System.out.println("Set report list, size: " + currentTest.reportList.size());
-        printCurrentAnimalList();
-        WellMap curMap = allTestAnimals.get(testID).get(0);
-
-        //TODO: Parse per well map for a single test. Per map add the animals off to the database
-        getCellValues(curMap.getFillX(), curMap.getFillY());
-        int animalListCount = 0;
-        for (Report n: currentTest.reportList) {
-            addReport(n);
-            n.setControlValues(parser.getControlValues());
-            for (int i = 0; i < n.getAnimalCount(); i++) {
-                n.addTestResult(parsedArrangedData.get(dataIndex));
-                System.out.println("Added: " + parsedArrangedData.get(dataIndex));
-                dataIndex++;
+                getCellValues(curTable, curMap.getFillX(), curMap.getFillY());
+                int animalListCount = 0;
+                for (Report n : currentTest.reportList) {
+                    if (n.getWellMap() == outer) {
+                        addReport(n);
+                        n.setControlValues(parser.getControlValues());
+                        for (int i = 0; i < n.getAnimalCount(); i++) {
+                            n.addTestResult(parsedArrangedData.get(dataIndex));
+                            System.out.println("Added: " + parsedArrangedData.get(dataIndex));
+                            dataIndex++;
+                        }
+                        //All test results added to a single test, calculate results and add to database
+                        n.addFinalAnimals(animalListCount, currentTest.animalIDList);
+                        animalListCount = animalListCount + n.getAnimalCount();
+                        //It's a report that should be generated so add to the list
+                        repToGen.add(n);
+                    }
+                }
             }
-            //All test results added to a single test, calculate results and add to database
-            n.addFinalAnimals(animalListCount, currentTest.animalIDList);
-            animalListCount = animalListCount + n.getAnimalCount();
+            currentTest.animalIDList.clear();
         }
 
-        boolean allMade = true;
-        for (Report r : currentTest.reportList) {
-            boolean made = printReport(r);
 
-            //If the report was made successfully then delete the animals from the database
-            //Should remove confusion about which animals belong to which client and which logID
-            if (made) {
-                System.out.println("Generated Report For: " + r.getSingleClient().getCompanyName());
-                dao.removeAnimals(r.getSingleClient().getCompanyName(), r.getLogID(), r.getAnimalType());
-            } else {
-                System.err.println("Report not generated for " + r.getSingleClient().getCompanyName());
-                allMade = false;
+        boolean allMade = true;
+        ArrayList<String> clientCheck = new ArrayList<>();
+        ArrayList<Report> repsNotMade = new ArrayList<>();
+
+        for (Report r : repToGen) {
+
+            if(!clientCheck.contains(r.getSingleClient().getCompanyName())) {
+                clientCheck.add(r.getSingleClient().getCompanyName());
+                boolean made = printReport(r);
+                //If the report was made successfully then delete the animals from the database
+                //Should remove confusion about which animals belong to which client and which logID
+                if (made) {
+                    System.out.println("Generated Report For: " + r.getSingleClient().getCompanyName());
+                    dao.removeAnimals(r.getSingleClient().getCompanyName(), r.getLogID(), r.getAnimalType());
+                } else {
+                    System.err.println("Report not generated for " + r.getSingleClient().getCompanyName());
+                    allMade = false;
+                    repsNotMade.add(r);
+                }
             }
 
         }
@@ -794,7 +811,7 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
     private void saveValues() {
         int index = currentIndex.get(testID);
         WellMap map = allTestAnimals.get(testID).get(index);
-        getCellValues(map.getFillX(), map.getFillY());
+        getCellValues(currentTable, map.getFillX(), map.getFillY());
         map.setAnimalList(currentTest.animalIDList);
         currentTest.animalIDList.clear();
 
@@ -1202,6 +1219,7 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
                 jTextField9.getText()                      //logID
         );
 
+        newReport.setWellMap(currentIndex.get(testID));
         currentTest.reportList.add(newReport);
 
         //clear fields
@@ -1231,7 +1249,7 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
     /*
      * Method to get just the animals from the table
      */
-    private void getCellValues(int fillX, int fillY) {
+    private void getCellValues(JTable table, int fillX, int fillY) {
         //fillX 1 and fillY 0 means nothing has been added
         //Is in earlier check because fillY != 0 && fillX != 1 doesn't work, is too broad of a condition
         boolean none = false;
@@ -1241,7 +1259,7 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
 
         if(!none) {
             //DefaultTableModel jTable1model = (DefaultTableModel) jTable1.getModel();
-            DefaultTableModel jTable1model = (DefaultTableModel) currentTable.getModel();
+            DefaultTableModel jTable1model = (DefaultTableModel) table.getModel();
 
             System.out.println("Column count: " + jTable1model.getColumnCount());
             System.out.println("Row count: " + jTable1model.getRowCount());
