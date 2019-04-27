@@ -265,6 +265,9 @@ public class DerbyDao {
                     return foundClient;
                 }
             }
+
+            rs.close();
+            stmt.close();
         } catch (SQLException sqle) {
             printSQLException(sqle);
         }

@@ -628,7 +628,7 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
     }
 
 
-    
+
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {
         //generate button
         ArrayList<Float> parsedArrangedData = new ArrayList<Float>();
@@ -677,9 +677,11 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
         boolean allMade = true;
         ArrayList<String> clientCheck = new ArrayList<>();
         ArrayList<Report> repsNotMade = new ArrayList<>();
+        //ArrayList<String> logIdsMade = new ArrayList<>();
 
         for (Report r : repToGen) {
-
+            //TODO: Think about the case that one client has two different sets of animals with different LogIDs
+            //  Will it work to check by LogID instead?
             if(!clientCheck.contains(r.getSingleClient().getCompanyName())) {
                 clientCheck.add(r.getSingleClient().getCompanyName());
                 boolean made = printReport(r);
@@ -688,6 +690,7 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
                 if (made) {
                     System.out.println("Generated Report For: " + r.getSingleClient().getCompanyName());
                     dao.removeAnimals(r.getSingleClient().getCompanyName(), r.getLogID(), r.getAnimalType());
+                    //logIdsMade.add(r.getLogID());
                 } else {
                     System.err.println("Report not generated for " + r.getSingleClient().getCompanyName());
                     allMade = false;
@@ -700,14 +703,25 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
         //TODO: Modify this to remove all tabs and reset the correct values
         if(allMade) {
             //clearMap(jTable1);
-            clearMap(currentTable);
+            //clearMap(currentTable);
             currentTest.reportList.clear();
             currentTest.animalIDList.clear();
             jTextField11.setText("");
-            allTestAnimals.get(testID).get(0).fillX = 1;
-            allTestAnimals.get(testID).get(0).fillY = 0;
-            allTestAnimals.get(testID).get(0).setAnimalList(currentTest.animalIDList);
+            allTestAnimals.get(testID).clear();
+
+            //Make new wellmap to start
+            ArrayList<String> newAnimalList = new ArrayList<>();
+            DefaultTableModel model = new DefaultTableModel();
+            WellMap startMap = new WellMap(newAnimalList, 1, 0, model);
+            allTestAnimals.get(testID).add(startMap);
+
+
+            currentTabPane.removeAll();
+            addTab();
+            currentTable = (JTable)((JViewport)((JScrollPane)currentTabPane.getComponent(0)).getComponent(0)).getComponent(0);
             setTestGUI(testID);
+        } else {
+
         }
 
     }
@@ -721,7 +735,7 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
 
     private boolean printReport(Report report) {
         String clientName = report.getSingleClient().getCompanyName();
-        final File outputFilename = new File(clientName + "Report" + ".pdf");
+        final File outputFilename = new File(".\\reports\\" + clientName + "Report" + ".pdf");
         boolean made = false;
         // Generate the report
         try {
@@ -759,7 +773,7 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
             ColorCells cs = new ColorCells(currentTable, selectedFilePath, testID, (String) jComboBox2.getSelectedItem());
             currentTable.repaint();
         }
-
+        jTextField11.setText(selectedFilePath);
     }
 
     private void jRadioButton2ActionPerformed(java.awt.event.ActionEvent evt) {
@@ -782,6 +796,7 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
             ColorCells cs = new ColorCells(currentTable, selectedFilePath, testID, (String) jComboBox2.getSelectedItem());
             currentTable.repaint();
         }
+        jTextField11.setText(selectedFilePath);
     }
 
     private void jRadioButton3ActionPerformed(java.awt.event.ActionEvent evt) {
@@ -805,7 +820,7 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
             ColorCells cs = new ColorCells(currentTable, selectedFilePath, testID, (String) jComboBox2.getSelectedItem());
             currentTable.repaint();
         }
-
+        jTextField11.setText(selectedFilePath);
     }
 
     private void saveValues() {
@@ -818,8 +833,12 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
     }
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {
-
         System.out.println("Add Well Map Pressed");
+        addTab();
+    }
+
+    private void addTab() {
+
         if(testID != -1) {
             System.out.println("In Well Map Add");
             ArrayList<String> newAnimalList = new ArrayList<>();
@@ -834,12 +853,9 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
             int numTab = currentTabPane.getTabCount() + 1;
             currentTabPane.add("Map " + numTab, newScroll);
 
-
-
         } else {
             JOptionPane.showMessageDialog(null, "Select a test.");
         }
-
     }
 
 
@@ -899,18 +915,21 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
         JTabbedPane sourceTabbedPane = (JTabbedPane) change.getSource();
 
         int index = sourceTabbedPane.getSelectedIndex();
-        System.out.println("Tab changed to: " + sourceTabbedPane.getTitleAt(index));
-        saveValues();
+        //System.out.println("Tab changed to: " + sourceTabbedPane.getTitleAt(index));
+        if(index != -1) {
+            saveValues();
 
-        currentTable = (JTable)((JViewport)((JScrollPane)currentTabPane.getComponent(index)).getComponent(0)).getComponent(0);
+            currentTable = (JTable) ((JViewport) ((JScrollPane) currentTabPane.getComponent(index)).getComponent(0)).getComponent(0);
 
-        setTestVals(testID);
-        populateTestValues();
-        currentIndex.set(testID, index);
-        String selectedFilePath = allTestAnimals.get(testID).get(currentIndex.get(testID)).resultFile;
-        if(!selectedFilePath.isEmpty()) {
-            ColorCells cs = new ColorCells(currentTable, selectedFilePath, testID, (String) jComboBox2.getSelectedItem());
-            currentTable.repaint();
+            setTestVals(testID);
+            populateTestValues();
+            currentIndex.set(testID, index);
+            String selectedFilePath = allTestAnimals.get(testID).get(currentIndex.get(testID)).resultFile;
+            if (!selectedFilePath.isEmpty()) {
+                ColorCells cs = new ColorCells(currentTable, selectedFilePath, testID, (String) jComboBox2.getSelectedItem());
+                currentTable.repaint();
+            }
+            jTextField11.setText(selectedFilePath);
         }
     }
 
