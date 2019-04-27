@@ -639,6 +639,12 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
     }
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {
+
+        if (fileName == null) {
+            JOptionPane.showMessageDialog(null, "Import a plate data file");
+            return;
+        }
+
         //generate button
         ArrayList<Float> parsedArrangedData = new ArrayList<Float>();
         int dataIndex = 4;
@@ -735,7 +741,7 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
     //Tried to save off entire DefaultTableModel but it saved by reference, it was not a copy
     private void jRadioButton1ActionPerformed(java.awt.event.ActionEvent evt) {
         //BLV Test
-        if(testID != -1) {
+        if(testID != -1 && testID != 1) {
             saveValues();
         }
 
@@ -752,7 +758,7 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
 
     private void jRadioButton2ActionPerformed(java.awt.event.ActionEvent evt) {
         //CL Test
-        if(testID != -1) {
+        if(testID != -1 && testID != 2) {
             saveValues();
         }
 
@@ -770,7 +776,7 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
     private void jRadioButton3ActionPerformed(java.awt.event.ActionEvent evt) {
         //Johne's Test
 
-        if(testID != -1) {
+        if(testID != -1 && testID != 3) {
             saveValues();
         }
 
@@ -1109,6 +1115,10 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
                 return 96;
             }
 
+            if (testXVals == null) {
+                System.out.println("error: testXVals is null");
+            }
+
             for (int l = 0; l < testXVals.size(); l++) {
 
                 if (map.fillX == (testXVals.get(l) + 1) && map.fillY == testYVals.get(l)) {
@@ -1308,6 +1318,7 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
     }
 
     private void setTestGUI(int testType) {
+        System.out.println("Setting selected test to " + testType);
         switch (testType) {
             case 1:
                 //BLV Test
@@ -1355,8 +1366,8 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
     private boolean existingClient = false;
     private int fillX = 1;
     private int fillY = 0;
-    ArrayList<Integer> testXVals;
-    ArrayList<Integer> testYVals;
+    private ArrayList<Integer> testXVals;
+    private ArrayList<Integer> testYVals;
     private DerbyDao dao;
     private StateSerializer state;
     private ArrayList<JTextField> textFields = new ArrayList<>();
@@ -1434,18 +1445,58 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
     public void windowOpened(WindowEvent e) {
 
         //TODO: Adjust where animals are added
-        /*
+
+        int selectedOption = JOptionPane.showConfirmDialog(null,
+                "Load previous program state?",
+                "Choose",
+                JOptionPane.YES_NO_OPTION);
+        if (selectedOption == JOptionPane.YES_OPTION) {
+            System.out.println("Loading previous program state");
+
         state.deserialize();
-        reportList = state.getReports();
-        testID = state.getCurrentTest();
-        for(Report n: reportList) {
-            n.createTestObject(testID);
+        allTestAnimals = state.getMapList();
+
+        //print loaded animals
+        for (ArrayList<WellMap> l : allTestAnimals) {
+            for (WellMap wm : l) {
+                if (wm.getAnimalList().size() > 0)
+                    System.out.println(wm.getAnimalList());
+            }
         }
 
-        setTestGUI(testID);
-        jTable1.setModel(state.getCurrentMap());
-        fillX = state.getCurFillX();
-        fillY = state.getCurFillY();*/
+
+
+        testID = state.getCurrentTest();
+        currentTabPane = allTabPanes.get(testID);
+        currentTable = (JTable)((JViewport)((JScrollPane)currentTabPane.getComponent(currentTabPane.getSelectedIndex())).getComponent(0)).getComponent(0);
+
+        switch (testID) {
+            case 1:
+                //BLV Test
+                jRadioButton1ActionPerformed(null);
+                jRadioButton1.setSelected(true);
+                break;
+            case 2:
+                //CL Test
+                jRadioButton2ActionPerformed(null);
+                jRadioButton2.setSelected(true);
+                break;
+            case 3:
+                //Johne's Test
+                jRadioButton3ActionPerformed(null);
+                jRadioButton3.setSelected(true);
+                break;
+            default:
+                break;
+        }
+
+        int index = allTabPanes.get(testID).getSelectedIndex();
+        WellMap map = allTestAnimals.get(testID).get(index);
+        map.fillX = state.getCurFillX();
+        map.fillY = state.getCurFillY();
+
+        }
+
 
     }
 
@@ -1456,7 +1507,22 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
         //state.setCurrentMap(jTable1.getModel());
         //state.setReports(reportList);
         //state.setResultName(jTextField11.getText());
+
+        state.setMapList(allTestAnimals);
+        int index = allTabPanes.get(testID).getSelectedIndex();
+        WellMap map = allTestAnimals.get(testID).get(index);
+        getCellValues(map.getFillX(), map.getFillY());
+        map.setAnimalList(currentTest.animalIDList);
+        //print saved animals
+        for (ArrayList<WellMap> l : allTestAnimals) {
+            for (WellMap wm : l) {
+                if (wm.getAnimalList().size() > 0)
+                    System.out.println(wm.getAnimalList());
+            }
+        }
+
         state.setCurrentTest(testID);
+
         state.setCurFillX(fillX);
         state.setCurFillY(fillY);
         state.serialize();

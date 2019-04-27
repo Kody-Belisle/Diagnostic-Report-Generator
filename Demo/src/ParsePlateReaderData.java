@@ -43,6 +43,7 @@ public class ParsePlateReaderData {
                 break;
 
             default:
+                System.out.println("ERROR : No valid testType passed in");
                 test = new CLTest();
         }
 
@@ -207,6 +208,10 @@ public class ParsePlateReaderData {
      * grabs the control values from our parsed list and puts them at the beginning of our new, ordered list
      */
     private void setControlValues(ArrayList <Float> arrangedValues) {
+
+        if (testValues == null) {
+            System.out.println("ERROR: NO TEST VALUES");
+        }
 
         arrangedValues.add(testValues.get(test.getNeg1()));
         System.out.println("negative control one: " + arrangedValues.get(0));

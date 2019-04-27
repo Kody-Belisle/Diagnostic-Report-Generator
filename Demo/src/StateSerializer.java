@@ -11,6 +11,7 @@ import java.util.List;
 public class StateSerializer {
     private final String filename = "state.ser";
     private ArrayList<Report> reports;
+    private ArrayList<ArrayList<WellMap>> mapList;
     private DefaultTableModel currentMap;
     private String resultName;
     private int currentTest;
@@ -39,17 +40,23 @@ public class StateSerializer {
             FileInputStream file = new FileInputStream(filename);
             ObjectInputStream in = new ObjectInputStream(file);
 
-            // Method for deserialization of object
-            readList = (ArrayList<Report>) in.readObject();
-            tableModel = (DefaultTableModel) in.readObject();
-            //resultName = (String) in.readObject();
+
+            mapList = (ArrayList<ArrayList<WellMap>>) in.readObject();
             currentTest = (Integer) in.readObject();
             curFillX = (Integer) in.readObject();
             curFillY = (Integer) in.readObject();
 
+            /*
+            // Method for deserialization of object
+            readList = (ArrayList<Report>) in.readObject();
+            tableModel = (DefaultTableModel) in.readObject();
+            //resultName = (String) in.readObject();
+
+
+            */
             in.close();
             file.close();
-
+            /*
             for (Report report: readList) {
                 System.out.println("Object has been deserialized.");
                 System.out.println("Client = " + report.getSingleClient().getCompanyName());
@@ -59,6 +66,7 @@ public class StateSerializer {
                 System.out.println("Animal Type = " + report.getAnimalType());
                 System.out.println("Log ID = " + report.getLogID());
             }
+            */
 
             this.reports = readList;
             this.currentMap = tableModel;
@@ -77,13 +85,19 @@ public class StateSerializer {
             FileOutputStream file = new FileOutputStream(filename);
             ObjectOutputStream out = new ObjectOutputStream(file);
 
+            out.writeObject(mapList);
+            out.writeObject(currentTest);
+            out.writeObject(curFillX);
+            out.writeObject(curFillY);
+
+            /*
             // Method for serialization of object
             out.writeObject(reports);
             out.writeObject(currentMap);
             //out.writeObject(resultName);
-            out.writeObject(currentTest);
-            out.writeObject(curFillX);
-            out.writeObject(curFillY);
+
+
+            */
 
             out.close();
             file.close();
@@ -141,5 +155,13 @@ public class StateSerializer {
 
     public void setCurFillY(int curFillY) {
         this.curFillY = curFillY;
+    }
+
+    public ArrayList<ArrayList<WellMap>> getMapList() {
+        return mapList;
+    }
+
+    public void setMapList(ArrayList<ArrayList<WellMap>> mapList) {
+        this.mapList = mapList;
     }
 }
