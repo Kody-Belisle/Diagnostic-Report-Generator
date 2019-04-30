@@ -275,6 +275,37 @@ public class DerbyDao {
         return foundClient;
     }
 
+    public ArrayList<String[]> backupReport(String logID, String clientName, String animalType) {
+        ArrayList<String[]> lines = new ArrayList<>();
+        try {
+            PreparedStatement stmt = conn.prepareStatement("select DISTINCT REPORT.CLIENT_NAME, ANIMALS.ANIMAL_ID as animalID, ANIMALS.RESULT as OD, ANIMALS.TEXT_RESULT as Result " +
+                    "from report join animals on REPORT.LOG_ID = ANIMALS.LOG_ID where REPORT.CLIENT_NAME = ? " +
+                    "AND ANIMALS.CLIENT_NAME = ? AND ANIMALS.type = ? AND ANIMALS.LOG_ID = ?");
+            stmt.setString(1, clientName);
+            stmt.setString(2, clientName);
+            stmt.setString(3, animalType);
+            stmt.setString(4, logID);
+
+            ResultSet rs = stmt.executeQuery();
+
+            while(rs.next()) {
+                String[] line = new String[3];
+                String animalName = rs.getString("animalID");
+                float animalOD = rs.getFloat("OD");
+                String animalResult = rs.getString("Result");
+
+                lines.add(new String[] {animalName, Float.toString(animalOD), animalResult});
+            }
+            rs.close();
+            stmt.close();
+
+        } catch (SQLException sqle) {
+            printSQLException(sqle);
+        }
+
+        return lines;
+    }
+
     public void updateSingleClient(Client client) {
         try {
 
