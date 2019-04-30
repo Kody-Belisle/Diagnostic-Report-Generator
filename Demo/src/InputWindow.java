@@ -735,6 +735,7 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
 
     private boolean printReport(Report report) {
         String clientName = report.getSingleClient().getCompanyName();
+        //TODO check if directory is created, if not we need to make it
         final File outputFilename = new File(".\\reports\\" + clientName + "Report" + ".pdf");
         boolean made = false;
         // Generate the report

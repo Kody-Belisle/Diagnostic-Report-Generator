@@ -6,3 +6,4 @@ lib/demoDB/log/log1.dat
 out/
 Customer List.csv
 lib/reportDB/
+reports/
