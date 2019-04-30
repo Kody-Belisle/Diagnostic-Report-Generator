@@ -39,3 +39,12 @@ Generated reports will be stored in the installation directory on completion.
 ## License
 
 TBD
+
+## Building from intelliJ
+
+1. Clone the repository.
+2. Go to file -> project structure then select 'Libraries'
+3. Select the + button and select 'java'
+4. Navigate to the project directory and select the 'lib' folder
+5. Select ok twice
+6. Select 'apply'
