@@ -755,7 +755,7 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
     //Tried to save off entire DefaultTableModel but it saved by reference, it was not a copy
     private void jRadioButton1ActionPerformed(java.awt.event.ActionEvent evt) {
         //BLV Test
-        if(testID != -1) {
+        if(testID != -1 && testID != 1) {
             saveValues();
         }
 
@@ -778,7 +778,7 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
 
     private void jRadioButton2ActionPerformed(java.awt.event.ActionEvent evt) {
         //CL Test
-        if(testID != -1) {
+        if(testID != -1 && testID != 2) {
             saveValues();
         }
 
@@ -802,7 +802,7 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
     private void jRadioButton3ActionPerformed(java.awt.event.ActionEvent evt) {
         //Johne's Test
 
-        if(testID != -1) {
+        if(testID != -1 && testID != 3) {
             saveValues();
         }
 
@@ -1101,15 +1101,20 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
 
     private int fillTable(int source) {
 
+        System.out.println("Attempting to populate table");
         int animalCount = 0;
         DefaultTableModel jTable2model = (DefaultTableModel) jTable2.getModel();
         jTable2.editCellAt(-1, -1);
         jTable2.getSelectionModel().clearSelection();
 
+        //find out which tabbed pane is selected
         int index = allTabPanes.get(testID).getSelectedIndex();
+        //grab the map corresponding to that
         WellMap map = allTestAnimals.get(testID).get(index);
+        System.out.println("Populating tab pane " + testID + " and well map " + index);
         //WellMap map = allTestAnimals.get(testID).get(0);
         //print rows in animal ID input column
+        //is called with source == 1 using populate test values function
         if(source == 0) {
             int rowCount = jTable2model.getRowCount();
             System.out.println("Row Count: " + rowCount);
@@ -1127,11 +1132,14 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
             jTable2model.setNumRows(0);
         } else {    //Being called from test radio button switch. Animal count doesn't matter
             //WellMap map = allTestAnimals.get(testID).get(0);
+            System.out.println("Populating with " + map.getAnimalList());
             ArrayList<String> curAnimalList = map.getAnimalList();
             if (curAnimalList.size() < 1) {
                 System.out.println("No animals to populate on table");
                 return -1;
             }
+
+            System.out.println("Current animal list: " + curAnimalList);
             //Reset fillX and fillY so that animals are added from the start
             map.fillY = 0;
             map.fillX = 1;
@@ -1146,6 +1154,10 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
         return animalCount;
     }
 
+    /*
+     * This method is called on every single element in a map,
+     * adding them to the upper jTable
+     */
     private int actualFillTable(String element, int animalCount, WellMap map) {
 
         //Use the map's fillX and fillY not the global ones
@@ -1160,7 +1172,7 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
             for (int l = 0; l < testXVals.size(); l++) {
 
                 if (map.fillX == (testXVals.get(l) + 1) && map.fillY == testYVals.get(l)) {
-                    System.out.println("Collision at: " + map.fillX + ", " + map.fillY);
+                    //System.out.println("Collision at: " + map.fillX + ", " + map.fillY);
                     if (map.fillY < 7) {
                         map.fillY++;
                     } else {
@@ -1181,7 +1193,7 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
                 map.fillX++;
                 map.fillY = 0;
             }
-            System.out.println("Cellpos x: " + map.fillX + " y: " + map.fillY);
+            //System.out.println("Cellpos x: " + map.fillX + " y: " + map.fillY);
             animalCount++;
         } else {
             System.out.println("Null or empty element, not pushing to map");
@@ -1266,9 +1278,10 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
     }
 
     /*
-     * Method to get just the animals from the table
+     * Method to get just the animals from the table and places them in the current tests animaal id list
      */
     private void getCellValues(JTable table, int fillX, int fillY) {
+
         //fillX 1 and fillY 0 means nothing has been added
         //Is in earlier check because fillY != 0 && fillX != 1 doesn't work, is too broad of a condition
         boolean none = false;
@@ -1482,25 +1495,110 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
     @Override
     public void windowOpened(WindowEvent e) {
 
-        //TODO: Adjust where animals are added
-        /*
-        state.deserialize();
-        reportList = state.getReports();
-        testID = state.getCurrentTest();
-        for(Report n: reportList) {
-            n.createTestObject(testID);
+        int selectedOption = JOptionPane.showConfirmDialog(null,
+                "Load previous program state?",
+                "Choose",
+                JOptionPane.YES_NO_OPTION);
+        if (selectedOption == JOptionPane.YES_OPTION) {
+            System.out.println("Loading previous program state");
+
+            state.deserialize();
+
+            allTestAnimals = state.getMapList();
+
+            //print loaded animals
+            for (ArrayList<WellMap> l : allTestAnimals) {
+                for (WellMap wm : l) {
+                    if (wm.getAnimalList().size() > 0)
+                        System.out.println(wm.getAnimalList());
+                }
+            }
+
+
+            testID = state.getCurrentTest();
+            currentTabPane = allTabPanes.get(testID);
+
+            currentTable = (JTable) ((JViewport) ((JScrollPane) currentTabPane.getComponent(currentTabPane.getSelectedIndex())).getComponent(0)).getComponent(0);
+
+            allTests = state.getAllTests();
+            System.out.println("printing test data structures");
+            for (TestType tt: allTests) {
+                System.out.println("Animal id list: ");
+                tt.clearList();
+                System.out.println(tt.animalIDList);
+                System.out.println("Report list: ");
+                System.out.println(tt.reportList);
+            }
+
+            currentTest = allTests.get(testID);
+
+            int index = allTabPanes.get(testID).getSelectedIndex();
+            WellMap map = allTestAnimals.get(testID).get(index);
+            map.fillX = state.getCurFillX();
+            map.fillY = state.getCurFillY();
+
+            loadTabs();
+            System.out.println("-----Current state of Map 0:----- " + allTestAnimals.get(testID).get(0).getAnimalList());
+            //currentTabPane.setSelectedIndex(state.getSelectedTabIndex());
+
+            switch (testID) {
+                case 1:
+                    //BLV Test
+
+                    jRadioButton1ActionPerformed(null);
+                    jRadioButton1.setSelected(true);
+                    break;
+                case 2:
+                    //CL Test
+                    System.out.println("-----Current state of Map 0:----- " + allTestAnimals.get(testID).get(0).getAnimalList());
+
+                    System.out.println("current test animal ids: " + currentTest.animalIDList);
+
+
+                    jRadioButton2ActionPerformed(null);
+                    jRadioButton2.setSelected(true);
+                    break;
+                case 3:
+                    //Johne's Test
+
+                    jRadioButton3ActionPerformed(null);
+                    jRadioButton3.setSelected(true);
+                    break;
+                default:
+                    break;
+            }
+
+
+
+
+
+
         }
+    }
 
-        if (!state.getResultName().equals("")) {
-            ColorCells cs = new ColorCells(jTable1, state.getResultName(), testID);
-            jTable1.repaint();
+    private void loadTabs() {
+        if(testID != -1) {
+            System.out.println("Loading well map tabs");
+
+            //for every set of well maps
+            for (int i = 1; i < allTestAnimals.size(); i++) {
+                //for every well map created for a test
+                for (int j = 1; j < allTestAnimals.get(i).size(); j++) {
+                    //make a new tab
+                    JTable newTable = new JTable();
+                    makeNewTable(newTable);
+                    JScrollPane newScroll = new JScrollPane(newTable, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+                    newScroll.setViewportView(newTable);
+                    //clearMap(jTable1);
+                    int numTab = currentTabPane.getTabCount() + 1;
+                    currentTabPane.add("Map " + numTab, newScroll);
+                }
+
+            }
+
+        } else {
+            JOptionPane.showMessageDialog(null, "Select a test.");
         }
-
-        setTestGUI(testID);
-        jTable1.setModel(state.getCurrentMap());
-        fillX = state.getCurFillX();
-        fillY = state.getCurFillY();*/
-
     }
 
     @Override
@@ -1510,9 +1608,29 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
         //state.setCurrentMap(jTable1.getModel());
         //state.setReports(reportList);
         //state.setResultName(jTextField11.getText());
+        saveValues();
+        state.setMapList(allTestAnimals);
+        int index = allTabPanes.get(testID).getSelectedIndex();
+        WellMap map = allTestAnimals.get(testID).get(index);
+        getCellValues(currentTable, map.getFillX(), map.getFillY());
+        map.setAnimalList(currentTest.animalIDList);
+        //print saved animals
+        for (ArrayList<WellMap> l : allTestAnimals) {
+            for (WellMap wm : l) {
+                if (wm.getAnimalList().size() > 0)
+                    System.out.println(wm.getAnimalList());
+            }
+        }
+
+        //set test array
+        state.setAllTests(allTests);
+
         state.setCurrentTest(testID);
+
         state.setCurFillX(fillX);
         state.setCurFillY(fillY);
+
+        state.setSelectedTabIndex(currentTabPane.getSelectedIndex());
         state.serialize();
         dao.shutDown();
 

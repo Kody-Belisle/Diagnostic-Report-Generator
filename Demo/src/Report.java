@@ -93,7 +93,7 @@ public class Report implements java.io.Serializable {
         }
 
         public String parseLogID() {
-            //Log format: O10419004
+                //Log format: O10419004
             //is Date Received – 1/4/2019
             //O followed by M or MM (need two cases) followed by DD followed by YY followed by XXX TestNumber
             //OMDDYYXXX or OMMDDYYXXX

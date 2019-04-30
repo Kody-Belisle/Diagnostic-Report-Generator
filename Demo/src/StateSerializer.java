@@ -17,6 +17,8 @@ public class StateSerializer {
     private int currentTest;
     private int curFillX;
     private int curFillY;
+    private int selectedTabIndex;
+    private ArrayList<TestType> allTests;
 
 
     public static void main(String[] args) {
@@ -45,6 +47,8 @@ public class StateSerializer {
             currentTest = (Integer) in.readObject();
             curFillX = (Integer) in.readObject();
             curFillY = (Integer) in.readObject();
+            allTests = (ArrayList<TestType>) in.readObject();
+            selectedTabIndex = (Integer) in.readObject();
 
             /*
             // Method for deserialization of object
@@ -89,6 +93,8 @@ public class StateSerializer {
             out.writeObject(currentTest);
             out.writeObject(curFillX);
             out.writeObject(curFillY);
+            out.writeObject(allTests);
+            out.writeObject(selectedTabIndex);
 
             /*
             // Method for serialization of object
@@ -157,11 +163,27 @@ public class StateSerializer {
         this.curFillY = curFillY;
     }
 
+    public ArrayList<TestType> getAllTests() {
+        return allTests;
+    }
+
     public ArrayList<ArrayList<WellMap>> getMapList() {
         return mapList;
     }
 
     public void setMapList(ArrayList<ArrayList<WellMap>> mapList) {
         this.mapList = mapList;
+    }
+
+    public void setAllTests(ArrayList<TestType> allTests) {
+        this.allTests = allTests;
+    }
+
+    public int getSelectedTabIndex() {
+        return selectedTabIndex;
+    }
+
+    public void setSelectedTabIndex(int selectedTabIndex) {
+        this.selectedTabIndex = selectedTabIndex;
     }
 }

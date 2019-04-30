@@ -3,7 +3,7 @@ package src;
 import java.util.ArrayList;
 import java.util.Map;
 
-public abstract class TestType {
+public abstract class TestType implements java.io.Serializable {
     ArrayList<String> animalIDList;
     ArrayList<Report> reportList;
 
@@ -18,6 +18,10 @@ public abstract class TestType {
     protected TestType() {
         reportList = new ArrayList<Report>();
         animalIDList = new ArrayList<String>();
+    }
+
+    public void clearList() {
+        animalIDList.clear();
     }
 
     public int getNeg1() {
