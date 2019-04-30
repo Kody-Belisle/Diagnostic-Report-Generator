@@ -13,10 +13,13 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import java.util.stream.*;
 
 public class InputWindow extends javax.swing.JFrame implements WindowListener, WindowFocusListener, WindowStateListener  {
 
@@ -676,37 +679,48 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
 
         boolean allMade = true;
         ArrayList<String> clientCheck = new ArrayList<>();
-        ArrayList<Report> repsNotMade = new ArrayList<>();
-        //ArrayList<String> logIdsMade = new ArrayList<>();
+        ArrayList<String> logIdsMade = new ArrayList<>();
 
         for (Report r : repToGen) {
-            //TODO: Think about the case that one client has two different sets of animals with different LogIDs
-            //  Will it work to check by LogID instead?
-            if(!clientCheck.contains(r.getSingleClient().getCompanyName())) {
+            boolean unique = true;
+            if(clientCheck.contains(r.getSingleClient().getCompanyName())) {
+                for (String logId: logIdsMade) {
+                    if(logId == r.getLogID()) { unique = false;}
+                }
+            }
+
+            if(unique) {
                 clientCheck.add(r.getSingleClient().getCompanyName());
                 boolean made = printReport(r);
                 //If the report was made successfully then delete the animals from the database
                 //Should remove confusion about which animals belong to which client and which logID
                 if (made) {
-                    System.out.println("Generated Report For: " + r.getSingleClient().getCompanyName());
+                    //System.out.println("Generated Report For: " + r.getSingleClient().getCompanyName());
                     dao.removeAnimals(r.getSingleClient().getCompanyName(), r.getLogID(), r.getAnimalType());
-                    //logIdsMade.add(r.getLogID());
+                    logIdsMade.add(r.getLogID());
                 } else {
-                    System.err.println("Report not generated for " + r.getSingleClient().getCompanyName());
+                    //System.err.println("Report not generated for " + r.getSingleClient().getCompanyName());
                     allMade = false;
-                    repsNotMade.add(r);
+                    try {
+                        makeCSV(r);
+                        dao.removeAnimals(r.getSingleClient().getCompanyName(), r.getLogID(), r.getAnimalType());
+                    } catch(IOException e) {
+                        System.out.println(e.getMessage());
+                    }
                 }
             }
-
         }
 
-        //TODO: Modify this to remove all tabs and reset the correct values
-        if(allMade) {
-            //clearMap(jTable1);
-            //clearMap(currentTable);
+        afterReportGen(allMade);
+
+    }
+
+    private void afterReportGen(boolean allMade) {
+            //Clear currentTest's structures and input file
             currentTest.reportList.clear();
             currentTest.animalIDList.clear();
             jTextField11.setText("");
+            //Completely clear the list of well maps for this test
             allTestAnimals.get(testID).clear();
 
             //Make new wellmap to start
@@ -715,15 +729,42 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
             WellMap startMap = new WellMap(newAnimalList, 1, 0, model);
             allTestAnimals.get(testID).add(startMap);
 
-
+            //Delete all tabs (makes a call to tab changed) and then add new one
             currentTabPane.removeAll();
             addTab();
+            //Set currentTable to first new tab and set the test gui
             currentTable = (JTable)((JViewport)((JScrollPane)currentTabPane.getComponent(0)).getComponent(0)).getComponent(0);
             setTestGUI(testID);
-        } else {
+        if(!allMade) {
+            JOptionPane.showMessageDialog(null, "Offical report not generated. Look for the csv titled with client name and log id.");
+        }
+    }
 
+    private void makeCSV(Report report) throws IOException{
+        File csvOutputFile = new File(".\\reports\\" + report.getSingleClient().getCompanyName() + report.getLogID() + ".csv");
+        ArrayList<String[]> reportList = dao.backupReport(report.getLogID(), report.getSingleClient().getCompanyName(), report.getAnimalType());
+
+        try (PrintWriter pw = new PrintWriter(csvOutputFile)) {
+            reportList.stream()
+                    .map(this::convertToCSV)
+                    .forEach(pw::println);
         }
 
+    }
+
+    private String convertToCSV(String[] data) {
+        return Stream.of(data)
+                .map(this::escapeSpecialCharacters)
+                .collect(Collectors.joining(","));
+    }
+
+    private String escapeSpecialCharacters(String data) {
+        String escapedData = data.replaceAll("\\R", " ");
+        if (data.contains(",") || data.contains("\"") || data.contains("'")) {
+            data = data.replace("\"", "\"\"");
+            escapedData = "\"" + data + "\"";
+        }
+        return escapedData;
     }
 
     private void addReport(Report report) {
@@ -735,7 +776,7 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
 
     private boolean printReport(Report report) {
         String clientName = report.getSingleClient().getCompanyName();
-        final File outputFilename = new File(".\\reports\\" + clientName + "Report" + ".pdf");
+        final File outputFilename = new File(".\\reports\\" + report.getLogID() + "-" + clientName + ".pdf");
         boolean made = false;
         // Generate the report
         try {
