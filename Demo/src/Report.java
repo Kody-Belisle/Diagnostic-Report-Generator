@@ -2,6 +2,7 @@ package src;
 
 import javax.swing.*;
 import java.lang.reflect.Array;
+import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Map;
@@ -48,9 +49,15 @@ public class Report implements java.io.Serializable {
             DerbyDao dao = new DerbyDao();
 
             for (int i = 0; i < animalCount; i++) {
+
                 calculateResults(i);
                 System.out.println("Added: " + calculatedResult.get(i));
-                dao.addAnimal(animals.get(startAt + i), animalType, (double)testResults.get(i), calculatedResult.get(i), singleClient.getCompanyName(), logID);
+                try {
+                    dao.addAnimal(animals.get(startAt + i), animalType, (double) testResults.get(i), calculatedResult.get(i), singleClient.getCompanyName(), logID);
+                } catch (SQLException e) {
+                    dao.printSQLException(e);
+                }
+
             }
 
             return 0;

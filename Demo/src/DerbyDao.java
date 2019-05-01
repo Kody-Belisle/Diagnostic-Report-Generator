@@ -70,7 +70,6 @@ public class DerbyDao {
                  * jar will be plus lib folder
                  */
 
-                //TODO: Figure out how to connect to embedded derby database
 
                     conn = DriverManager.getConnection(protocol + "\\lib\\" + dbName
                             + ";create=true", props);
@@ -140,8 +139,9 @@ public class DerbyDao {
         return results;
     }
 
-    public void addAnimal(String animalID, String type, Double result, String textResult, String companyName, String logID) {
+    public void addAnimal(String animalID, String type, Double result, String textResult, String companyName, String logID) throws SQLException{
         try {
+            conn.setAutoCommit(false);
             PreparedStatement psInsert = conn.prepareStatement(
                     "insert into animals values (?, ?, ?, ?, ?, ?)");
             statements.add(psInsert);
@@ -163,7 +163,10 @@ public class DerbyDao {
             conn.commit();
             System.out.println("Committed the change");
         } catch (SQLException sqle) {
+            conn.rollback();
             printSQLException(sqle);
+        } finally {
+            conn.setAutoCommit(true);
         }
     }
 

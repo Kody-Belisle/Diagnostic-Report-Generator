@@ -661,9 +661,9 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
                         addReport(n);
                         n.setControlValues(parser.getControlValues());
                         for (int i = 0; i < n.getAnimalCount(); i++) {
-                            n.addTestResult(parsedArrangedData.get(dataIndex));
-                            System.out.println("Added: " + parsedArrangedData.get(dataIndex));
-                            dataIndex++;
+                                n.addTestResult(parsedArrangedData.get(dataIndex));
+                                System.out.println("Added: " + parsedArrangedData.get(dataIndex));
+                                dataIndex++;
                         }
                         //All test results added to a single test, calculate results and add to database
                         n.addFinalAnimals(animalListCount, currentTest.animalIDList);
@@ -685,7 +685,10 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
             boolean unique = true;
             if(clientCheck.contains(r.getSingleClient().getCompanyName())) {
                 for (String logId: logIdsMade) {
-                    if(logId == r.getLogID()) { unique = false;}
+                    //If the same client and logID has already been made to generate again.
+                    //Only need one report generated per client, logID combo because at this point
+                    //  all animals are in database and only need to make one call
+                    if(logId.compareTo(r.getLogID()) == 0) { unique = false;}
                 }
             }
 
@@ -1208,7 +1211,7 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
             if (map.fillX > 12) {
                 System.out.println("Too many animals");
                 //Return max amount of animals possible
-                return 96;
+                return animalCount;
             }
 
             for (int l = 0; l < testXVals.size(); l++) {
