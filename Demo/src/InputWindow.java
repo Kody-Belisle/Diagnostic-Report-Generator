@@ -14,6 +14,7 @@ import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Properties;
 import java.util.regex.Matcher;
@@ -1539,7 +1540,7 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
 
     @Override
     public void windowOpened(WindowEvent e) {
-
+        /*
         int selectedOption = JOptionPane.showConfirmDialog(null,
                 "Load previous program state?",
                 "Choose",
@@ -1618,7 +1619,14 @@ public class InputWindow extends javax.swing.JFrame implements WindowListener, W
 
 
 
+        } else if (selectedOption == JOptionPane.NO_OPTION) {
+            try {
+                dao.deleteAllAnimals();
+            } catch (SQLException sqle) {
+                dao.printSQLException(sqle);
+            }
         }
+        */
     }
 
     private void loadTabs() {

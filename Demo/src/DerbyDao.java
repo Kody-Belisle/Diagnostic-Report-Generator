@@ -30,7 +30,7 @@ public class DerbyDao {
     public void startUp() {
 
             String protocol = "";
-            System.out.println("DerbyDriver starting in " + framework + " mode");
+            System.out.println("Derby starting in " + framework + " mode");
             conn = null;
             //Get current user directory
 
@@ -52,13 +52,13 @@ public class DerbyDao {
                 // and derbyclient frameworks
                 //Because user is specified, SCHEMA IS USER1
 
-                //props.put("user", "app");
-                props.put("user", "user1");
+                props.put("user", "app");
+                //props.put("user", "user1");
                 props.put("password", "");
 
 
-                //String dbName = "reportDB"; // the name of the database
-                String dbName = "demoDB";
+                String dbName = "reportDB"; // the name of the database
+                //String dbName = "demoDB";
 
                 /*
                  * This connection specifies create=true in the connection URL to
@@ -193,6 +193,22 @@ public class DerbyDao {
         } catch (SQLException sqle) {
             printSQLException(sqle);
         }
+    }
+
+    public void deleteAllAnimals() throws SQLException{
+        try{
+            conn.setAutoCommit(false);
+            PreparedStatement stmt = conn.prepareStatement("delete from ANIMALS");
+            stmt.executeUpdate();
+
+            stmt.close();
+        } catch (SQLException e) {
+            conn.rollback();
+            printSQLException(e);
+        } finally {
+            conn.setAutoCommit(true);
+        }
+
     }
 
     public void addReport(String logID, String type, String dateReceived, String dateTested, String resultFile, String clientName) {
@@ -349,7 +365,8 @@ public class DerbyDao {
         //Get the current directory so that
         //the path is not hardcoded
         String protocol = System.getProperty("user.dir");
-        String dbName = "demoDB";
+        //String dbName = "demoDB";
+        String dbName = "reportDB";
 
         final DriverConnectionProvider singleDriverConnectionProvider = new DriverConnectionProvider();
         singleDriverConnectionProvider.setDriver("org.apache.derby.jdbc.EmbeddedDriver");
@@ -357,7 +374,8 @@ public class DerbyDao {
         //Set up driver connection specifically for Pentaho
         System.out.println("Full URL:" + "jdbc:derby:" + protocol + "\\lib\\" + dbName + ";create=true");
         singleDriverConnectionProvider.setUrl("jdbc:derby:" + protocol + "\\lib\\" + dbName + ";create=true");
-        singleDriverConnectionProvider.setProperty("user", "user1");
+        //singleDriverConnectionProvider.setProperty("user", "user1");
+        singleDriverConnectionProvider.setProperty("user", "app");
         singleDriverConnectionProvider.setProperty("password", "");
 
         return singleDriverConnectionProvider;
@@ -370,11 +388,13 @@ public class DerbyDao {
 
             PreparedStatement ps = conn.prepareStatement(
                     "CALL SYSCS_UTIL.SYSCS_EXPORT_TABLE (?,?,?,?,?,?)");
-            ps.setString(1, "USER1");
+            //ps.setString(1, "USER1");
+            ps.setString(1, "APP");
             ps.setString(2, "CLIENT");
             final String outFile = "out/clients" + sdf.format((time)) + ".txt";
             ps.setString(3, outFile);
-            ps.setString(4, "%");
+            //ps.setString(4, '%');
+            ps.setString(4, ",");
             ps.setString(5, null);
             ps.setString(6, null);
             ps.execute();

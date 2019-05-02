@@ -21,6 +21,7 @@ package src;
  */
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
@@ -81,8 +82,10 @@ public class ReportGenerator extends AbstractReportGenerator
         {
             // Using the classloader, get the URL to the reportDefinition file
             final ClassLoader classloader = this.getClass().getClassLoader();
-            final URL reportDefinitionURL = this.getClass().getResource("../SageReportTemplate.prpt");
+            final URL reportDefinitionURL = this.getClass().getResource("SageReportTemplate.prpt");
+            //final URL reportDefinitionURL = this.getClass().getResource("Demo/src/SageReportTemplate.prpt");
             //final URL reportDefinitionURL = classloader.getResource("/src/sample1.prpt");
+            System.out.println(this.getClass().getName());
             System.out.println(reportDefinitionURL);
             //System.out.println(testUrl);
             // Parse the report file
